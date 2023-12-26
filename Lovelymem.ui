@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1709</width>
-    <height>730</height>
+    <width>1610</width>
+    <height>767</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LovelyMem</string>
+   <string>LovelyMem v0.1</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_loadMem">
@@ -44,9 +44,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
-      <width>1691</width>
-      <height>611</height>
+      <y>70</y>
+      <width>1591</width>
+      <height>661</height>
      </rect>
     </property>
    </widget>
@@ -86,13 +86,104 @@
      <string>加载netstat</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_load_netstat_timeline">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>40</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载net_timeline</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_load_proc_timeline">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>40</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载proc_timeline</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_load_proc">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>10</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载proc</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_load_tasks">
+    <property name="geometry">
+     <rect>
+      <x>780</x>
+      <y>10</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载tasks</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_load_findevil">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>10</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载findevil</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_load_web_timeline">
+    <property name="geometry">
+     <rect>
+      <x>860</x>
+      <y>40</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>加载web_timeline</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_findrow">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>40</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>搜索字符串</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1709</width>
+     <width>1610</width>
      <height>21</height>
     </rect>
    </property>
