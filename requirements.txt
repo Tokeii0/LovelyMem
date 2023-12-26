@@ -1,0 +1,5 @@
+colorama
+leechcorepyc
+pandas
+pypykatz
+PySide6
