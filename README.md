@@ -6,7 +6,7 @@
 ### 使用前准备
 待定
 ### 使用方法
-自带了memprocfs，如果不放心可以删除然后到memprocfs作者github页面下载相对应的版本
+不自带memprocfs，可以到memprocfs作者github页面下载相对应的版本，然后解压放在Tools/memprocfs目录下
 
 
 
