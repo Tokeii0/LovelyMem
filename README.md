@@ -25,11 +25,15 @@ _✨ 基于Memprocfs的可视化内存取证工具 ✨_
 https://www.bilibili.com/video/BV1TK411b78J/
 
 ### 使用方法
-` python main.py `
 
-不自带memprocfs，可以到memprocfs作者github页面下载相对应的版本https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
+因为不自带memprocfs，请先到memprocfs作者github页面下载相对应的版本
+
+https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
+
 放在*Tools/memprocfs*目录下
+
 挂载文件系统需要*安装Dokany文件系统库*
+
 请下载并安装最新版本的 Dokany 版本 2：https://github.com/dokan-dev/dokany/releases/latest
 
 ### 其他
