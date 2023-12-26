@@ -1,7 +1,8 @@
 # LovelyMem
 ### 这是什么
 一款基于memprocfs的快捷内存取证工具
-区别于VolatilityPro有着更快的取证速度以及更便捷的功能
+区别于VolatilityPro：https://github.com/Tokeii0/VolatilityPro
+有着更快的取证速度以及更便捷的功能
 
 ### 功能展示
 https://www.bilibili.com/video/BV1TK411b78J/
