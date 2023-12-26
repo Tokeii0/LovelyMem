@@ -36,6 +36,10 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 请下载并安装最新版本的 Dokany 版本 2：https://github.com/dokan-dev/dokany/releases/latest
 
+目录下运行命令
+
+` python main.py `
+
 ### 其他
 远离内卷，还CTF圈一个朗朗乾坤
 
