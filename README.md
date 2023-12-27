@@ -36,11 +36,13 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 请下载并安装最新版本的 Dokany 版本 2：https://github.com/dokan-dev/dokany/releases/latest
 
+安装gimp https://www.gimp.org/download/
+
 目录下运行命令
 
 ` python main.py `
 ### 你都更新了点啥
-v0.2 2023.12.27
+#### v0.2 2023.12.27
   - 新建右键菜单，修改右键逻辑，现在大伙可以按右键选择直接跳转到文件所在目录（前提是这是一个文件路径）
   - 右键新增功能，复制内容并发送至搜索框
   - 因为有部分过小文件无法搜索到，新增vol2联合搜索，打印至控制台，dumpfile放下个版本写
@@ -49,8 +51,8 @@ v0.2 2023.12.27
   - 输入框支持输入pid并点击procdump2gimp可直接用gimp载入原始数据
   - 支持拖拽镜像文件至窗口内
   - 版本号更改为v0.2
-
-v0.1 2023.12.26
+  - config.py文件用于存放第三方工具gimp以及vol2所在目录仅供参考
+#### v0.1 2023.12.26
   - 新建项目
 
 
