@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LovelyMem v0.1</string>
+   <string>LovelyMem v0.2</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_loadMem">
@@ -76,7 +76,7 @@
    <widget class="QPushButton" name="pushButton_load_netstat">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>670</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -89,7 +89,7 @@
    <widget class="QPushButton" name="pushButton_load_netstat_timeline">
     <property name="geometry">
      <rect>
-      <x>620</x>
+      <x>670</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -102,7 +102,7 @@
    <widget class="QPushButton" name="pushButton_load_proc_timeline">
     <property name="geometry">
      <rect>
-      <x>740</x>
+      <x>780</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -115,7 +115,7 @@
    <widget class="QPushButton" name="pushButton_load_proc">
     <property name="geometry">
      <rect>
-      <x>700</x>
+      <x>750</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -128,7 +128,7 @@
    <widget class="QPushButton" name="pushButton_load_tasks">
     <property name="geometry">
      <rect>
-      <x>780</x>
+      <x>830</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -141,7 +141,7 @@
    <widget class="QPushButton" name="pushButton_load_findevil">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>910</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -154,7 +154,7 @@
    <widget class="QPushButton" name="pushButton_load_web_timeline">
     <property name="geometry">
      <rect>
-      <x>860</x>
+      <x>890</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -175,6 +175,74 @@
     </property>
     <property name="text">
      <string>搜索字符串</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_unloadmem">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>卸载内存镜像</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_withvol2find">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>10</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>vol2联合搜索</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_withvol2dump">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>40</y>
+      <width>91</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>vol2导出文件</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_ntfsfind">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>40</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ntfs搜索</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_procdump2gimp">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>40</y>
+      <width>111</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>procdump2gimp</string>
     </property>
    </widget>
   </widget>
