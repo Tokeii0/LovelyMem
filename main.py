@@ -408,7 +408,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if reply == QMessageBox.Yes:
             event.accept()
             # 结束MemProcFS进程，模拟ctrl+c结束MemProcFS.exe
-            # os.system('taskkill /F /IM MemProcFS.exe')
+            os.system('taskkill /F /IM MemProcFS.exe')
 
         else:
             event.ignore()
