@@ -7,7 +7,6 @@ import os
 import subprocess
 from colorama import Fore, Back, Style
 import csv
-import re
 import shutil
 from PySide6 import QtGui
 import convert.netstat
@@ -15,6 +14,7 @@ import convert.loadcsv
 import vol2find
 import pandas as pd
 from PySide6 import QtWidgets
+import re
 
 
 class CommandRunner(QThread):
@@ -41,7 +41,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.setWindowIcon(QtGui.QIcon('res/ico.jpg'))
         #长宽不允许修改
         self.setFixedSize(self.width(), self.height())
-        self.actionOpenFile.triggered.connect(self.open_file)
+        self.actionOpenFile.triggered.connect(self.open_file_select)
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
@@ -147,6 +147,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             self.open_file(file_path)
+    
+    #打开文件
+    def open_file_select(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '内存镜像文件 (*.raw)')
+        if file_path:
+            self.open_file(file_path)       
 
     def open_file(self, file_path):
         self.file_name = file_path
@@ -284,29 +290,29 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         str1 = self.lineEdit_str.text()
         files = r'M:\forensic\csv\timeline_ntfs.csv'
         result = []
-        with open(files, 'r',encoding='UTF-8') as file:
+        with open(files, 'r', encoding='UTF-8') as file:
             for line in file:
-                if str1 in line:
+                if re.search(str1, line, re.IGNORECASE):
                     result.append(line)
-        #pandas读result
+        # pandas读result
         df = pd.DataFrame(result)
         df = df.values.tolist()
-        #每行分割
+        # 每行分割
         for i in range(len(df)):
             df[i] = re.split(',', df[i][0])
-            #去掉最后一列
+            # 去掉最后一列
             df[i].pop()
         # 加载至tableWidget_find,不知几列
         self.tableWidget_find.setRowCount(len(df))
         self.tableWidget_find.setColumnCount(len(df[0]))
         # Time	Type	Action	PID	Value32	Value64	Text	Pad
-        self.tableWidget_find.setHorizontalHeaderLabels(['Time','Type','Action','PID','Value32','Value64','Text'])
+        self.tableWidget_find.setHorizontalHeaderLabels(['Time', 'Type', 'Action', 'PID', 'Value32', 'Value64', 'Text'])
         for i in range(len(df)):
             for j in range(len(df[0])):
                 self.tableWidget_find.setItem(i, j, QTableWidgetItem(df[i][j]))
-                #宽度自适应，根据内容调整列宽,最后一列填充空白部分
+                # 宽度自适应，根据内容调整列宽,最后一列填充空白部分
                 self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(df[0])-1, QHeaderView.Stretch)
+                self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(df[0]) - 1, QHeaderView.Stretch)
         print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
     def volfindscan(self):
         if self.lineEdit_str.text() == '':
@@ -325,8 +331,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         profile = str1 + str2
         #cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
         cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} filescan | findstr {str}'
+        #运行时 按钮变为不可用
+        self.pushButton_withvol2find.setEnabled(False)
         self.command_runner = CommandRunner(cmd)
         self.command_runner.start()
+        #线程结束后 按钮变为可用
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setEnabled(True))
     def procdump2gimp(self):
         str = self.lineEdit_str.text()
         #判断是否为数字
