@@ -163,7 +163,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         except:
             print(Fore.RED + '[Error] 请先加载内存镜像文件！' + Style.RESET_ALL)
         # memprocfs.exe -device mempath -v -forensic 1
-        cmd = config.MemProcFsDir + ' -device ' + path + ' -v -forensic 1'
+        cmd = f'{config.MemProcFsDir} -device "{path}" -v -forensic 1'
         try:
             subprocess.Popen(cmd, shell=True)
         except:
@@ -323,7 +323,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         else:
             str2 = 'x86'
         profile = str1 + str2
-        cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
+        #cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} filescan | findstr {str}'
         self.command_runner = CommandRunner(cmd)
         self.command_runner.start()
     def procdump2gimp(self):
