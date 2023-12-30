@@ -38,13 +38,13 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
         #icon 设置为'res\ico.jpg'
         self.setAcceptDrops(True)
-        self.setWindowIcon(QtGui.QIcon('res/ico.jpg'))
-        #长宽不允许修改
-        self.setFixedSize(self.width(), self.height())
+        self.setWindowIcon(QtGui.QIcon('res/ico.jpg')) 
         self.actionOpenFile.triggered.connect(self.open_file_select)
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
+        # open_file_select
+
         self.customContextMenuRequested.connect(self.contextMenuEvent)
         self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
         self.pushButton_flush.clicked.connect(self.flush)
@@ -61,6 +61,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_withvol2find.clicked.connect(self.volfindscan)
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
+        self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
         self.show()
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
@@ -150,7 +151,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
     
     #打开文件
     def open_file_select(self):
-        file_path, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '内存镜像文件 (*.raw)')
+        file_path, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '所有文件 (*.*)')
         if file_path:
             self.open_file(file_path)       
 
@@ -287,12 +288,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if self.lineEdit_str.text() == '':
             print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
-        str1 = self.lineEdit_str.text()
+        pattern = self.lineEdit_str.text()
         files = r'M:\forensic\csv\timeline_ntfs.csv'
         result = []
         with open(files, 'r', encoding='UTF-8') as file:
             for line in file:
-                if re.search(str1, line, re.IGNORECASE):
+                if re.search(pattern, line, re.IGNORECASE):
                     result.append(line)
         # pandas读result
         df = pd.DataFrame(result)
@@ -328,15 +329,36 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             str2 = 'x64'
         else:
             str2 = 'x86'
-        profile = str1 + str2
+        self.profile = str1 + str2
         #cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
-        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} filescan | findstr {str}'
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={self.profile} filescan | findstr {str}'
         #运行时 按钮变为不可用
         self.pushButton_withvol2find.setEnabled(False)
+        #按钮名字改为搜索中...
+        self.pushButton_withvol2find.setText('搜索中...')
+        print(Fore.YELLOW + '[*] 正在调用vol2进行文件搜索：' + cmd + Style.RESET_ALL)
         self.command_runner = CommandRunner(cmd)
         self.command_runner.start()
         #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setText('vol2联合搜索'))
+    def withvol2dump(self):
+        if self.lineEdit_str.text() == '':
+            print(Fore.RED + '[Error] 请输入要需要dumpfile的地址！' + Style.RESET_ALL)
+            return
+        str = self.lineEdit_str.text()
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={self.profile} dumpfiles -Q {str} --dump-dir=output'
+        #运行时 按钮变为不可用
+        self.pushButton_withvol2dump.setEnabled(False)
+        #按钮名字改为搜索中...
+        self.pushButton_withvol2dump.setText('搜索中...')
+        self.command_runner = CommandRunner(cmd)
+        self.command_runner.start()
+        #线程结束后 按钮变为可用
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setText('vol2导出文件'))
+
+
     def procdump2gimp(self):
         str = self.lineEdit_str.text()
         #判断是否为数字
