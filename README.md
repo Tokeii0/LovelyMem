@@ -24,6 +24,10 @@ _✨ 基于Memprocfs的可视化内存取证工具 ✨_
 ### 功能展示
 https://www.bilibili.com/video/BV1TK411b78J/
 https://www.bilibili.com/video/BV1Hb4y1G77m/
+
+### 适合什么题
+  - 没有套娃的取证题目
+    
 ### 使用方法
 
 因为不自带memprocfs，请先到memprocfs作者github页面下载相对应的版本
