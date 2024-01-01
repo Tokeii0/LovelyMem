@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1610</width>
-    <height>767</height>
+    <width>1041</width>
+    <height>778</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,14 +30,14 @@
    <widget class="QPushButton" name="pushButton_flush">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>124</x>
       <y>10</y>
-      <width>75</width>
+      <width>81</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>刷新结果</string>
+     <string>镜像基本信息</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget_find">
@@ -45,10 +45,28 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>1591</width>
+      <width>1011</width>
       <height>661</height>
      </rect>
     </property>
+    <property name="rowCount">
+     <number>0</number>
+    </property>
+    <property name="columnCount">
+     <number>0</number>
+    </property>
+    <attribute name="horizontalHeaderMinimumSectionSize">
+     <number>15</number>
+    </attribute>
+    <attribute name="horizontalHeaderDefaultSectionSize">
+     <number>1000</number>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>10</number>
+    </attribute>
+    <attribute name="verticalHeaderDefaultSectionSize">
+     <number>18</number>
+    </attribute>
    </widget>
    <widget class="QPushButton" name="pushButton_findstr">
     <property name="geometry">
@@ -76,7 +94,7 @@
    <widget class="QPushButton" name="pushButton_load_netstat">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>680</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -89,7 +107,7 @@
    <widget class="QPushButton" name="pushButton_load_netstat_timeline">
     <property name="geometry">
      <rect>
-      <x>670</x>
+      <x>680</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -102,7 +120,7 @@
    <widget class="QPushButton" name="pushButton_load_proc_timeline">
     <property name="geometry">
      <rect>
-      <x>780</x>
+      <x>790</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -115,7 +133,7 @@
    <widget class="QPushButton" name="pushButton_load_proc">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>760</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -128,7 +146,7 @@
    <widget class="QPushButton" name="pushButton_load_tasks">
     <property name="geometry">
      <rect>
-      <x>830</x>
+      <x>840</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -141,7 +159,7 @@
    <widget class="QPushButton" name="pushButton_load_findevil">
     <property name="geometry">
      <rect>
-      <x>910</x>
+      <x>920</x>
       <y>10</y>
       <width>75</width>
       <height>23</height>
@@ -154,7 +172,7 @@
    <widget class="QPushButton" name="pushButton_load_web_timeline">
     <property name="geometry">
      <rect>
-      <x>890</x>
+      <x>900</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -205,7 +223,7 @@
    </widget>
    <widget class="QPushButton" name="pushButton_withvol2dump">
     <property name="enabled">
-     <bool>false</bool>
+     <bool>true</bool>
     </property>
     <property name="geometry">
      <rect>
@@ -251,7 +269,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1610</width>
+     <width>1041</width>
      <height>21</height>
     </rect>
    </property>

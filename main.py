@@ -1,7 +1,7 @@
 import config
 from Lovelymem_ui import Ui_MainWindow
 from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QWidget, QTableWidgetItem, QHeaderView, QMenu, QTableWidget
-from PySide6.QtCore import Qt, QThread, Signal
+from PySide6.QtCore import Qt, QThread, Signal,QRect
 import sys
 import os
 import subprocess
@@ -14,7 +14,9 @@ import convert.loadcsv
 import vol2find
 import pandas as pd
 from PySide6 import QtWidgets
-import re
+import re,hexdump
+import binascii
+from PIL import Image
 
 
 class CommandRunner(QThread):
@@ -43,7 +45,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-        # open_file_select
 
         self.customContextMenuRequested.connect(self.contextMenuEvent)
         self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
@@ -68,9 +69,41 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         context_menu = QtWidgets.QMenu(self)
         opendir = context_menu.addAction("打开文件所在目录")
         copy_str = context_menu.addAction("复制内容并发送至搜索框")
+        quickly_view = context_menu.addAction("快速查看文本")
+        quickly_view_img = context_menu.addAction("快速查看图片")
         action = context_menu.exec(self.mapToGlobal(pos))
-
-        if action == opendir:
+        def get_truepath(selectstr):
+            if selectstr.split('\\')[1] == '0' or selectstr.split('\\')[1] == '1' or selectstr.split('\\')[1] == '2':
+                print(Fore.YELLOW + '[*] 识别为ntfs目录' + selectstr + Style.RESET_ALL)
+                ntfsroot = r'M:\forensic\ntfs'
+                truepath = ntfsroot + selectstr.replace('\\', '/')
+                
+            elif 'HarddiskVolume' in selectstr:
+                print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
+                selectstr = '/'.join(selectstr.split('\\')[3:])
+                ntfsroot = r'M:\forensic\ntfs'
+                try:
+                    truepath = ntfsroot+'\\0\\' + selectstr.replace('\\', '/')
+                except:
+                    truepath = ntfsroot+'\\1\\' + selectstr.replace('\\', '/')
+                
+            elif ':\\' in selectstr:
+                print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
+                selectstr = '/'.join(selectstr.split('\\')[1:])
+                ntfsroot = r'M:\forensic\ntfs'
+                try:
+                    truepath = ntfsroot+'\\0\\' + selectstr.replace('\\', '/')
+                except:
+                    truepath = ntfsroot+'\\1\\' + selectstr.replace('\\', '/')
+                
+            else:
+                print(Fore.YELLOW + '[*] 使用正常目录' + selectstr + Style.RESET_ALL)
+                memfilepath = r'M:/forensic/files/ROOT'
+                truepath = memfilepath + selectstr.replace('\\', '/')
+            #转换为windows路径
+            truepath = truepath.replace('/', '\\')
+            return truepath
+        if action == opendir: #打开文件所在目录
             # Get the content of the selected cell
             local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
             header_height = self.tableWidget_find.horizontalHeader().height()
@@ -82,49 +115,15 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 print("所选单元格内容：", selectstr)
                 
             # 判断 M:/forensic/files/ROOT/+selectstr是否存在，若存在就打开文件目录
-            if selectstr.split('\\')[1] == '0':
-                print(Fore.YELLOW + '[*] 识别为ntfs目录' + selectstr + Style.RESET_ALL)
-                ntfsroot = r'M:\forensic\ntfs'
-                truepath = ntfsroot + selectstr.replace('\\', '/')
-                # 转换为windows路径
-                truepath = truepath.replace('/', '\\').split('\\')[:-1]
-                truepath = '\\'.join(truepath)
-                # 黄色高亮显示
+            truepath = get_truepath(selectstr)
+            #判断一下是不是文件夹,若是文件夹就打开文件夹,若是文件就打开文件所在目录
+            if os.path.isdir(truepath):
                 print(Fore.YELLOW + '[*] 正在打开目录：' + truepath + Style.RESET_ALL)
-                os.system('explorer.exe ' + truepath + '\\')
-            elif 'HarddiskVolume' in selectstr:
-                print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
-                selectstr = '/'.join(selectstr.split('\\')[3:])
-                ntfsroot = r'M:\forensic\ntfs'
-                truepath = ntfsroot+'\\0\\' + selectstr.replace('\\', '/')
-                # 转换为windows路径
-                truepath = truepath.replace('/', '\\').split('\\')[:-1]
-                truepath = '\\'.join(truepath)
-                # 黄色高亮显示
-                print(Fore.YELLOW + '[*] 正在打开目录：' + truepath + Style.RESET_ALL)
-                os.system('explorer.exe ' + truepath + '\\')
-            elif ':\\' in selectstr:
-                print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
-                selectstr = '/'.join(selectstr.split('\\')[1:])
-                ntfsroot = r'M:\forensic\ntfs'
-                truepath = ntfsroot + '\\0\\' + selectstr.replace('\\', '/')
-                # 转换为windows路径
-                truepath = truepath.replace('/', '\\').split('\\')[:-1]
-                truepath = '\\'.join(truepath)
-                # 黄色高亮显示
-                print(Fore.YELLOW + '[*] 正在打开目录：' + truepath + Style.RESET_ALL)
-                os.system('explorer.exe ' + truepath + '\\')
+                os.system('explorer.exe ' + truepath)
             else:
-                print(Fore.YELLOW + '[*] 使用正常目录' + selectstr + Style.RESET_ALL)
-                memfilepath = r'M:/forensic/files/ROOT'
-                truepath = memfilepath + selectstr.replace('\\', '/')
-                # 转换为windows路径
-                truepath = truepath.replace('/', '\\').split('\\')[:-1]
-                truepath = '\\'.join(truepath)
-                # 黄色高亮显示
-                print(Fore.YELLOW + '[*] 正在打开目录：' + truepath + Style.RESET_ALL)
-                os.system('explorer.exe ' + truepath + '\\')
-        elif action == copy_str:
+                print(Fore.YELLOW + '[*] 正在打开目录：' + os.path.dirname(truepath) + Style.RESET_ALL)
+                os.system('explorer.exe ' + os.path.dirname(truepath))                
+        elif action == copy_str: #复制内容并发送至搜索框
             # Get the content of the selected cell
             local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
             header_height = self.tableWidget_find.horizontalHeader().height()
@@ -136,6 +135,52 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 clipboard = QApplication.clipboard()
                 clipboard.setText(selectstr)
                 print(Fore.GREEN + f'[+] 发送成功！内容为：{selectstr}' + Style.RESET_ALL)
+        elif action == quickly_view: #快速查看文本
+            # Get the content of the selected cell
+            local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
+            header_height = self.tableWidget_find.horizontalHeader().height()
+            local_pos.setY(local_pos.y() - header_height)
+            selected_item = self.tableWidget_find.itemAt(local_pos)
+            if selected_item is not None:
+                selectstr = selected_item.text().strip('"')
+                #打印光标所在行数据
+                print("所选单元格内容：", selectstr)
+            truepath = get_truepath(selectstr)
+            #先判断是不是文件夹
+            if os.path.isdir(truepath):
+                print(Fore.RED + '[Error] 该路径为文件夹！' + Style.RESET_ALL)
+                return
+            #用于显示文件内容,编码使用utf-8,仅读取前200字节
+            try:
+                self.quicklyview(truepath)
+                self.textEdit.setText(open(truepath, 'r', encoding='utf-8').read(500))
+                self.quicklyviewwindow.show()
+            except:
+                print(Fore.RED + '[Error] 该文件无法快速读取,即将使用hexdump打印至控制台' + Style.RESET_ALL)
+                print(Fore.GREEN + '[*] 正在使用hexdump打印文件内容：' + truepath + Style.RESET_ALL)
+                hexdump.hexdump(open(truepath, 'rb').read(500))
+        elif action == quickly_view_img:
+            #调用PIL库打开图片，如果不是图片就调用quickly_view
+            # Get the content of the selected cell
+            local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
+            header_height = self.tableWidget_find.horizontalHeader().height()
+            local_pos.setY(local_pos.y() - header_height)
+            selected_item = self.tableWidget_find.itemAt(local_pos)
+            if selected_item is not None:
+                selectstr = selected_item.text().strip('"')
+                #打印光标所在行数据
+                print("所选单元格内容：", selectstr)
+            truepath = get_truepath(selectstr)
+            try:
+                Image.open(truepath).show()
+            except:
+                print(Fore.RED + '[Error] 该文件不是图片！' + Style.RESET_ALL)
+                return
+            
+
+
+            
+
 
 #功能区------------------------------------------------------------------------------------------------------
     def dragEnterEvent(self, event):
@@ -357,6 +402,17 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setEnabled(True))
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setText('vol2导出文件'))
+    def quicklyview(self,path):
+        #创建一个新的窗口，里面有一个textEdit，用于显示文件内容,编码使用utf-8,仅读取前200字节
+        self.quicklyviewwindow = QWidget()
+        self.quicklyviewwindow.resize(800, 600)
+        self.quicklyviewwindow.setWindowTitle(f'文件内容-路径:{path}')
+        self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/ico.jpg'))
+        self.textEdit = QtWidgets.QTextEdit(self.quicklyviewwindow)
+        self.textEdit.setGeometry(QRect(0, 0, 800, 600))
+        self.textEdit.setObjectName("textEdit")
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setAcceptDrops(False)
 
 
     def procdump2gimp(self):
@@ -384,28 +440,34 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if self.lineEdit_str.text() == '':
             print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
-        memdisk = r'M:/'
-        files = open(memdisk + 'forensic/files/files.txt', 'r', encoding='utf-8').readlines()
-        str = self.lineEdit_str.text()
-        newline = []
-        for line in files:
-            if re.search(str, line, re.I):
-                line = line.split(' ')
-                while '' in line:
-                    line.remove('')
-                line = [x.replace('\n', '') for x in line]
-                newline.append(line[3:6])
-        # newline 加载至tableWidget_find，表头为大小,文件名，路径
-        self.tableWidget_find.setRowCount(len(newline))
-        self.tableWidget_find.setColumnCount(3)
-        self.tableWidget_find.setHorizontalHeaderLabels(['大小', '文件名', '路径'])
-        for i in range(len(newline)):
-            for j in range(3):
-                self.tableWidget_find.setItem(i, j, QTableWidgetItem(newline[i][j]))
-                #宽度自适应，根据内容调整列宽,最后一列填充空白部分
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
-        print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
+        str1 = self.lineEdit_str.text()
+        file_path = r"M:\forensic\csv\files.csv"
+        df = pd.read_csv(file_path)
+        def correct_path(row):
+            path_parts = row['Path'].rsplit('\\', 1)
+            new_path = path_parts[0] + '\\' + row['Object'][2:] + '-' + row['File'] if len(path_parts) > 1 else row['Path']
+            return new_path
+        try:
+            matching_rows = df[df['File'].str.contains(str1, case=False, na=False)].copy()
+            matching_rows['Path'] = matching_rows.apply(correct_path, axis=1)
+            matching_rows = matching_rows.astype(str)
+            newline = matching_rows.values.tolist()
+
+            # Ensure the number of columns matches the number of elements in newline
+            num_columns = 5
+            self.tableWidget_find.setRowCount(len(newline))
+            self.tableWidget_find.setColumnCount(num_columns)
+            self.tableWidget_find.setHorizontalHeaderLabels(['地址','类型','大小', '文件名', '实际路径'])
+            for i in range(len(newline)):
+                for j in range(num_columns):
+                    self.tableWidget_find.setItem(i, j, QTableWidgetItem(newline[i][j]))
+            self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+
+            print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
+        except Exception as e:
+            print(Fore.RED + '[Error] 搜索失败，未找到内容 ' + str(e) + Style.RESET_ALL)
+
+    
         
     #右键tableWidget_find中的文件，选择打开文件所在目录
     def open_dir(self):
@@ -432,7 +494,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 self.tableWidget_find.setItem(data.index(i), columns.index(j), QTableWidgetItem(i[columns.index(j)]))
                 #宽度自适应，根据内容调整列宽,最后一列填充空白部分
                 self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(columns)-1, QHeaderView.Stretch)
+                self.tableWidget_find.horizontalHeader().setStretchLastSection(True)
                 
         print(Fore.GREEN + '[+] 加载成功！' + Style.RESET_ALL)
         
