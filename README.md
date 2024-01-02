@@ -50,6 +50,9 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - 重整按钮位置
   - 修改了几个按钮的位置，现在搜索都在搜索框下方
   - 新增了vol2editbox，volclipboard
+  - 新增查看services,注册表timeline
+  - 最初写的netstat重写方法
+  - 修改缩小了绘制表格打行高
 #### v0.2b 2024.1.1
   - 新增快速查看文本内容
   - 新增快速查看图片
