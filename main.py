@@ -63,6 +63,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
+        self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
+        self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
         self.show()
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
@@ -365,18 +367,9 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
         str = self.lineEdit_str.text()
-        regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
-        data = open(regpath, 'r', encoding='utf-8').readlines()
-        newdata = data[2].split('.')
-        str1 = newdata[3].split('_')[0]
-        str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
-        if '64' in newdata[2]:
-            str2 = 'x64'
-        else:
-            str2 = 'x86'
-        self.profile = str1 + str2
+        profile = self.getprofile()
         #cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
-        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={self.profile} filescan | findstr {str}'
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} filescan | findstr {str}'
         #运行时 按钮变为不可用
         self.pushButton_withvol2find.setEnabled(False)
         #按钮名字改为搜索中...
@@ -413,8 +406,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.textEdit.setObjectName("textEdit")
         self.textEdit.setReadOnly(True)
         self.textEdit.setAcceptDrops(False)
-
-
     def procdump2gimp(self):
         str = self.lineEdit_str.text()
         #判断是否为数字
@@ -435,7 +426,46 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         print(Fore.YELLOW + '[*] 正在调用gimp执行命令：' + cmd2 + Style.RESET_ALL)
         subprocess.Popen(cmd2, shell=True)
         print(Fore.GREEN + '[+] 执行成功！' + Style.RESET_ALL)
-
+    def withvol2editbox(self):
+        profile = self.getprofile()
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} editbox'
+        self.pushButton_vol2editbox.setEnabled(False)
+        #按钮名字改为搜索中...
+        self.pushButton_vol2editbox.setText('搜索中...')
+        self.command_runner = CommandRunner(cmd)
+        print(Fore.YELLOW + '[*] 正在调用vol2进行editbox：' + cmd + Style.RESET_ALL)
+        self.command_runner.start()
+        #线程结束后 按钮变为可用
+        self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setText('vol2editbox'))
+    def withvol2clipboard(self):
+        profile = self.getprofile()
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} clipboard'
+        self.pushButton_vol2clipboard.setEnabled(False)
+        #按钮名字改为搜索中...
+        self.pushButton_vol2clipboard.setText('搜索中...')
+        self.command_runner = CommandRunner(cmd)
+        print(Fore.YELLOW + '[*] 正在调用vol2进行clipboard：' + cmd + Style.RESET_ALL)
+        self.command_runner.start()
+        #线程结束后 按钮变为可用
+        self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setText('vol2clipboard'))
+    def getprofile(self):
+        regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
+        data = open(regpath, 'r', encoding='utf-8').readlines()
+        newdata = data[2].split('.')
+        str1 = newdata[3].split('_')[0]
+        str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
+        if '10' not in str1 and 'SP' not in str1:
+            str1 = str1 + 'SP1'
+        if '64' in newdata[2]:
+            str2 = 'x64'
+        else:
+            str2 = 'x86'
+        self.profile = str1 + str2
+        
+        print(Fore.GREEN + '[+] 获取profile成功！' + Style.RESET_ALL)
+        return self.profile
     def findstr(self):
         if self.lineEdit_str.text() == '':
             print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
@@ -502,7 +532,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         reply = QMessageBox.question(self, '退出', '确认退出吗？退出会结束MemProcFS进程', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             event.accept()
-            # 结束MemProcFS进程，模拟ctrl+c结束MemProcFS.exe
+            # 结束MemProcFS进程，结束MemProcFS.exe
             os.system('taskkill /F /IM MemProcFS.exe')
 
         else:

@@ -30,9 +30,9 @@
    <widget class="QPushButton" name="pushButton_flush">
     <property name="geometry">
      <rect>
-      <x>124</x>
-      <y>10</y>
-      <width>81</width>
+      <x>10</x>
+      <y>40</y>
+      <width>111</width>
       <height>23</height>
      </rect>
     </property>
@@ -44,9 +44,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>100</y>
       <width>1011</width>
-      <height>661</height>
+      <height>631</height>
      </rect>
     </property>
     <property name="rowCount">
@@ -71,8 +71,8 @@
    <widget class="QPushButton" name="pushButton_findstr">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>10</y>
+      <x>280</x>
+      <y>40</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -84,11 +84,14 @@
    <widget class="QLineEdit" name="lineEdit_str">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>130</x>
       <y>10</y>
-      <width>281</width>
+      <width>341</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="inputMask">
+     <string/>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_load_netstat">
@@ -185,7 +188,7 @@
    <widget class="QPushButton" name="pushButton_findrow">
     <property name="geometry">
      <rect>
-      <x>210</x>
+      <x>130</x>
       <y>40</y>
       <width>75</width>
       <height>23</height>
@@ -199,7 +202,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>40</y>
+      <y>70</y>
       <width>111</width>
       <height>23</height>
      </rect>
@@ -211,14 +214,14 @@
    <widget class="QPushButton" name="pushButton_withvol2find">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>10</y>
+      <x>130</x>
+      <y>70</y>
       <width>91</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>vol2联合搜索</string>
+     <string>vol2findscan</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_withvol2dump">
@@ -227,20 +230,20 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>40</y>
+      <x>220</x>
+      <y>70</y>
       <width>91</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>vol2导出文件</string>
+     <string>vol2dumpfile</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_ntfsfind">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>205</x>
       <y>40</y>
       <width>75</width>
       <height>23</height>
@@ -253,14 +256,45 @@
    <widget class="QPushButton" name="pushButton_procdump2gimp">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>40</y>
+      <x>480</x>
+      <y>10</y>
       <width>111</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
      <string>procdump2gimp</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_vol2editbox">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>70</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>vol2editbox</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_vol2clipboard">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>70</y>
+      <width>81</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>vol2clipboard</string>
     </property>
    </widget>
   </widget>
