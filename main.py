@@ -11,7 +11,6 @@ import shutil
 from PySide6 import QtGui
 import convert.netstat
 import convert.loadcsv
-import vol2find
 import pandas as pd
 from PySide6 import QtWidgets
 import re,hexdump
@@ -45,7 +44,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
-
         self.customContextMenuRequested.connect(self.contextMenuEvent)
         self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
         self.pushButton_flush.clicked.connect(self.flush)
@@ -65,6 +63,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
         self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
+        self.pushButton_services.clicked.connect(self.loadservices)
+        self.pushButton_load_timeline_registry.clicked.connect(self.loadtimeline_registry)
         self.show()
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
@@ -178,11 +178,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             except:
                 print(Fore.RED + '[Error] 该文件不是图片！' + Style.RESET_ALL)
                 return
-            
-
-
-            
-
 
 #功能区------------------------------------------------------------------------------------------------------
     def dragEnterEvent(self, event):
@@ -281,7 +276,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 if j == len(columns) - 1:
                     item.setTextAlignment(Qt.AlignTop | Qt.AlignLeft)
                     item.setFlags(item.flags() | Qt.ItemIsSelectable | Qt.ItemIsEditable)
-                    self.tableWidget_find.setRowHeight(i, 50)  # Increase row height
+                    self.tableWidget_find.setRowHeight(i, 20)  # Decrease row height
                 else:
                     pass
             self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(columns) - 1, QHeaderView.Stretch)
@@ -496,8 +491,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
         except Exception as e:
             print(Fore.RED + '[Error] 搜索失败，未找到内容 ' + str(e) + Style.RESET_ALL)
-
-    
+    def loadservices(self):
+        servicespath = r'M:/forensic/csv/services.csv'
+        return self.loadcsv2table(servicespath)
+    def loadtimeline_registry(self):
+        registrypath = r'M:/forensic/csv/timeline_registry.csv'
+        return self.loadcsv2table(registrypath)
         
     #右键tableWidget_find中的文件，选择打开文件所在目录
     def open_dir(self):
@@ -513,20 +512,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         os.system('explorer.exe ' + truepath+'\\')    
     # 加载netstat-v.txt *转换文件在convert/netstat.py中*
     def load_netstat(self):
-        # 转换为列表
-        columns, data = convert.netstat.main()
-        # 加载至tableWidget_netstat
-        self.tableWidget_find.setRowCount(len(data))
-        self.tableWidget_find.setColumnCount(len(columns))
-        self.tableWidget_find.setHorizontalHeaderLabels(columns)
-        for i in data:
-            for j in columns:
-                self.tableWidget_find.setItem(data.index(i), columns.index(j), QTableWidgetItem(i[columns.index(j)]))
-                #宽度自适应，根据内容调整列宽,最后一列填充空白部分
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-                self.tableWidget_find.horizontalHeader().setStretchLastSection(True)
-                
-        print(Fore.GREEN + '[+] 加载成功！' + Style.RESET_ALL)
+        netstatpath = r'M:/forensic/csv/net.csv'
+        return self.loadcsv2table(netstatpath)
         
     def closeEvent(self, event):
         reply = QMessageBox.question(self, '退出', '确认退出吗？退出会结束MemProcFS进程', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1041</width>
+    <width>1068</width>
     <height>778</height>
    </rect>
   </property>
@@ -45,7 +45,7 @@
      <rect>
       <x>10</x>
       <y>100</y>
-      <width>1011</width>
+      <width>1041</width>
       <height>631</height>
      </rect>
     </property>
@@ -94,23 +94,10 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_load_netstat">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载netstat</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_load_netstat_timeline">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>650</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -123,7 +110,7 @@
    <widget class="QPushButton" name="pushButton_load_proc_timeline">
     <property name="geometry">
      <rect>
-      <x>790</x>
+      <x>760</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -133,49 +120,10 @@
      <string>加载proc_timeline</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_load_proc">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载proc</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_load_tasks">
-    <property name="geometry">
-     <rect>
-      <x>840</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载tasks</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_load_findevil">
-    <property name="geometry">
-     <rect>
-      <x>920</x>
-      <y>10</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载findevil</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_load_web_timeline">
     <property name="geometry">
      <rect>
-      <x>900</x>
+      <x>870</x>
       <y>40</y>
       <width>111</width>
       <height>23</height>
@@ -297,13 +245,83 @@
      <string>vol2clipboard</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton_load_timeline_registry">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>70</y>
+      <width>121</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>加载timeline_registry</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>10</y>
+      <width>401</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_load_netstat">
+       <property name="text">
+        <string>加载netstat</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_load_proc">
+       <property name="text">
+        <string>加载proc</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_load_tasks">
+       <property name="text">
+        <string>加载tasks</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_load_findevil">
+       <property name="text">
+        <string>加载findevil</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_services">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>加载services</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1041</width>
+     <width>1068</width>
      <height>21</height>
     </rect>
    </property>
