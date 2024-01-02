@@ -46,6 +46,10 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 ` python main.py `
 ### 你都更新了点啥
+#### v0.2c 2024.1.2
+  - 重整按钮位置
+  - 修改了几个按钮的位置，现在搜索都在搜索框下方
+  - 新增了vol2editbox，volclipboard
 #### v0.2b 2024.1.1
   - 新增快速查看文本内容
   - 新增快速查看图片
