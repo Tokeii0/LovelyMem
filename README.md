@@ -52,7 +52,7 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - 新增了vol2editbox，volclipboard
   - 新增查看services,注册表timeline
   - 最初写的netstat重写方法
-  - 修改缩小了绘制表格打行高
+  - 修改缩小了绘制表格打印行高
 #### v0.2b 2024.1.1
   - 新增快速查看文本内容
   - 新增快速查看图片
