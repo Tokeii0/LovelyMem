@@ -380,11 +380,16 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             print(Fore.RED + '[Error] 请输入要需要dumpfile的地址！' + Style.RESET_ALL)
             return
         str = self.lineEdit_str.text()
+        #判断output文件夹是否存在，不存在就创建
+        if not os.path.exists('output'):
+            os.makedirs('output')
+
         cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={self.profile} dumpfiles -Q {str} --dump-dir=output'
         #运行时 按钮变为不可用
         self.pushButton_withvol2dump.setEnabled(False)
         #按钮名字改为搜索中...
-        self.pushButton_withvol2dump.setText('搜索中...')
+        self.pushButton_withvol2dump.setText('导出中...')
+        print(Fore.YELLOW + '[*] 正在调用vol2进行文件导出，导出后文件位于/output文件夹下：' + cmd + Style.RESET_ALL)
         self.command_runner = CommandRunner(cmd)
         self.command_runner.start()
         #线程结束后 按钮变为可用
