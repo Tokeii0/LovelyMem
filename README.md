@@ -46,6 +46,8 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 ` python main.py `
 ### 你都更新了点啥
+#### v0.2d 2024.1.4
+  - 修了个bug
 #### v0.2c 2024.1.2
   - 重整按钮位置
   - 修改了几个按钮的位置，现在搜索都在搜索框下方
