@@ -3,3 +3,5 @@ leechcorepyc
 pandas
 pypykatz
 PySide6
+hexdump
+Pillow
