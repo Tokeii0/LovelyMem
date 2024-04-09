@@ -88,7 +88,8 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - config.py文件用于存放第三方工具gimp以及vol2所在目录仅供参考
 #### v0.1 2023.12.26
   - 新建项目
-
+### BUG 
+  - 部分windows7内存镜像在解析netstat -v时无法显示对端（DST）ip和端口，解决方案是在界面内加入了vol2netscan进行搜索
 
 ### 其他
 远离内卷，还CTF圈一个朗朗乾坤
