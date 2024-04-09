@@ -1,12 +1,11 @@
 import config
 from Lovelymem_ui import Ui_MainWindow
-from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QWidget, QTableWidgetItem, QHeaderView, QMenu, QTableWidget
+from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QWidget, QTableWidgetItem, QHeaderView
 from PySide6.QtCore import Qt, QThread, Signal,QRect
 import sys
 import os
 import subprocess
 from colorama import Fore, Back, Style
-import csv
 import shutil
 from PySide6 import QtGui
 import convert.netstat
@@ -14,7 +13,6 @@ import convert.loadcsv
 import pandas as pd
 from PySide6 import QtWidgets
 import re,hexdump
-import binascii
 from PIL import Image
 
 
@@ -135,12 +133,10 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 print(Fore.YELLOW + '[*] 正在打开目录：' + os.path.dirname(truepath) + Style.RESET_ALL)
                 os.system('explorer.exe ' + os.path.dirname(truepath))                
         elif action == copy_str: #复制内容并发送至搜索框
-            # Get the content of the selected cell
-            local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
-            header_height = self.tableWidget_find.horizontalHeader().height()
-            local_pos.setY(local_pos.y() - header_height)
-            selected_item = self.tableWidget_find.itemAt(local_pos)
-            if selected_item is not None:
+        # Get the content of the selected cell
+            selected_items = self.tableWidget_find.selectedItems()
+            if selected_items:
+                selected_item = selected_items[0]
                 selectstr = selected_item.text()
                 self.lineEdit_str.setText(selectstr)
                 clipboard = QApplication.clipboard()
@@ -557,12 +553,21 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         return self.loadcsv2table(netstatpath)
         
     def closeEvent(self, event):
-        reply = QMessageBox.question(self, '退出', '确认退出吗？退出会结束MemProcFS进程', QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        pixmap = QtGui.QPixmap("res/qrcode.png")
+        pixmap = pixmap.scaled(200, 200)
+        msg = QMessageBox()
+        msg.setIconPixmap(pixmap)
+        msg.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        msg.setTextFormat(Qt.RichText)
+        msg.setText("<center><h2>确认退出吗？</h2></center><center><h2>退出会结束MemProcFS进程</h2></center>")
+        msg.setWindowTitle("请我喝杯咖啡吧！")
+        msg.setWindowIcon(QtGui.QIcon('res/logo.ico'))
+        msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        reply = msg.exec()
         if reply == QMessageBox.Yes:
             event.accept()
             # 结束MemProcFS进程，结束MemProcFS.exe
             os.system('taskkill /F /IM MemProcFS.exe')
-
         else:
             event.ignore()
 #----------------------------------------------------------------------------------------------------------
