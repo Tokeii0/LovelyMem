@@ -48,6 +48,15 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 ` python main.py `
 ### 你都更新了点啥
+#### v0.3 2024.4.9
+  - 在对表格项目进行操作时新增右键菜单删除行删除列
+  - 内部的tableWidget的宽度现在会跟随者窗口宽度变化
+  - 新增了一个开关用于在自适应以及自定义列宽中切换
+  - 新增一个加载全部文件的按钮
+  - title新增github项目地址
+  - 对右侧的按钮进行layout整理
+  - 版本号更新至v0.3
+  - 采用全新logo
 #### v0.2d 2024.1.4
   - 修了个bug
 #### v0.2c 2024.1.2
