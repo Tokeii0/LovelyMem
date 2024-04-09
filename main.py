@@ -40,29 +40,57 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.actionOpenFile.triggered.connect(self.open_file_select)
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
+        self.action2.triggered.connect(self.use_memprocfs)
+        self.action2.setShortcut('Ctrl+L')
+        self.action2.setStatusTip('加载内存镜像')
+        self.action3.triggered.connect(self.unloadmem)
+        self.action3.setShortcut('Ctrl+U')
+        self.action3.setStatusTip('卸载内存镜像')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.contextMenuEvent)
-        self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
+        #self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
         self.pushButton_flush.clicked.connect(self.flush)
+        self.pushButton_flush.setToolTip('在新窗口加载镜像的基本信息')
         self.pushButton_findstr.clicked.connect(self.findstr)
+        self.pushButton_findstr.setToolTip('搜索文件名包含关键字的文件')
         self.pushButton_load_netstat.clicked.connect(self.load_netstat)
+        self.pushButton_load_netstat.setToolTip('加载网络连接信息，若目的地址无法显示请使用netscan')
         self.pushButton_load_proc.clicked.connect(self.loadproc)
+        self.pushButton_load_proc.setToolTip('加载进程信息')
         self.pushButton_load_tasks.clicked.connect(self.loadtasks)
+        self.pushButton_load_tasks.setToolTip('加载任务信息')
         self.pushButton_load_findevil.clicked.connect(self.loadfindevil)
+        self.pushButton_load_findevil.setToolTip('加载恶意文件信息')
         self.pushButton_load_netstat_timeline.clicked.connect(self.loadnetstat_timeline)
+        self.pushButton_load_netstat_timeline.setToolTip('加载网络连接时间线')
         self.pushButton_load_proc_timeline.clicked.connect(self.loadproc_timeline)
+        self.pushButton_load_proc_timeline.setToolTip('加载进程时间线')
         self.pushButton_load_web_timeline.clicked.connect(self.loadweb_timeline)
+        self.pushButton_load_web_timeline.setToolTip('加载web网页访问时间线')
         self.pushButton_findrow.clicked.connect(self.findrow)
-        self.pushButton_unloadmem.clicked.connect(self.unloadmem)
+        #self.pushButton_unloadmem.clicked.connect(self.unloadmem)
         self.pushButton_withvol2find.clicked.connect(self.volfindscan)
+        self.pushButton_withvol2find.setToolTip('通过vol2搜索文件')
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
+
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
+        self.pushButton_procdump2gimp.setToolTip('使用gimp打开搜索框中pid对应进程的minidump文件')
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
+        self.pushButton_withvol2dump.setToolTip('通过vol2导出文件')
         self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
+        self.pushButton_vol2editbox.setToolTip('通过vol2搜索editbox')
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
+        self.pushButton_vol2clipboard.setToolTip('通过vol2搜索clipboard')
         self.pushButton_services.clicked.connect(self.loadservices)
+        self.pushButton_services.setToolTip('加载服务信息')
         self.pushButton_load_timeline_registry.clicked.connect(self.loadtimeline_registry)
+        self.pushButton_load_timeline_registry.setToolTip('加载注册表时间线')
         self.pushButton_loadallfile.clicked.connect(self.loadallfiles)
+        self.pushButton_loadallfile.setToolTip('加载所有文件列表')
+        self.pushButton_withvol2netscan.clicked.connect(self.withvol2netscan)
+        self.pushButton_withvol2netscan.setToolTip('通过vol2搜索netscan')
+        
+
         # checkBox_cusHW 
         self.checkBox_cusHW.stateChanged.connect(self.cusHW)
         self.show()
@@ -70,6 +98,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
     def resizeEvent(self, event):
         width = self.width() - 20
         self.tableWidget_find.setFixedWidth(width)
+        height = self.height() -163
+        self.tableWidget_find.setFixedHeight(height)
         super().resizeEvent(event)
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
@@ -248,26 +278,46 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         try:
             #M:\sys下
             memdisk = r'M:/'
-            self.computername = open(memdisk + 'sys/computername.txt', 'r').read()
-            self.architecture = open(memdisk + 'sys/architecture.txt', 'r').read()
-            self.time_boot = open(memdisk + 'sys/time-boot.txt', 'r').read()
-            self.time_current = open(memdisk + 'sys/time-current.txt', 'r').read()
-            self.timezone = open(memdisk + 'sys/timezone.txt', 'r').read()
-            self.unique_tag = open(memdisk + 'sys/unique-tag.txt', 'r').read()
-            self.version = open(memdisk + 'sys/version.txt', 'r').read()
-            self.version_build = open(memdisk + 'sys/version-build.txt', 'r').read()
-            self.users = open(memdisk + 'sys/users/users.txt', 'r').read()
+            self.computername = open(memdisk + 'sys/computername.txt', 'r').read().replace('\n', '')
+            self.architecture = open(memdisk + 'sys/architecture.txt', 'r').read().replace('\n', '')
+            self.time_boot = open(memdisk + 'sys/time-boot.txt', 'r').read().replace('\n', '')
+            self.time_current = open(memdisk + 'sys/time-current.txt', 'r').read().replace('\n', '')
+            self.timezone = open(memdisk + 'sys/timezone.txt', 'r').read().replace('\n', '')
+            self.unique_tag = open(memdisk + 'sys/unique-tag.txt', 'r').read().replace('\n', '')
+            self.version = open(memdisk + 'sys/version.txt', 'r').read().replace('\n', '')
+            self.version_build = open(memdisk + 'sys/version-build.txt', 'r').read().replace('\n', '')
+            self.users = open(memdisk + 'sys/users/users.txt', 'r').read().replace('--', '')
+            # "M:\py\regsecrets\all.txt" 获取密码相关
+            self.secretsall = open(memdisk + 'py/regsecrets/all.txt', 'r').read()
             print(Fore.GREEN + '[+] 读取成功！' + Style.RESET_ALL)
-            #显示
-            print('[*] 计算机名: ' + self.computername + '\n' 
-                               + '[*] 架构: ' + self.architecture + '\n' 
-                               + '[*] 最后一次开机时间: ' + self.time_boot 
-                               + '[*] 镜像获取时间: ' + self.time_current 
-                               + '[*] 时区: ' + self.timezone 
-                               + '[*] 元标签: ' + self.unique_tag + '\n' 
-                               + '[*] 版本号: ' + self.version + '\n' 
-                               + '[*] 构建版本号: ' + self.version_build+'\n'
-                               + '[*] 用户: ' + self.users)
+            info_list = [
+                ('计算机名', self.computername),
+                ('架构', self.architecture),
+                ('最后一次开机时间', self.time_boot),
+                ('镜像获取时间', self.time_current),
+                ('时区', self.timezone),
+                ('元标签', self.unique_tag),
+                ('版本号', self.version),
+                ('构建版本号', self.version_build),
+                ('用户', '\n'+self.users),
+                ('系统密码相关', '\n'+self.secretsall)
+            ]
+            
+            # 在一个新的800*600窗口中显示
+            self.quicklyviewwindow = QWidget()
+            self.quicklyviewwindow.resize(800, 600)
+            self.quicklyviewwindow.setWindowTitle('镜像信息')
+            self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/logo.ico'))
+            self.textEdit = QtWidgets.QTextEdit(self.quicklyviewwindow)
+            self.textEdit.setGeometry(QRect(0, 0, 800, 600))
+            self.textEdit.setObjectName("textEdit")
+            self.textEdit.setReadOnly(True)
+            self.textEdit.setAcceptDrops(False)
+            # 显示信息
+            for info in info_list:
+                self.textEdit.append(info[0] + ': ' + info[1])
+            self.quicklyviewwindow.show()
+
 
         except Exception as e:
             print(Fore.RED + '[Error] ' + str(e) + Style.RESET_ALL)
@@ -427,6 +477,18 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setEnabled(True))
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setText('vol2导出文件'))
+    def withvol2netscan(self):
+        profile = self.getprofile()
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} netscan|findstr {self.lineEdit_str.text()}'
+        self.pushButton_withvol2netscan.setEnabled(False)
+        #按钮名字改为搜索中...
+        self.pushButton_withvol2netscan.setText('搜索中...')
+        self.command_runner = CommandRunner(cmd)
+        print(Fore.YELLOW + '[*] 正在调用vol2进行netscan：' + cmd + Style.RESET_ALL)
+        self.command_runner.start()
+        #线程结束后 按钮变为可用
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setText('vol2netscan'))
     def quicklyview(self,path):
         #创建一个新的窗口，里面有一个textEdit，用于显示文件内容,编码使用utf-8,仅读取前200字节
         self.quicklyviewwindow = QWidget()
@@ -567,7 +629,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if reply == QMessageBox.Yes:
             event.accept()
             # 结束MemProcFS进程，结束MemProcFS.exe
-            os.system('taskkill /F /IM MemProcFS.exe')
+            #os.system('taskkill /F /IM MemProcFS.exe')
         else:
             event.ignore()
 #----------------------------------------------------------------------------------------------------------

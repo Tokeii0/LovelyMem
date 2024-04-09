@@ -6,47 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1077</width>
-    <height>807</height>
+    <width>1076</width>
+    <height>815</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>LovelyMem v0.3 - https://github.com/Tokeii0/LovelyMem</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_loadMem">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载内存至磁盘</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_flush">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>40</y>
-      <width>111</width>
+      <width>71</width>
       <height>23</height>
      </rect>
     </property>
     <property name="text">
-     <string>镜像基本信息</string>
+     <string>基本信息</string>
     </property>
    </widget>
    <widget class="QTableWidget" name="tableWidget_find">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>120</y>
+      <y>100</y>
       <width>1051</width>
-      <height>641</height>
+      <height>671</height>
      </rect>
     </property>
     <property name="rowCount">
@@ -71,7 +58,7 @@
    <widget class="QPushButton" name="pushButton_findstr">
     <property name="geometry">
      <rect>
-      <x>280</x>
+      <x>240</x>
       <y>40</y>
       <width>75</width>
       <height>23</height>
@@ -84,9 +71,9 @@
    <widget class="QLineEdit" name="lineEdit_str">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>20</x>
       <y>10</y>
-      <width>341</width>
+      <width>421</width>
       <height>21</height>
      </rect>
     </property>
@@ -97,7 +84,7 @@
    <widget class="QPushButton" name="pushButton_findrow">
     <property name="geometry">
      <rect>
-      <x>130</x>
+      <x>90</x>
       <y>40</y>
       <width>75</width>
       <height>23</height>
@@ -107,52 +94,10 @@
      <string>搜索字符串</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_unloadmem">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>70</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>卸载内存镜像</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_withvol2find">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>70</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>vol2findscan</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_withvol2dump">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>70</y>
-      <width>91</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>vol2dumpfile</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_ntfsfind">
     <property name="geometry">
      <rect>
-      <x>205</x>
+      <x>165</x>
       <y>40</y>
       <width>75</width>
       <height>23</height>
@@ -160,37 +105,6 @@
     </property>
     <property name="text">
      <string>Ntfs搜索</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_vol2editbox">
-    <property name="geometry">
-     <rect>
-      <x>310</x>
-      <y>70</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>vol2editbox</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_vol2clipboard">
-    <property name="geometry">
-     <rect>
-      <x>390</x>
-      <y>70</y>
-      <width>81</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>vol2clipboard</string>
     </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget">
@@ -290,20 +204,79 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="4">
+      <widget class="QCheckBox" name="checkBox_cusHW">
+       <property name="text">
+        <string>自定义列宽</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
-   <widget class="QCheckBox" name="checkBox_cusHW">
+   <widget class="QComboBox" name="comboBox_profile">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>40</y>
+      <width>121</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>95</y>
-      <width>101</width>
-      <height>19</height>
+      <y>60</y>
+      <width>421</width>
+      <height>41</height>
      </rect>
     </property>
-    <property name="text">
-     <string>自定义列宽</string>
-    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_withvol2find">
+       <property name="text">
+        <string>findscan</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_withvol2dump">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>dumpfile</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_vol2editbox">
+       <property name="text">
+        <string>editbox</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_vol2clipboard">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>clipboard</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_withvol2netscan">
+       <property name="text">
+        <string>netscan</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -311,7 +284,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1077</width>
+     <width>1076</width>
      <height>21</height>
     </rect>
    </property>
@@ -320,6 +293,8 @@
      <string>文件</string>
     </property>
     <addaction name="actionOpenFile"/>
+    <addaction name="action2"/>
+    <addaction name="action3"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -327,6 +302,16 @@
   <action name="actionOpenFile">
    <property name="text">
     <string>打开</string>
+   </property>
+  </action>
+  <action name="action2">
+   <property name="text">
+    <string>加载镜像</string>
+   </property>
+  </action>
+  <action name="action3">
+   <property name="text">
+    <string>卸载镜像</string>
    </property>
   </action>
  </widget>
