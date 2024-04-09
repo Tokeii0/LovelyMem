@@ -37,9 +37,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        #icon 设置为'res\ico.jpg'
         self.setAcceptDrops(True)
-        self.setWindowIcon(QtGui.QIcon('res/ico.jpg')) 
+        self.setWindowIcon(QtGui.QIcon('res/logo.ico')) 
         self.actionOpenFile.triggered.connect(self.open_file_select)
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
@@ -65,7 +64,15 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
         self.pushButton_services.clicked.connect(self.loadservices)
         self.pushButton_load_timeline_registry.clicked.connect(self.loadtimeline_registry)
+        self.pushButton_loadallfile.clicked.connect(self.loadallfiles)
+        # checkBox_cusHW 
+        self.checkBox_cusHW.stateChanged.connect(self.cusHW)
         self.show()
+    #动态调整tableWidget_find大小
+    def resizeEvent(self, event):
+        width = self.width() - 20
+        self.tableWidget_find.setFixedWidth(width)
+        super().resizeEvent(event)
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
         context_menu = QtWidgets.QMenu(self)
@@ -73,6 +80,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         copy_str = context_menu.addAction("复制内容并发送至搜索框")
         quickly_view = context_menu.addAction("快速查看文本")
         quickly_view_img = context_menu.addAction("快速查看图片")
+        delete_col = context_menu.addAction("删除所选列")
+        delete_row = context_menu.addAction("删除所选行")
         action = context_menu.exec(self.mapToGlobal(pos))
         def get_truepath(selectstr):
             if selectstr.split('\\')[1] == '0' or selectstr.split('\\')[1] == '1' or selectstr.split('\\')[1] == '2':
@@ -178,8 +187,22 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             except:
                 print(Fore.RED + '[Error] 该文件不是图片！' + Style.RESET_ALL)
                 return
+        elif action == delete_col:
+            #删除当前列
+            self.tableWidget_find.removeColumn(self.tableWidget_find.currentColumn())
+            print(Fore.GREEN + '[+] 删除成功！' + Style.RESET_ALL)
+        elif action == delete_row:
+            #删除当前行
+            self.tableWidget_find.removeRow(self.tableWidget_find.currentRow())
+            print(Fore.GREEN + '[+] 删除成功！' + Style.RESET_ALL)
 
 #功能区------------------------------------------------------------------------------------------------------
+    def cusHW(self):
+        #自定义列宽，若checkBox_cusHW勾选，则自定义列宽，否则就自适应
+        if self.checkBox_cusHW.isChecked():
+            self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        else:
+            self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
             event.accept()
@@ -190,7 +213,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             self.open_file(file_path)
-    
+
     #打开文件
     def open_file_select(self):
         file_path, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '所有文件 (*.*)')
@@ -201,7 +224,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.file_name = file_path
         self.mem_path = self.get_mem_path(self.file_name)
         # title + path
-        self.setWindowTitle('LovelyMem v0.2 - ' + self.mem_path)
+        self.setWindowTitle('LovelyMem v0.3 - ' + self.mem_path)
         return self.mem_path
     #获取镜像完整路径
     def get_mem_path(self, file_name):
@@ -263,23 +286,33 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             self.tableWidget_find.setColumnCount(len(columns))
             self.tableWidget_find.setHorizontalHeaderLabels(columns)
         except:
-            print(Fore.RED + '[Error] 请先加载内存镜像文件！并等待加载完毕' + Style.RESET_ALL)
+            #如果 process.csv存在
+            if os.path.exists(path):
+                print(Fore.RED + '[Error] 请先加载内存镜像文件！' + Style.RESET_ALL)
+            else:
+                print(Fore.RED + '[Error] 未找到文件！' + Style.RESET_ALL)
             return
         for i, row in enumerate(data):
             for j, value in enumerate(row):
                 item = QTableWidgetItem(str(value))
                 self.tableWidget_find.setItem(i, j, item)
-                # 设置列宽根据字符串长度自适应
-                self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
-                self.tableWidget_find.horizontalHeader().setStretchLastSection(True)
-                # 设置最后一列填充空白部分
-                if j == len(columns) - 1:
-                    item.setTextAlignment(Qt.AlignTop | Qt.AlignLeft)
-                    item.setFlags(item.flags() | Qt.ItemIsSelectable | Qt.ItemIsEditable)
-                    self.tableWidget_find.setRowHeight(i, 20)  # Decrease row height
-                else:
-                    pass
+            # 设置列宽根据字符串长度自适应
+            self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
+            self.tableWidget_find.horizontalHeader().setStretchLastSection(True)
+            # 设置最后一列填充空白部分
+            if j == len(columns) - 1:
+                item.setTextAlignment(Qt.AlignTop | Qt.AlignLeft)
+                item.setFlags(item.flags() | Qt.ItemIsSelectable | Qt.ItemIsEditable)
+                self.tableWidget_find.setRowHeight(i, 20)  # Decrease row height
+            else:
+                pass
             self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(columns) - 1, QHeaderView.Stretch)
+            
+        
+        # Enable column dragging
+        self.tableWidget_find.horizontalHeader().setSectionsMovable(True)
+        
+
 
         print(Fore.GREEN + '[+] 加载成功！' + Style.RESET_ALL)
     def findrow(self):
@@ -323,6 +356,9 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
     def loadweb_timeline(self):
         web_timelinepath = r'M:/forensic/csv/timeline_web.csv'
         return self.loadcsv2table(web_timelinepath)
+    def loadallfiles(self):
+        allfilespath = r'M:/forensic/csv/files.csv'
+        return self.loadcsv2table(allfilespath)
     def loadntfs_timeline(self):
         ntfs_timelinepath = r'M:/forensic/csv/timeline_ntfs.csv'
         return self.loadcsv2table(ntfs_timelinepath)    
@@ -400,7 +436,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.quicklyviewwindow = QWidget()
         self.quicklyviewwindow.resize(800, 600)
         self.quicklyviewwindow.setWindowTitle(f'文件内容-路径:{path}')
-        self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/ico.jpg'))
+        self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/logo.ico'))
         self.textEdit = QtWidgets.QTextEdit(self.quicklyviewwindow)
         self.textEdit.setGeometry(QRect(0, 0, 800, 600))
         self.textEdit.setObjectName("textEdit")
@@ -525,7 +561,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if reply == QMessageBox.Yes:
             event.accept()
             # 结束MemProcFS进程，结束MemProcFS.exe
-            os.system('taskkill /F /IM MemProcFS.exe')
+            #os.system('taskkill /F /IM MemProcFS.exe')
 
         else:
             event.ignore()

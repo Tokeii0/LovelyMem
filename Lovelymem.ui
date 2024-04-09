@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1068</width>
-    <height>778</height>
+    <width>1077</width>
+    <height>807</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LovelyMem v0.2</string>
+   <string>LovelyMem v0.3 - https://github.com/Tokeii0/LovelyMem</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QPushButton" name="pushButton_loadMem">
@@ -44,9 +44,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
-      <width>1041</width>
-      <height>631</height>
+      <y>120</y>
+      <width>1051</width>
+      <height>641</height>
      </rect>
     </property>
     <property name="rowCount">
@@ -92,45 +92,6 @@
     </property>
     <property name="inputMask">
      <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_load_netstat_timeline">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
-      <y>40</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载net_timeline</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_load_proc_timeline">
-    <property name="geometry">
-     <rect>
-      <x>760</x>
-      <y>40</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载proc_timeline</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_load_web_timeline">
-    <property name="geometry">
-     <rect>
-      <x>870</x>
-      <y>40</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>加载web_timeline</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_findrow">
@@ -201,19 +162,6 @@
      <string>Ntfs搜索</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_procdump2gimp">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>10</y>
-      <width>111</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>procdump2gimp</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_vol2editbox">
     <property name="geometry">
      <rect>
@@ -245,63 +193,92 @@
      <string>vol2clipboard</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_load_timeline_registry">
+   <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>70</y>
-      <width>121</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>加载timeline_registry</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="">
-    <property name="geometry">
-     <rect>
-      <x>650</x>
+      <x>490</x>
       <y>10</y>
-      <width>401</width>
-      <height>25</height>
+      <width>571</width>
+      <height>83</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_load_netstat">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="1" column="2">
+      <widget class="QPushButton" name="pushButton_load_proc_timeline">
        <property name="text">
-        <string>加载netstat</string>
+        <string>加载proc_timeline</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="1" column="3">
+      <widget class="QPushButton" name="pushButton_load_web_timeline">
+       <property name="text">
+        <string>加载web_timeline</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="4">
+      <widget class="QPushButton" name="pushButton_load_timeline_registry">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>加载timeline_registry</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="pushButton_load_netstat_timeline">
+       <property name="text">
+        <string>加载net_timeline</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButton_loadallfile">
+       <property name="text">
+        <string>加载全部文件</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
       <widget class="QPushButton" name="pushButton_load_proc">
        <property name="text">
         <string>加载proc</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="pushButton_procdump2gimp">
+       <property name="text">
+        <string>procdump2gimp</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_load_netstat">
+       <property name="text">
+        <string>加载netstat</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
       <widget class="QPushButton" name="pushButton_load_tasks">
        <property name="text">
         <string>加载tasks</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="3">
       <widget class="QPushButton" name="pushButton_load_findevil">
        <property name="text">
         <string>加载findevil</string>
        </property>
       </widget>
      </item>
-     <item>
+     <item row="0" column="4">
       <widget class="QPushButton" name="pushButton_services">
        <property name="font">
         <font>
@@ -315,13 +292,26 @@
      </item>
     </layout>
    </widget>
+   <widget class="QCheckBox" name="checkBox_cusHW">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>95</y>
+      <width>101</width>
+      <height>19</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>自定义列宽</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1068</width>
+     <width>1077</width>
      <height>21</height>
     </rect>
    </property>
