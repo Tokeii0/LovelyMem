@@ -57,6 +57,7 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - 对大部分控件添加了tips内容方便快速了解使用方法
   - 通过判断文件镜像注册表的内容来自动判断vol2所需的profile
   - 新增profile下拉框，如果是windows7X64以上的版本一般来说是用不上的但是不能没有，列表添加可以在config.py中添加
+  - 右键选择打开文件现在会默认选择到你所选的文件上
   - 版本号更新至v0.4
 #### v0.3 2024.4.9
   - 修改加载卸载布局，现在都归入文件菜单中
@@ -72,7 +73,7 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - 对右侧的按钮进行layout整理
   - 版本号更新至v0.3
   - 采用全新logo
-  - 退出是新增收款码
+  - 退出时新增收款码
   - 新增一个下拉框，准备在里面放vol2的profile，明天再说
 #### v0.2d 2024.1.4
   - 修了个bug
