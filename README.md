@@ -58,6 +58,7 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
   - 通过判断文件镜像注册表的内容来自动判断vol2所需的profile
   - 新增profile下拉框，如果是windows7X64以上的版本一般来说是用不上的但是不能没有，列表添加可以在config.py中添加
   - 右键选择打开文件现在会默认选择到你所选的文件上
+  - 优化tips内容
   - 版本号更新至v0.4
 #### v0.3 2024.4.9
   - 修改加载卸载布局，现在都归入文件菜单中
