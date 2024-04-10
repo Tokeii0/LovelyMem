@@ -11,22 +11,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>LovelyMem v0.3 - https://github.com/Tokeii0/LovelyMem</string>
+   <string>LovelyMem v0.4 - https://github.com/Tokeii0/LovelyMem</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton_flush">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>40</y>
-      <width>71</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>基本信息</string>
-    </property>
-   </widget>
    <widget class="QTableWidget" name="tableWidget_find">
     <property name="geometry">
      <rect>
@@ -55,25 +42,12 @@
      <number>18</number>
     </attribute>
    </widget>
-   <widget class="QPushButton" name="pushButton_findstr">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>40</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>搜索文件</string>
-    </property>
-   </widget>
    <widget class="QLineEdit" name="lineEdit_str">
     <property name="geometry">
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>421</width>
+      <width>371</width>
       <height>21</height>
      </rect>
     </property>
@@ -81,38 +55,12 @@
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_findrow">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>40</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>搜索字符串</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_ntfsfind">
-    <property name="geometry">
-     <rect>
-      <x>165</x>
-      <y>40</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Ntfs搜索</string>
-    </property>
-   </widget>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>520</x>
       <y>10</y>
-      <width>571</width>
+      <width>541</width>
       <height>83</height>
      </rect>
     </property>
@@ -139,7 +87,7 @@
         </font>
        </property>
        <property name="text">
-        <string>加载timeline_registry</string>
+        <string>加载timeline_reg</string>
        </property>
       </widget>
      </item>
@@ -216,48 +164,31 @@
    <widget class="QComboBox" name="comboBox_profile">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>40</y>
-      <width>121</width>
+      <x>400</x>
+      <y>10</y>
+      <width>111</width>
       <height>22</height>
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>60</y>
-      <width>421</width>
-      <height>41</height>
+      <x>21</x>
+      <y>41</y>
+      <width>482</width>
+      <height>51</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="pushButton_withvol2find">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="3">
+      <widget class="QPushButton" name="pushButton_ntfsfind">
        <property name="text">
-        <string>findscan</string>
+        <string>Ntfs搜索</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_withvol2dump">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="text">
-        <string>dumpfile</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_vol2editbox">
-       <property name="text">
-        <string>editbox</string>
-       </property>
-      </widget>
-     </item>
-     <item>
+     <item row="2" column="3">
       <widget class="QPushButton" name="pushButton_vol2clipboard">
        <property name="font">
         <font>
@@ -269,10 +200,69 @@
        </property>
       </widget>
      </item>
-     <item>
+     <item row="2" column="1">
+      <widget class="QPushButton" name="pushButton_withvol2dump">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="text">
+        <string>dumpfile</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="pushButton_flush">
+       <property name="text">
+        <string>基本信息</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QPushButton" name="pushButton_vol2">
+       <property name="text">
+        <string>执行VOL2</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="4">
       <widget class="QPushButton" name="pushButton_withvol2netscan">
        <property name="text">
         <string>netscan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="pushButton_vol2editbox">
+       <property name="text">
+        <string>editbox</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QPushButton" name="pushButton_findrow">
+       <property name="text">
+        <string>搜索字符串</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="pushButton_findstr">
+       <property name="text">
+        <string>搜索文件</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="pushButton_withvol2find">
+       <property name="text">
+        <string>findscan</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="5">
+      <widget class="QPushButton" name="pushButton_cuscmd">
+       <property name="text">
+        <string>自定义命令</string>
        </property>
       </widget>
      </item>

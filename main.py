@@ -7,13 +7,14 @@ import os
 import subprocess
 from colorama import Fore, Back, Style
 import shutil
-from PySide6 import QtGui
+from PySide6 import QtGui 
 import convert.netstat
 import convert.loadcsv
 import pandas as pd
 from PySide6 import QtWidgets
 import re,hexdump
 from PIL import Image
+
 
 
 class CommandRunner(QThread):
@@ -30,6 +31,45 @@ class CommandRunner(QThread):
 
         except subprocess.CalledProcessError as e:
             self.error_signal.emit("Error: " + str(e))
+# 一个通用的class 用于创建一个新的窗口，里面有一个textEdit，用于显示文件内容,编码使用utf-8
+class QuicklyView(QWidget):
+    def __init__(self, title, size=(800, 600)):
+        super().__init__()
+        self.resize(*size)
+        self.setWindowTitle(title)
+        self.setWindowIcon(QtGui.QIcon('res/logo.ico')) 
+        self.textEdit = QtWidgets.QTextEdit(self)
+        self.textEdit.setGeometry(QRect(0, 30, 800, 570))
+        self.textEdit.setObjectName("textEdit")
+        self.textEdit.setReadOnly(True)
+        self.textEdit.setTextInteractionFlags(Qt.TextSelectableByMouse)
+        
+        self.lineEdit = QtWidgets.QLineEdit(self)
+        self.lineEdit.setGeometry(QRect(0, 0, 700, 30))
+        self.lineEdit.setObjectName("lineEdit")
+        
+        self.pushButton = QtWidgets.QPushButton(self)
+        self.pushButton.setGeometry(QRect(700, 0, 100, 30))
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setText('搜索')
+        self.pushButton.clicked.connect(self.findstr)
+        
+    def resizeEvent(self, event):
+        width = self.width() 
+        self.textEdit.setFixedWidth(width)
+        height = self.height() - 30
+        self.textEdit.setFixedHeight(height)
+        super().resizeEvent(event)
+    def findstr(self):
+        search_text = self.lineEdit.text()
+        if search_text:
+            self.textEdit.find(search_text)
+            self.textEdit.setFocus()
+        else:
+            self.textEdit.clearFocus()
+            self.textEdit.moveCursor(QtGui.QTextCursor.Start)
+            self.textEdit.ensureCursorVisible()
+
 
 class Lovelymem(QMainWindow, Ui_MainWindow):
     def __init__(self):
@@ -48,7 +88,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.action3.setStatusTip('卸载内存镜像')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.contextMenuEvent)
-        #self.pushButton_loadMem.clicked.connect(self.use_memprocfs)
         self.pushButton_flush.clicked.connect(self.flush)
         self.pushButton_flush.setToolTip('在新窗口加载镜像的基本信息')
         self.pushButton_findstr.clicked.connect(self.findstr)
@@ -68,15 +107,13 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_load_web_timeline.clicked.connect(self.loadweb_timeline)
         self.pushButton_load_web_timeline.setToolTip('加载web网页访问时间线')
         self.pushButton_findrow.clicked.connect(self.findrow)
-        #self.pushButton_unloadmem.clicked.connect(self.unloadmem)
         self.pushButton_withvol2find.clicked.connect(self.volfindscan)
-        self.pushButton_withvol2find.setToolTip('通过vol2搜索文件')
+        self.pushButton_withvol2find.setToolTip('通过vol2搜索文件,输入框输入文件关键字')
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
-
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
         self.pushButton_procdump2gimp.setToolTip('使用gimp打开搜索框中pid对应进程的minidump文件')
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
-        self.pushButton_withvol2dump.setToolTip('通过vol2导出文件')
+        self.pushButton_withvol2dump.setToolTip('通过vol2导出文件,输入框输入文件物理地址0xXXXXXXX')
         self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
         self.pushButton_vol2editbox.setToolTip('通过vol2搜索editbox')
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
@@ -89,16 +126,22 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_loadallfile.setToolTip('加载所有文件列表')
         self.pushButton_withvol2netscan.clicked.connect(self.withvol2netscan)
         self.pushButton_withvol2netscan.setToolTip('通过vol2搜索netscan')
-        
-
-        # checkBox_cusHW 
         self.checkBox_cusHW.stateChanged.connect(self.cusHW)
+        self.comboBox_profile.currentIndexChanged.connect(self.getprofile)
+        self.comboBox_profile.addItems(config.profile)
+        self.comboBox_profile.setToolTip('这里默认选择Win7SP1x64\n左上文件-加载镜像无法正确加载，这里选择是为下面的vol2功能选择profile\n点击前面的vol2功能按钮前会自动匹配profile(Frrom volatilityPro)')
+        self.pushButton_vol2.clicked.connect(self.runvol2pro)
+        self.pushButton_vol2.setToolTip('通过vol2进行分析，若memprocfs正常加载，会自动匹配profile\n若无法加载的镜像（一般为xp,win7x86）则会自动进行imageinfo')
+        self.lineEdit_str.setToolTip('该输入框为通用搜索、查询、导出等功能的限制关键词输入框，具体功能请查看按钮提示')
+        # pushButton_cuscmd
+        self.pushButton_cuscmd.clicked.connect(self.cuscmd)
+        self.pushButton_cuscmd.setToolTip('这个按钮功能是vol2中profile后面命令的自定义执行\n输入框中输入需要执行的内容,例如：iehistory|findstr flag \n默认命令提示符输出')
         self.show()
     #动态调整tableWidget_find大小
     def resizeEvent(self, event):
         width = self.width() - 20
         self.tableWidget_find.setFixedWidth(width)
-        height = self.height() -163
+        height = self.height() -147
         self.tableWidget_find.setFixedHeight(height)
         super().resizeEvent(event)
 #右键菜单------------------------------------------------------------------------------------------------------
@@ -112,37 +155,26 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         delete_row = context_menu.addAction("删除所选行")
         action = context_menu.exec(self.mapToGlobal(pos))
         def get_truepath(selectstr):
-            if selectstr.split('\\')[1] == '0' or selectstr.split('\\')[1] == '1' or selectstr.split('\\')[1] == '2':
+            ntfsroot = r'M:\forensic\ntfs'
+            memfilepath = r'M:/forensic/files/ROOT'
+            truepath = ''
+            if selectstr.split('\\')[1] in ['0', '1', '2']:
                 print(Fore.YELLOW + '[*] 识别为ntfs目录' + selectstr + Style.RESET_ALL)
-                ntfsroot = r'M:\forensic\ntfs'
                 truepath = ntfsroot + selectstr.replace('\\', '/')
-                
-            elif 'HarddiskVolume' in selectstr:
+            elif 'HarddiskVolume' in selectstr or ':\\' in selectstr:
                 print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
-                selectstr = '/'.join(selectstr.split('\\')[3:])
-                ntfsroot = r'M:\forensic\ntfs'
+                selectstr = '/'.join(selectstr.split('\\')[3:]) if 'HarddiskVolume' in selectstr else '/'.join(selectstr.split('\\')[1:])
                 try:
                     truepath = ntfsroot+'\\0\\' + selectstr.replace('\\', '/')
                 except:
                     truepath = ntfsroot+'\\1\\' + selectstr.replace('\\', '/')
-                
-            elif ':\\' in selectstr:
-                print(Fore.YELLOW + '[*] 使用ntfs目录' + selectstr + Style.RESET_ALL)
-                selectstr = '/'.join(selectstr.split('\\')[1:])
-                ntfsroot = r'M:\forensic\ntfs'
-                try:
-                    truepath = ntfsroot+'\\0\\' + selectstr.replace('\\', '/')
-                except:
-                    truepath = ntfsroot+'\\1\\' + selectstr.replace('\\', '/')
-                
             else:
                 print(Fore.YELLOW + '[*] 使用正常目录' + selectstr + Style.RESET_ALL)
-                memfilepath = r'M:/forensic/files/ROOT'
                 truepath = memfilepath + selectstr.replace('\\', '/')
             #转换为windows路径
             truepath = truepath.replace('/', '\\')
             return truepath
-        if action == opendir: #打开文件所在目录
+        def open_directory(self, pos):
             # Get the content of the selected cell
             local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
             header_height = self.tableWidget_find.horizontalHeader().height()
@@ -152,17 +184,18 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 selectstr = selected_item.text().strip('"')
                 #打印光标所在行数据
                 print("所选单元格内容：", selectstr)
-                
             # 判断 M:/forensic/files/ROOT/+selectstr是否存在，若存在就打开文件目录
             truepath = get_truepath(selectstr)
             #判断一下是不是文件夹,若是文件夹就打开文件夹,若是文件就打开文件所在目录
             if os.path.isdir(truepath):
                 print(Fore.YELLOW + '[*] 正在打开目录：' + truepath + Style.RESET_ALL)
-                os.system('explorer.exe ' + truepath)
+                subprocess.run(["explorer", truepath])
             else:
                 print(Fore.YELLOW + '[*] 正在打开目录：' + os.path.dirname(truepath) + Style.RESET_ALL)
-                os.system('explorer.exe ' + os.path.dirname(truepath))                
-        elif action == copy_str: #复制内容并发送至搜索框
+                subprocess.run(["explorer", "/select,", truepath])
+        if action == opendir:
+            open_directory(self, pos)
+        elif action == copy_str: # 复制内容并发送至搜索框
         # Get the content of the selected cell
             selected_items = self.tableWidget_find.selectedItems()
             if selected_items:
@@ -172,7 +205,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 clipboard = QApplication.clipboard()
                 clipboard.setText(selectstr)
                 print(Fore.GREEN + f'[+] 发送成功！内容为：{selectstr}' + Style.RESET_ALL)
-        elif action == quickly_view: #快速查看文本
+        elif action == quickly_view: # 快速查看文本
             # Get the content of the selected cell
             local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
             header_height = self.tableWidget_find.horizontalHeader().height()
@@ -185,20 +218,21 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             truepath = get_truepath(selectstr)
             #先判断是不是文件夹
             if os.path.isdir(truepath):
-                print(Fore.RED + '[Error] 该路径为文件夹！' + Style.RESET_ALL)
+                print(Fore.RED + '[×] 该路径为文件夹！' + Style.RESET_ALL)
                 return
-            #用于显示文件内容,编码使用utf-8,仅读取前200字节
             try:
-                self.quicklyview(truepath)
-                self.textEdit.setText(open(truepath, 'r', encoding='utf-8').read(500))
+                ## 初始化 textEdit 属性
+                self.quicklyviewwindow = QuicklyView(f'文件内容,文件路径：{truepath}',size=(800, 600))
+                self.quicklyviewwindow.textEdit.setPlainText(open(truepath, 'r', encoding='utf-8').read(500))
                 self.quicklyviewwindow.show()
-            except:
-                print(Fore.RED + '[Error] 该文件无法快速读取,即将使用hexdump打印至控制台' + Style.RESET_ALL)
+            #打印报错
+            except Exception as e:
+                print(Fore.RED + '[×] ' + str(e) + Style.RESET_ALL)
+                print(Fore.RED + '[×] 该文件无法快速读取,即将使用hexdump打印至控制台' + Style.RESET_ALL)
                 print(Fore.GREEN + '[*] 正在使用hexdump打印文件内容：' + truepath + Style.RESET_ALL)
                 hexdump.hexdump(open(truepath, 'rb').read(500))
-        elif action == quickly_view_img:
-            #调用PIL库打开图片，如果不是图片就调用quickly_view
-            # Get the content of the selected cell
+                
+        elif action == quickly_view_img: # 快速查看图片
             local_pos = self.tableWidget_find.mapFromGlobal(self.mapToGlobal(pos))
             header_height = self.tableWidget_find.horizontalHeader().height()
             local_pos.setY(local_pos.y() - header_height)
@@ -209,15 +243,17 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 print("所选单元格内容：", selectstr)
             truepath = get_truepath(selectstr)
             try:
-                Image.open(truepath).show()
+                img = Image.open(truepath)
+                img.show()
+                
             except:
-                print(Fore.RED + '[Error] 该文件不是图片！' + Style.RESET_ALL)
+                print(Fore.RED + '[×] 该文件不是图片！' + Style.RESET_ALL)
                 return
-        elif action == delete_col:
+        elif action == delete_col: # 删除所选列
             #删除当前列
             self.tableWidget_find.removeColumn(self.tableWidget_find.currentColumn())
             print(Fore.GREEN + '[+] 删除成功！' + Style.RESET_ALL)
-        elif action == delete_row:
+        elif action == delete_row: # 删除所选行
             #删除当前行
             self.tableWidget_find.removeRow(self.tableWidget_find.currentRow())
             print(Fore.GREEN + '[+] 删除成功！' + Style.RESET_ALL)
@@ -250,7 +286,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.file_name = file_path
         self.mem_path = self.get_mem_path(self.file_name)
         # title + path
-        self.setWindowTitle('LovelyMem v0.3 - ' + self.mem_path)
+        self.setWindowTitle('LovelyMem v0.4 - ' + self.mem_path)
         return self.mem_path
     #获取镜像完整路径
     def get_mem_path(self, file_name):
@@ -259,13 +295,13 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         try:
             path = self.mem_path
         except:
-            print(Fore.RED + '[Error] 请先加载内存镜像文件！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请先加载内存镜像文件！' + Style.RESET_ALL)
         # memprocfs.exe -device mempath -v -forensic 1
         cmd = f'{config.MemProcFsDir} -device "{path}" -v -forensic 1'
         try:
             subprocess.Popen(cmd, shell=True)
         except:
-            print(Fore.RED + '[Error] MemProcFS路径错误！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] MemProcFS路径错误！' + Style.RESET_ALL)
     def unloadmem(self):
         try:
             #卸载镜像 ，taskkill /F /IM MemProcFS.exe
@@ -273,7 +309,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             subprocess.Popen(cmd, shell=True)
             print(Fore.GREEN + '[+] 卸载成功！' + Style.RESET_ALL)
         except:
-            print(Fore.RED + '[Error] 卸载失败！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 卸载失败！' + Style.RESET_ALL)
     def flush(self):
         try:
             #M:\sys下
@@ -303,24 +339,42 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 ('系统密码相关', '\n'+self.secretsall)
             ]
             
-            # 在一个新的800*600窗口中显示
-            self.quicklyviewwindow = QWidget()
-            self.quicklyviewwindow.resize(800, 600)
-            self.quicklyviewwindow.setWindowTitle('镜像信息')
-            self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/logo.ico'))
-            self.textEdit = QtWidgets.QTextEdit(self.quicklyviewwindow)
-            self.textEdit.setGeometry(QRect(0, 0, 800, 600))
-            self.textEdit.setObjectName("textEdit")
-            self.textEdit.setReadOnly(True)
-            self.textEdit.setAcceptDrops(False)
-            # 显示信息
-            for info in info_list:
-                self.textEdit.append(info[0] + ': ' + info[1])
+            self.quicklyviewwindow = QuicklyView('镜像信息',size=(800, 700))
+            self.quicklyviewwindow.textEdit.setPlainText('\n'.join([f'{name}: {value}' for name, value in info_list]))
             self.quicklyviewwindow.show()
-
-
         except Exception as e:
-            print(Fore.RED + '[Error] ' + str(e) + Style.RESET_ALL)
+            print(Fore.RED + '[×] ' + str(e) + Style.RESET_ALL)
+    def runvol2pro(self):
+        #读取镜像
+        try:
+            path = self.mem_path
+        except:
+            print(Fore.RED + '[×] 请先加载内存镜像文件！' + Style.RESET_ALL)
+        #subprocess.Popen(python volpro.py -f path)
+        #判断self.regpath是否存在，不存在就提示
+        if os.path.exists(self.regpath): 
+            cmd = f'python volpro.py "{path}" {self.profile}'
+            print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{S}：' + cmd + Style.RESET_ALL)
+        try:
+            subprocess.Popen(cmd, shell=True)
+        except:
+            print(Fore.RED + '[×] volpro路径错误！' + Style.RESET_ALL)
+    def cuscmd(self):
+        #自定义执行命令
+        if self.lineEdit_str.text() == '':
+            print(Fore.RED + '[×] 请输入自定义指令即vol.exe -f mem --profile= xxx 后面的内容！' + Style.RESET_ALL)
+            return
+        str = self.lineEdit_str.text()
+        profile = self.getprofile()
+        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} {str}'
+        self.pushButton_cuscmd.setEnabled(False)
+        self.pushButton_cuscmd.setText('执行中...')
+        print(Fore.YELLOW + '[*] 正在调用vol2进行自定义命令执行：' + cmd + Style.RESET_ALL)
+        self.command_runner = CommandRunner(cmd)
+        self.command_runner.start()
+        self.command_runner.finished.connect(lambda: self.pushButton_cuscmd.setEnabled(True))
+        self.command_runner.finished.connect(lambda: self.pushButton_cuscmd.setText('自定义指令'))
+
     def loadcsv2table(self, path):
         self.tableWidget_find.clearSelection()
         self.tableWidget_find.clearContents()
@@ -334,9 +388,9 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         except:
             #如果 process.csv存在
             if os.path.exists(path):
-                print(Fore.RED + '[Error] 请先加载内存镜像文件！' + Style.RESET_ALL)
+                print(Fore.RED + '[×] 请先加载内存镜像文件！' + Style.RESET_ALL)
             else:
-                print(Fore.RED + '[Error] 未找到文件！' + Style.RESET_ALL)
+                print(Fore.RED + '[×] 未找到文件！' + Style.RESET_ALL)
             return
         for i, row in enumerate(data):
             for j, value in enumerate(row):
@@ -357,12 +411,9 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         
         # Enable column dragging
         self.tableWidget_find.horizontalHeader().setSectionsMovable(True)
-        
-
-
         print(Fore.GREEN + '[+] 加载成功！' + Style.RESET_ALL)
     def findrow(self):
-        str_to_find = self.lineEdit_str.text()
+        str_to_find = self.lineEdit_str.text()         
         found_rows = []
         for row in range(self.tableWidget_find.rowCount()):
             for column in range(self.tableWidget_find.columnCount()):
@@ -370,7 +421,6 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 if item and str_to_find.lower() in item.text().lower():
                     found_rows.append(row)
                     break
-
         if found_rows:
             self.tableWidget_find.clearSelection()
             for row in found_rows:
@@ -410,7 +460,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         return self.loadcsv2table(ntfs_timelinepath)    
     def ntfsfind(self):
         if self.lineEdit_str.text() == '':
-            print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
         pattern = self.lineEdit_str.text()
         files = r'M:\forensic\csv\timeline_ntfs.csv'
@@ -441,7 +491,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
     def volfindscan(self):
         if self.lineEdit_str.text() == '':
-            print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
         str = self.lineEdit_str.text()
         profile = self.getprofile()
@@ -456,10 +506,10 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.command_runner.start()
         #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setEnabled(True))
-        self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setText('vol2联合搜索'))
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setText('filescan'))
     def withvol2dump(self):
         if self.lineEdit_str.text() == '':
-            print(Fore.RED + '[Error] 请输入要需要dumpfile的地址！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请输入要需要dumpfile的地址！' + Style.RESET_ALL)
             return
         str = self.lineEdit_str.text()
         #判断output文件夹是否存在，不存在就创建
@@ -476,35 +526,33 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.command_runner.start()
         #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setEnabled(True))
-        self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setText('vol2导出文件'))
+        self.command_runner.finished.connect(lambda: self.pushButton_withvol2dump.setText('dumpfiles'))
     def withvol2netscan(self):
-        profile = self.getprofile()
-        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} netscan|findstr {self.lineEdit_str.text()}'
-        self.pushButton_withvol2netscan.setEnabled(False)
-        #按钮名字改为搜索中...
-        self.pushButton_withvol2netscan.setText('搜索中...')
-        self.command_runner = CommandRunner(cmd)
-        print(Fore.YELLOW + '[*] 正在调用vol2进行netscan：' + cmd + Style.RESET_ALL)
-        self.command_runner.start()
-        #线程结束后 按钮变为可用
-        self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setEnabled(True))
-        self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setText('vol2netscan'))
-    def quicklyview(self,path):
-        #创建一个新的窗口，里面有一个textEdit，用于显示文件内容,编码使用utf-8,仅读取前200字节
-        self.quicklyviewwindow = QWidget()
-        self.quicklyviewwindow.resize(800, 600)
-        self.quicklyviewwindow.setWindowTitle(f'文件内容-路径:{path}')
-        self.quicklyviewwindow.setWindowIcon(QtGui.QIcon('res/logo.ico'))
-        self.textEdit = QtWidgets.QTextEdit(self.quicklyviewwindow)
-        self.textEdit.setGeometry(QRect(0, 0, 800, 600))
-        self.textEdit.setObjectName("textEdit")
-        self.textEdit.setReadOnly(True)
-        self.textEdit.setAcceptDrops(False)
+        if os.path.exists('output/netscan.txt'):
+            #QuicklyView('文件内容+path',size=(1000, 600))
+            self.quicklyviewwindow = QuicklyView('output/netscan.txt',size=(800, 600))
+            self.quicklyviewwindow.textEdit.setPlainText(open('output/netscan.txt', 'r', encoding='utf-8').read())
+            self.quicklyviewwindow.show()
+        else:
+            profile = self.getprofile()
+            if self.lineEdit_str.text() != '':
+                cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} netscan|findstr {self.lineEdit_str.text()}'
+            else:
+                cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} netscan'
+            self.pushButton_withvol2netscan.setEnabled(False)
+            #按钮名字改为搜索中...
+            self.pushButton_withvol2netscan.setText('搜索中...')
+            self.command_runner = CommandRunner(cmd)
+            print(Fore.YELLOW + '[*] 正在调用vol2进行netscan：' + cmd + Style.RESET_ALL)
+            self.command_runner.start()
+            #线程结束后 按钮变为可用
+            self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setEnabled(True))
+            self.command_runner.finished.connect(lambda: self.pushButton_withvol2netscan.setText('netscan'))
     def procdump2gimp(self):
         str = self.lineEdit_str.text()
         #判断是否为数字
         if str.isdigit() == False:
-            print(Fore.RED + '[Error] 请输入程序对应的pid！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请输入程序对应的pid！' + Style.RESET_ALL)
             return
         procmemfile = rf'M:/pid/{str}/minidump/minidump.dmp'
         #创建tmp文件夹
@@ -521,48 +569,70 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         subprocess.Popen(cmd2, shell=True)
         print(Fore.GREEN + '[+] 执行成功！' + Style.RESET_ALL)
     def withvol2editbox(self):
-        profile = self.getprofile()
-        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} editbox'
-        self.pushButton_vol2editbox.setEnabled(False)
-        #按钮名字改为搜索中...
-        self.pushButton_vol2editbox.setText('搜索中...')
-        self.command_runner = CommandRunner(cmd)
-        print(Fore.YELLOW + '[*] 正在调用vol2进行editbox：' + cmd + Style.RESET_ALL)
-        self.command_runner.start()
-        #线程结束后 按钮变为可用
-        self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setEnabled(True))
-        self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setText('vol2editbox'))
-    def withvol2clipboard(self):
-        profile = self.getprofile()
-        cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} clipboard'
-        self.pushButton_vol2clipboard.setEnabled(False)
-        #按钮名字改为搜索中...
-        self.pushButton_vol2clipboard.setText('搜索中...')
-        self.command_runner = CommandRunner(cmd)
-        print(Fore.YELLOW + '[*] 正在调用vol2进行clipboard：' + cmd + Style.RESET_ALL)
-        self.command_runner.start()
-        #线程结束后 按钮变为可用
-        self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setEnabled(True))
-        self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setText('vol2clipboard'))
-    def getprofile(self):
-        regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
-        data = open(regpath, 'r', encoding='utf-8').readlines()
-        newdata = data[2].split('.')
-        str1 = newdata[3].split('_')[0]
-        str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
-        if '10' not in str1 and 'SP' not in str1:
-            str1 = str1 + 'SP1'
-        if '64' in newdata[2]:
-            str2 = 'x64'
+        #判断output\editbox.txt是否存在,且文件大小不为0
+        if os.path.exists('output/editbox.txt') and os.path.getsize('output/editbox.txt') > 0:
+            #QuicklyView('文件内容+path',size=(800, 600))
+            self.quicklyviewwindow = QuicklyView('output/editbox.txt',size=(800, 600))
+            self.quicklyviewwindow.textEdit.setPlainText(open('output/editbox.txt', 'r', encoding='utf-8').read())
+            self.quicklyviewwindow.show()
         else:
-            str2 = 'x86'
-        self.profile = str1 + str2
+            print(Fore.RED + '[×] 未找到editbox.txt文件！或editbox文件为空正在尝试重新执行' + Style.RESET_ALL)
+            profile = self.getprofile()
+            cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} editbox'
+            self.pushButton_vol2editbox.setEnabled(False)
+            #按钮名字改为搜索中...
+            self.pushButton_vol2editbox.setText('搜索中...')
+            self.command_runner = CommandRunner(cmd)
+            print(Fore.YELLOW + '[*] 正在调用vol2进行editbox：' + cmd + Style.RESET_ALL)
+            self.command_runner.start()
+            #线程结束后 按钮变为可用
+            self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setEnabled(True))
+            self.command_runner.finished.connect(lambda: self.pushButton_vol2editbox.setText('editbox'))
+    def withvol2clipboard(self):
+        if os.path.exists('output/clipboard.txt') and os.path.getsize('output/clipboard.txt') > 0:
+            #QuicklyView('文件内容+path',size=(800, 600))
+            self.quicklyviewwindow = QuicklyView('output/clipboard.txt',size=(800, 600))
+            self.quicklyviewwindow.textEdit.setPlainText(open('output/clipboard.txt', 'r', encoding='utf-8').read())
+            self.quicklyviewwindow.show()
+        else:
+            profile = self.getprofile()
+            cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} clipboard'
+            self.pushButton_vol2clipboard.setEnabled(False)
+            #按钮名字改为搜索中...
+            self.pushButton_vol2clipboard.setText('搜索中...')
+            self.command_runner = CommandRunner(cmd)
+            print(Fore.YELLOW + '[*] 正在调用vol2进行clipboard：' + cmd + Style.RESET_ALL)
+            self.command_runner.start()
+            #线程结束后 按钮变为可用
+            self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setEnabled(True))
+            self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setText('clipboard'))
+    
+    def getprofile(self):
+        self.regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
+        if os.path.exists(self.regpath):
+
+            data = open(self.regpath, 'r', encoding='utf-8').readlines()
+            newdata = data[2].split('.')
+            str1 = newdata[3].split('_')[0]
+            str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
+            if '10' not in str1 and 'SP' not in str1:
+                str1 = str1 + 'SP1'
+            if '64' in newdata[2]:
+                str2 = 'x64'
+            else:
+                str2 = 'x86'
+            self.profile = str1 + str2
+            
+            print(Fore.GREEN + '[+] 获取profile成功！' + Style.RESET_ALL)
+            return self.profile
+        else:
+            self.profile = self.comboBox_profile.currentText()
+            return self.profile
         
-        print(Fore.GREEN + '[+] 获取profile成功！' + Style.RESET_ALL)
-        return self.profile
+        
     def findstr(self):
         if self.lineEdit_str.text() == '':
-            print(Fore.RED + '[Error] 请输入要搜索的内容！' + Style.RESET_ALL)
+            print(Fore.RED + '[×] 请输入要搜索的内容！' + Style.RESET_ALL)
             return
         str1 = self.lineEdit_str.text()
         file_path = r"M:\forensic\csv\files.csv"
@@ -589,7 +659,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
 
             print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
         except Exception as e:
-            print(Fore.RED + '[Error] 搜索失败，未找到内容 ' + str(e) + Style.RESET_ALL)
+            print(Fore.RED + '[×] 搜索失败，未找到内容 ' + str(e) + Style.RESET_ALL)
     def loadservices(self):
         servicespath = r'M:/forensic/csv/services.csv'
         return self.loadcsv2table(servicespath)
@@ -621,7 +691,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         msg.setIconPixmap(pixmap)
         msg.setTextInteractionFlags(Qt.TextSelectableByMouse)
         msg.setTextFormat(Qt.RichText)
-        msg.setText("<center><h2>确认退出吗？</h2></center><center><h2>退出会结束MemProcFS进程</h2></center>")
+        msg.setText("<center><h2>确认退出吗？</h2></center><center><h2>退出会结束MemProcFS进程</h2></center><center><h2>退出会清空output文件夹</h2></center>")
         msg.setWindowTitle("请我喝杯咖啡吧！")
         msg.setWindowIcon(QtGui.QIcon('res/logo.ico'))
         msg.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -629,7 +699,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if reply == QMessageBox.Yes:
             event.accept()
             # 结束MemProcFS进程，结束MemProcFS.exe
-            #os.system('taskkill /F /IM MemProcFS.exe')
+            os.system('taskkill /F /IM MemProcFS.exe')
+            # 清空 output 文件夹
+            output_folder = 'output'
+            if os.path.exists(output_folder):
+                shutil.rmtree(output_folder)
+            os.makedirs(output_folder)
         else:
             event.ignore()
 #----------------------------------------------------------------------------------------------------------
