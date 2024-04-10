@@ -103,7 +103,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_load_netstat_timeline.clicked.connect(self.loadnetstat_timeline)
         self.pushButton_load_netstat_timeline.setToolTip('加载网络连接时间线')
         self.pushButton_load_proc_timeline.clicked.connect(self.loadproc_timeline)
-        self.pushButton_load_proc_timeline.setToolTip('加载进程时间线')
+        self.pushButton_load_proc_timeline.setToolTip('加载进程时间线\nQ:进程时间线是什么？\nA:进程时间线是进程的创建、退出时间等信息')
         self.pushButton_load_web_timeline.clicked.connect(self.loadweb_timeline)
         self.pushButton_load_web_timeline.setToolTip('加载web网页访问时间线')
         self.pushButton_findrow.clicked.connect(self.findrow)
@@ -111,13 +111,13 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_withvol2find.setToolTip('通过vol2搜索文件,输入框输入文件关键字')
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
-        self.pushButton_procdump2gimp.setToolTip('使用gimp打开搜索框中pid对应进程的minidump文件')
+        self.pushButton_procdump2gimp.setToolTip('使用gimp打开搜索框中pid对应进程的minidump文件\n 通过调整宽高位移来查看缓存在内存中的图片等信息')
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
         self.pushButton_withvol2dump.setToolTip('通过vol2导出文件,输入框输入文件物理地址0xXXXXXXX')
         self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
-        self.pushButton_vol2editbox.setToolTip('通过vol2搜索editbox')
+        self.pushButton_vol2editbox.setToolTip('通过vol2搜索editbox\nQ：editbox是什么？\nA：editbox是windows中的文本框\nQ：为什么要搜索？\nA：因为文本框中可能有密码等敏感信息')
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
-        self.pushButton_vol2clipboard.setToolTip('通过vol2搜索clipboard')
+        self.pushButton_vol2clipboard.setToolTip('通过vol2搜索clipboard\n Q：clipboard是什么？\nA：clipboard是windows中的剪贴板\nQ：为什么要搜索？\nA：因为剪贴板中可能有密码等敏感信息')
         self.pushButton_services.clicked.connect(self.loadservices)
         self.pushButton_services.setToolTip('加载服务信息')
         self.pushButton_load_timeline_registry.clicked.connect(self.loadtimeline_registry)
@@ -125,13 +125,13 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.pushButton_loadallfile.clicked.connect(self.loadallfiles)
         self.pushButton_loadallfile.setToolTip('加载所有文件列表')
         self.pushButton_withvol2netscan.clicked.connect(self.withvol2netscan)
-        self.pushButton_withvol2netscan.setToolTip('通过vol2搜索netscan')
+        self.pushButton_withvol2netscan.setToolTip('通过vol2搜索netscan\nTips:软件默认的memprocfs导出的网络连接缺少目的地址的显示\n所以这里调用vol2的可以使用netscan进行查看')
         self.checkBox_cusHW.stateChanged.connect(self.cusHW)
         self.comboBox_profile.currentIndexChanged.connect(self.getprofile)
         self.comboBox_profile.addItems(config.profile)
         self.comboBox_profile.setToolTip('这里默认选择Win7SP1x64\n左上文件-加载镜像无法正确加载，这里选择是为下面的vol2功能选择profile\n点击前面的vol2功能按钮前会自动匹配profile(Frrom volatilityPro)')
         self.pushButton_vol2.clicked.connect(self.runvol2pro)
-        self.pushButton_vol2.setToolTip('通过vol2进行分析，若memprocfs正常加载，会自动匹配profile\n若无法加载的镜像（一般为xp,win7x86）则会自动进行imageinfo')
+        self.pushButton_vol2.setToolTip('一般来说仅支持windows7x64以下的系统\n通过vol2进行分析，若memprocfs正常加载，会自动匹配profile\n若无法加载的镜像（一般为xp,win7x86）则会自动进行imageinfo')
         self.lineEdit_str.setToolTip('该输入框为通用搜索、查询、导出等功能的限制关键词输入框，具体功能请查看按钮提示')
         # pushButton_cuscmd
         self.pushButton_cuscmd.clicked.connect(self.cuscmd)
@@ -325,7 +325,20 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             self.users = open(memdisk + 'sys/users/users.txt', 'r').read().replace('--', '')
             # "M:\py\regsecrets\all.txt" 获取密码相关
             self.secretsall = open(memdisk + 'py/regsecrets/all.txt', 'r').read()
-            print(Fore.GREEN + '[+] 读取成功！' + Style.RESET_ALL)
+            #判断M:\misc\bitlocker目录下是否有多个文件（>2）
+            try:
+                bitlocker = os.listdir(memdisk + 'misc/bitlocker')
+                if len(bitlocker) > 2:
+                    filelist = []
+                    for file in bitlocker:
+                        if file != 'readme.txt':
+                            print(Fore.YELLOW + '[*] 发现bitlocker相关文件：' + file + Style.RESET_ALL)
+                            filelist.append(file)
+                self.bitlockerinfo = '\n'.join(filelist)
+                print(Fore.GREEN + '[+] 读取成功！' + Style.RESET_ALL)
+            except:
+                self.bitlockerinfo = '未发现bitlocker相关文件'
+                print(Fore.YELLOW + '[-] 未发现bitlocker相关文件' + Style.RESET_ALL)
             info_list = [
                 ('计算机名', self.computername),
                 ('架构', self.architecture),
@@ -336,7 +349,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
                 ('版本号', self.version),
                 ('构建版本号', self.version_build),
                 ('用户', '\n'+self.users),
-                ('系统密码相关', '\n'+self.secretsall)
+                ('系统密码相关', '\n'+self.secretsall),
+                ('Bitlocker信息', '\n'+self.bitlockerinfo)
             ]
             
             self.quicklyviewwindow = QuicklyView('镜像信息',size=(800, 700))
@@ -354,8 +368,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         #判断self.regpath是否存在，不存在就提示
         if os.path.exists(self.regpath): 
             cmd = f'python volpro.py "{path}" {self.profile}'
-            print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{S}：' + cmd + Style.RESET_ALL)
+            print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + cmd + Style.RESET_ALL)
+        else :
+            cmd = f'python volpro.py "{path}"'
+            print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + cmd + Style.RESET_ALL)
         try:
+            print
             subprocess.Popen(cmd, shell=True)
         except:
             print(Fore.RED + '[×] volpro路径错误！' + Style.RESET_ALL)
