@@ -136,6 +136,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         # pushButton_cuscmd
         self.pushButton_cuscmd.clicked.connect(self.cuscmd)
         self.pushButton_cuscmd.setToolTip('这个按钮功能是vol2中profile后面命令的自定义执行\n输入框中输入需要执行的内容,例如：iehistory|findstr flag \n默认命令提示符输出')
+        # pushButton_load_ntfsfile_timeline
+        self.pushButton_load_ntfsfile_timeline.clicked.connect(self.loadntfs_timeline)
         self.show()
     #动态调整tableWidget_find大小
     def resizeEvent(self, event):
@@ -364,13 +366,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             path = self.mem_path
         except:
             print(Fore.RED + '[×] 请先加载内存镜像文件！' + Style.RESET_ALL)
-        #subprocess.Popen(python volpro.py -f path)
-        #判断self.regpath是否存在，不存在就提示
+        pythonpath = r'mem_venv\Scripts\python.exe'
         if os.path.exists(self.regpath): 
-            cmd = f'python volpro.py "{path}" {self.profile}'
+            cmd = [pythonpath, 'volpro.py', path, self.profile]
             print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + cmd + Style.RESET_ALL)
         else :
-            cmd = f'python volpro.py "{path}"'
+            cmd = [pythonpath, 'volpro.py', path]
             print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + cmd + Style.RESET_ALL)
         try:
             print
@@ -464,6 +465,9 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
     def loadnetstat_timeline(self):
         netstat_timelinepath = r'M:/forensic/csv/timeline_net.csv'
         return self.loadcsv2table(netstat_timelinepath)
+    def loadntfs_timeline(self):
+        ntfs_timelinepath = r'M:/forensic/csv/timeline_ntfs.csv'
+        return self.loadcsv2table(ntfs_timelinepath)
     def loadproc_timeline(self):
         proc_timelinepath = r'M:/forensic/csv/timeline_process.csv'
         return self.loadcsv2table(proc_timelinepath)

@@ -60,7 +60,7 @@
      <rect>
       <x>520</x>
       <y>10</y>
-      <width>541</width>
+      <width>547</width>
       <height>83</height>
      </rect>
     </property>
@@ -98,24 +98,10 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0">
-      <widget class="QPushButton" name="pushButton_loadallfile">
-       <property name="text">
-        <string>加载全部文件</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="pushButton_load_proc">
        <property name="text">
         <string>加载proc</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QPushButton" name="pushButton_procdump2gimp">
-       <property name="text">
-        <string>procdump2gimp</string>
        </property>
       </widget>
      </item>
@@ -159,6 +145,20 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="pushButton_loadallfile">
+       <property name="text">
+        <string>加载全部文件</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QPushButton" name="pushButton_load_ntfsfile_timeline">
+       <property name="text">
+        <string>加载NTFS_timeline</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QComboBox" name="comboBox_profile">
@@ -171,13 +171,13 @@
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>21</x>
       <y>41</y>
-      <width>482</width>
-      <height>51</height>
+      <width>491</width>
+      <height>54</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout_2">
@@ -263,6 +263,13 @@
       <widget class="QPushButton" name="pushButton_cuscmd">
        <property name="text">
         <string>自定义命令</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5">
+      <widget class="QPushButton" name="pushButton_procdump2gimp">
+       <property name="text">
+        <string>proc2gimp</string>
        </property>
       </widget>
      </item>

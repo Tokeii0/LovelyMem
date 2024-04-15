@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.lineEdit_str.setGeometry(QRect(20, 10, 371, 21))
         self.gridLayoutWidget = QWidget(self.centralwidget)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
-        self.gridLayoutWidget.setGeometry(QRect(520, 10, 541, 83))
+        self.gridLayoutWidget.setGeometry(QRect(520, 10, 547, 83))
         self.gridLayout = QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setObjectName(u"gridLayout")
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -75,20 +75,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.pushButton_load_netstat_timeline, 1, 1, 1, 1)
 
-        self.pushButton_loadallfile = QPushButton(self.gridLayoutWidget)
-        self.pushButton_loadallfile.setObjectName(u"pushButton_loadallfile")
-
-        self.gridLayout.addWidget(self.pushButton_loadallfile, 1, 0, 1, 1)
-
         self.pushButton_load_proc = QPushButton(self.gridLayoutWidget)
         self.pushButton_load_proc.setObjectName(u"pushButton_load_proc")
 
         self.gridLayout.addWidget(self.pushButton_load_proc, 0, 0, 1, 1)
-
-        self.pushButton_procdump2gimp = QPushButton(self.gridLayoutWidget)
-        self.pushButton_procdump2gimp.setObjectName(u"pushButton_procdump2gimp")
-
-        self.gridLayout.addWidget(self.pushButton_procdump2gimp, 2, 0, 1, 1)
 
         self.pushButton_load_netstat = QPushButton(self.gridLayoutWidget)
         self.pushButton_load_netstat.setObjectName(u"pushButton_load_netstat")
@@ -116,71 +106,86 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.checkBox_cusHW, 2, 4, 1, 1)
 
+        self.pushButton_loadallfile = QPushButton(self.gridLayoutWidget)
+        self.pushButton_loadallfile.setObjectName(u"pushButton_loadallfile")
+
+        self.gridLayout.addWidget(self.pushButton_loadallfile, 2, 0, 1, 1)
+
+        self.pushButton_load_ntfsfile_timeline = QPushButton(self.gridLayoutWidget)
+        self.pushButton_load_ntfsfile_timeline.setObjectName(u"pushButton_load_ntfsfile_timeline")
+
+        self.gridLayout.addWidget(self.pushButton_load_ntfsfile_timeline, 1, 0, 1, 1)
+
         self.comboBox_profile = QComboBox(self.centralwidget)
         self.comboBox_profile.setObjectName(u"comboBox_profile")
         self.comboBox_profile.setGeometry(QRect(400, 10, 111, 22))
-        self.widget = QWidget(self.centralwidget)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(21, 41, 482, 51))
-        self.gridLayout_2 = QGridLayout(self.widget)
+        self.layoutWidget = QWidget(self.centralwidget)
+        self.layoutWidget.setObjectName(u"layoutWidget")
+        self.layoutWidget.setGeometry(QRect(21, 41, 491, 54))
+        self.gridLayout_2 = QGridLayout(self.layoutWidget)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.pushButton_ntfsfind = QPushButton(self.widget)
+        self.pushButton_ntfsfind = QPushButton(self.layoutWidget)
         self.pushButton_ntfsfind.setObjectName(u"pushButton_ntfsfind")
 
         self.gridLayout_2.addWidget(self.pushButton_ntfsfind, 0, 3, 1, 1)
 
-        self.pushButton_vol2clipboard = QPushButton(self.widget)
+        self.pushButton_vol2clipboard = QPushButton(self.layoutWidget)
         self.pushButton_vol2clipboard.setObjectName(u"pushButton_vol2clipboard")
         self.pushButton_vol2clipboard.setFont(font)
 
         self.gridLayout_2.addWidget(self.pushButton_vol2clipboard, 2, 3, 1, 1)
 
-        self.pushButton_withvol2dump = QPushButton(self.widget)
+        self.pushButton_withvol2dump = QPushButton(self.layoutWidget)
         self.pushButton_withvol2dump.setObjectName(u"pushButton_withvol2dump")
         self.pushButton_withvol2dump.setEnabled(True)
 
         self.gridLayout_2.addWidget(self.pushButton_withvol2dump, 2, 1, 1, 1)
 
-        self.pushButton_flush = QPushButton(self.widget)
+        self.pushButton_flush = QPushButton(self.layoutWidget)
         self.pushButton_flush.setObjectName(u"pushButton_flush")
 
         self.gridLayout_2.addWidget(self.pushButton_flush, 0, 1, 1, 1)
 
-        self.pushButton_vol2 = QPushButton(self.widget)
+        self.pushButton_vol2 = QPushButton(self.layoutWidget)
         self.pushButton_vol2.setObjectName(u"pushButton_vol2")
 
         self.gridLayout_2.addWidget(self.pushButton_vol2, 0, 0, 1, 1)
 
-        self.pushButton_withvol2netscan = QPushButton(self.widget)
+        self.pushButton_withvol2netscan = QPushButton(self.layoutWidget)
         self.pushButton_withvol2netscan.setObjectName(u"pushButton_withvol2netscan")
 
         self.gridLayout_2.addWidget(self.pushButton_withvol2netscan, 2, 4, 1, 1)
 
-        self.pushButton_vol2editbox = QPushButton(self.widget)
+        self.pushButton_vol2editbox = QPushButton(self.layoutWidget)
         self.pushButton_vol2editbox.setObjectName(u"pushButton_vol2editbox")
 
         self.gridLayout_2.addWidget(self.pushButton_vol2editbox, 2, 2, 1, 1)
 
-        self.pushButton_findrow = QPushButton(self.widget)
+        self.pushButton_findrow = QPushButton(self.layoutWidget)
         self.pushButton_findrow.setObjectName(u"pushButton_findrow")
 
         self.gridLayout_2.addWidget(self.pushButton_findrow, 0, 2, 1, 1)
 
-        self.pushButton_findstr = QPushButton(self.widget)
+        self.pushButton_findstr = QPushButton(self.layoutWidget)
         self.pushButton_findstr.setObjectName(u"pushButton_findstr")
 
         self.gridLayout_2.addWidget(self.pushButton_findstr, 0, 4, 1, 1)
 
-        self.pushButton_withvol2find = QPushButton(self.widget)
+        self.pushButton_withvol2find = QPushButton(self.layoutWidget)
         self.pushButton_withvol2find.setObjectName(u"pushButton_withvol2find")
 
         self.gridLayout_2.addWidget(self.pushButton_withvol2find, 2, 0, 1, 1)
 
-        self.pushButton_cuscmd = QPushButton(self.widget)
+        self.pushButton_cuscmd = QPushButton(self.layoutWidget)
         self.pushButton_cuscmd.setObjectName(u"pushButton_cuscmd")
 
         self.gridLayout_2.addWidget(self.pushButton_cuscmd, 2, 5, 1, 1)
+
+        self.pushButton_procdump2gimp = QPushButton(self.layoutWidget)
+        self.pushButton_procdump2gimp.setObjectName(u"pushButton_procdump2gimp")
+
+        self.gridLayout_2.addWidget(self.pushButton_procdump2gimp, 0, 5, 1, 1)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
@@ -213,14 +218,14 @@ class Ui_MainWindow(object):
         self.pushButton_load_web_timeline.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dweb_timeline", None))
         self.pushButton_load_timeline_registry.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dtimeline_reg", None))
         self.pushButton_load_netstat_timeline.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dnet_timeline", None))
-        self.pushButton_loadallfile.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7d\u5168\u90e8\u6587\u4ef6", None))
         self.pushButton_load_proc.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dproc", None))
-        self.pushButton_procdump2gimp.setText(QCoreApplication.translate("MainWindow", u"procdump2gimp", None))
         self.pushButton_load_netstat.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dnetstat", None))
         self.pushButton_load_tasks.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dtasks", None))
         self.pushButton_load_findevil.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dfindevil", None))
         self.pushButton_services.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dservices", None))
         self.checkBox_cusHW.setText(QCoreApplication.translate("MainWindow", u"\u81ea\u5b9a\u4e49\u5217\u5bbd", None))
+        self.pushButton_loadallfile.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7d\u5168\u90e8\u6587\u4ef6", None))
+        self.pushButton_load_ntfsfile_timeline.setText(QCoreApplication.translate("MainWindow", u"\u52a0\u8f7dNTFS_timeline", None))
         self.pushButton_ntfsfind.setText(QCoreApplication.translate("MainWindow", u"Ntfs\u641c\u7d22", None))
         self.pushButton_vol2clipboard.setText(QCoreApplication.translate("MainWindow", u"clipboard", None))
         self.pushButton_withvol2dump.setText(QCoreApplication.translate("MainWindow", u"dumpfile", None))
@@ -232,6 +237,7 @@ class Ui_MainWindow(object):
         self.pushButton_findstr.setText(QCoreApplication.translate("MainWindow", u"\u641c\u7d22\u6587\u4ef6", None))
         self.pushButton_withvol2find.setText(QCoreApplication.translate("MainWindow", u"findscan", None))
         self.pushButton_cuscmd.setText(QCoreApplication.translate("MainWindow", u"\u81ea\u5b9a\u4e49\u547d\u4ee4", None))
+        self.pushButton_procdump2gimp.setText(QCoreApplication.translate("MainWindow", u"proc2gimp", None))
         self.menu.setTitle(QCoreApplication.translate("MainWindow", u"\u6587\u4ef6", None))
     # retranslateUi
 
