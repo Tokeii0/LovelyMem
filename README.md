@@ -48,6 +48,9 @@ https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
 
 ` python main.py `
 ### 你都更新了点啥
+#### v0.4a 2024.4.15
+  - 新增了NTFS文件时间线
+  - 修改几个按钮位置
 #### v0.4 2024.4.10
   - 新增联动volpro进行执行
   - 在快速查看文本的新窗口中新增了搜索框与搜索按钮
