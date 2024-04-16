@@ -366,9 +366,8 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             path = self.mem_path
         except:
             print(Fore.RED + '[×] 请先加载内存镜像文件！' + Style.RESET_ALL)
-        pythonpath = r'mem_venv\Scripts\python.exe'
         if os.path.exists(self.regpath): 
-            cmd = [pythonpath, 'volpro.py', path, self.profile]
+            cmd = [config.pythonpath, 'volpro.py', path, self.profile]
             print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + cmd + Style.RESET_ALL)
         else :
             cmd = [pythonpath, 'volpro.py', path]
