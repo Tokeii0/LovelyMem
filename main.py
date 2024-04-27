@@ -369,14 +369,14 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         
         if os.path.exists(self.regpath): 
             cmd = [config.pythonpath, 'volpro.py', path, self.profile]
-            readcmd = ' '.join(cmd)
+            readcmd = ' '.join
             print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + readcmd + Style.RESET_ALL)
         else :
             cmd = [config.pythonpath, 'volpro.py', path]
-            readcmd = ' '.join(cmd)
+            readcmd = ' '.join
             print(Fore.YELLOW + '[*] 正在调用volpro进行分析，使用profile:{self.profile}：' + readcmd + Style.RESET_ALL)
         try:
-            print
+            print(Fore.GREEN + '[+] 执行成功！' + Style.RESET_ALL)
             subprocess.Popen(cmd, shell=True)
         except:
             print(Fore.RED + '[×] volpro路径错误！' + Style.RESET_ALL)
