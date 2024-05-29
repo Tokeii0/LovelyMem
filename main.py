@@ -1,21 +1,30 @@
 import config
 from Lovelymem_ui import Ui_MainWindow
-from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QWidget, QTableWidgetItem, QHeaderView
-from PySide6.QtCore import Qt, QThread, Signal,QRect
-import sys
-import os
-import subprocess
+from PySide6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QApplication, QWidget, QTableWidgetItem, QHeaderView,QLabel
+from PySide6.QtCore import Qt, QThread, Signal, QRect,QCoreApplication
+import subprocess,time,os,sys,shutil
 from colorama import Fore, Back, Style
-import shutil
-from PySide6 import QtGui 
+from PySide6 import QtGui, QtWidgets
+import pandas as pd
+import re, hexdump
+from PIL import Image
+from tooltips import tooltips
+
+
 import convert.netstat
 import convert.loadcsv
-import pandas as pd
-from PySide6 import QtWidgets
-import re,hexdump
-from PIL import Image
 
-
+class LogoWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setFixedSize(400, 400)
+        self.logo_label = QtWidgets.QLabel(self)
+        self.setWindowIcon(QtGui.QIcon('res/logo.ico'))
+        self.logo_label.setPixmap(QtGui.QPixmap('res/logo_200.png'))
+        self.logo_label.setAlignment(Qt.AlignCenter)
+        self.logo_label.setGeometry(0, 0, 400, 400)
 
 class CommandRunner(QThread):
     output_signal = Signal(str)
@@ -43,11 +52,9 @@ class QuicklyView(QWidget):
         self.textEdit.setObjectName("textEdit")
         self.textEdit.setReadOnly(True)
         self.textEdit.setTextInteractionFlags(Qt.TextSelectableByMouse)
-        
         self.lineEdit = QtWidgets.QLineEdit(self)
         self.lineEdit.setGeometry(QRect(0, 0, 700, 30))
         self.lineEdit.setObjectName("lineEdit")
-        
         self.pushButton = QtWidgets.QPushButton(self)
         self.pushButton.setGeometry(QRect(700, 0, 100, 30))
         self.pushButton.setObjectName("pushButton")
@@ -80,72 +87,53 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         self.actionOpenFile.triggered.connect(self.open_file_select)
         self.actionOpenFile.setShortcut('Ctrl+O')
         self.actionOpenFile.setStatusTip('打开文件')
-        self.action2.triggered.connect(self.use_memprocfs)
-        self.action2.setShortcut('Ctrl+L')
-        self.action2.setStatusTip('加载内存镜像')
         self.action3.triggered.connect(self.unloadmem)
         self.action3.setShortcut('Ctrl+U')
         self.action3.setStatusTip('卸载内存镜像')
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.contextMenuEvent)
         self.pushButton_flush.clicked.connect(self.flush)
-        self.pushButton_flush.setToolTip('在新窗口加载镜像的基本信息')
         self.pushButton_findstr.clicked.connect(self.findstr)
-        self.pushButton_findstr.setToolTip('搜索文件名包含关键字的文件')
         self.pushButton_load_netstat.clicked.connect(self.load_netstat)
-        self.pushButton_load_netstat.setToolTip('加载网络连接信息，若目的地址无法显示请使用netscan')
         self.pushButton_load_proc.clicked.connect(self.loadproc)
-        self.pushButton_load_proc.setToolTip('加载进程信息')
         self.pushButton_load_tasks.clicked.connect(self.loadtasks)
-        self.pushButton_load_tasks.setToolTip('加载任务信息')
         self.pushButton_load_findevil.clicked.connect(self.loadfindevil)
-        self.pushButton_load_findevil.setToolTip('加载恶意文件信息')
         self.pushButton_load_netstat_timeline.clicked.connect(self.loadnetstat_timeline)
-        self.pushButton_load_netstat_timeline.setToolTip('加载网络连接时间线')
         self.pushButton_load_proc_timeline.clicked.connect(self.loadproc_timeline)
-        self.pushButton_load_proc_timeline.setToolTip('加载进程时间线\nQ:进程时间线是什么？\nA:进程时间线是进程的创建、退出时间等信息')
         self.pushButton_load_web_timeline.clicked.connect(self.loadweb_timeline)
-        self.pushButton_load_web_timeline.setToolTip('加载web网页访问时间线')
         self.pushButton_findrow.clicked.connect(self.findrow)
         self.pushButton_withvol2find.clicked.connect(self.volfindscan)
-        self.pushButton_withvol2find.setToolTip('通过vol2搜索文件,输入框输入文件关键字')
         self.pushButton_ntfsfind.clicked.connect(self.ntfsfind)
         self.pushButton_procdump2gimp.clicked.connect(self.procdump2gimp)
-        self.pushButton_procdump2gimp.setToolTip('使用gimp打开搜索框中pid对应进程的minidump文件\n 通过调整宽高位移来查看缓存在内存中的图片等信息')
         self.pushButton_withvol2dump.clicked.connect(self.withvol2dump)
-        self.pushButton_withvol2dump.setToolTip('通过vol2导出文件,输入框输入文件物理地址0xXXXXXXX')
         self.pushButton_vol2editbox.clicked.connect(self.withvol2editbox)
-        self.pushButton_vol2editbox.setToolTip('通过vol2搜索editbox\nQ：editbox是什么？\nA：editbox是windows中的文本框\nQ：为什么要搜索？\nA：因为文本框中可能有密码等敏感信息')
         self.pushButton_vol2clipboard.clicked.connect(self.withvol2clipboard)
-        self.pushButton_vol2clipboard.setToolTip('通过vol2搜索clipboard\n Q：clipboard是什么？\nA：clipboard是windows中的剪贴板\nQ：为什么要搜索？\nA：因为剪贴板中可能有密码等敏感信息')
         self.pushButton_services.clicked.connect(self.loadservices)
-        self.pushButton_services.setToolTip('加载服务信息')
         self.pushButton_load_timeline_registry.clicked.connect(self.loadtimeline_registry)
-        self.pushButton_load_timeline_registry.setToolTip('加载注册表时间线')
         self.pushButton_loadallfile.clicked.connect(self.loadallfiles)
-        self.pushButton_loadallfile.setToolTip('加载所有文件列表')
         self.pushButton_withvol2netscan.clicked.connect(self.withvol2netscan)
-        self.pushButton_withvol2netscan.setToolTip('通过vol2搜索netscan\nTips:软件默认的memprocfs导出的网络连接缺少目的地址的显示\n所以这里调用vol2的可以使用netscan进行查看')
         self.checkBox_cusHW.stateChanged.connect(self.cusHW)
         self.comboBox_profile.currentIndexChanged.connect(self.getprofile)
         self.comboBox_profile.addItems(config.profile)
-        self.comboBox_profile.setToolTip('这里默认选择Win7SP1x64\n左上文件-加载镜像无法正确加载，这里选择是为下面的vol2功能选择profile\n点击前面的vol2功能按钮前会自动匹配profile(Frrom volatilityPro)')
         self.pushButton_vol2.clicked.connect(self.runvol2pro)
-        self.pushButton_vol2.setToolTip('一般来说仅支持windows7x64以下的系统\n通过vol2进行分析，若memprocfs正常加载，会自动匹配profile\n若无法加载的镜像（一般为xp,win7x86）则会自动进行imageinfo')
-        self.lineEdit_str.setToolTip('该输入框为通用搜索、查询、导出等功能的限制关键词输入框，具体功能请查看按钮提示')
-        # pushButton_cuscmd
         self.pushButton_cuscmd.clicked.connect(self.cuscmd)
-        self.pushButton_cuscmd.setToolTip('这个按钮功能是vol2中profile后面命令的自定义执行\n输入框中输入需要执行的内容,例如：iehistory|findstr flag \n默认命令提示符输出')
-        # pushButton_load_ntfsfile_timeline
         self.pushButton_load_ntfsfile_timeline.clicked.connect(self.loadntfs_timeline)
+        self.set_tooltips()
         self.show()
+    def set_tooltips(self):
+        for obj_name, tooltip in tooltips.items():
+            obj = self.findChild(QWidget, obj_name)
+            if obj:
+                obj.setToolTip(tooltip)
+
     #动态调整tableWidget_find大小
     def resizeEvent(self, event):
         width = self.width() - 20
         self.tableWidget_find.setFixedWidth(width)
-        height = self.height() -147
+        height = self.height() -165
         self.tableWidget_find.setFixedHeight(height)
         super().resizeEvent(event)
+        
 #右键菜单------------------------------------------------------------------------------------------------------
     def contextMenuEvent(self, pos):
         context_menu = QtWidgets.QMenu(self)
@@ -277,18 +265,22 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         if event.mimeData().hasUrls():
             file_path = event.mimeData().urls()[0].toLocalFile()
             self.open_file(file_path)
+            #加载镜像
+            self.use_memprocfs(file_path)
+
 
     #打开文件
     def open_file_select(self):
         file_path, _ = QFileDialog.getOpenFileName(self, '打开文件', '', '所有文件 (*.*)')
         if file_path:
-            self.open_file(file_path)       
+            self.open_file(file_path) 
+            self.use_memprocfs(file_path)      
 
     def open_file(self, file_path):
         self.file_name = file_path
         self.mem_path = self.get_mem_path(self.file_name)
         # title + path
-        self.setWindowTitle('LovelyMem v0.4 - ' + self.mem_path)
+        self.setWindowTitle('LovelyMem v0.5 - ' + self.mem_path)
         return self.mem_path
     #获取镜像完整路径
     def get_mem_path(self, file_name):
@@ -384,7 +376,7 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
         #自定义执行命令
         if self.lineEdit_str.text() == '':
             print(Fore.RED + '[×] 请输入自定义指令即vol.exe -f mem --profile= xxx 后面的内容！' + Style.RESET_ALL)
-            return
+            return 
         str = self.lineEdit_str.text()
         profile = self.getprofile()
         cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} {str}'
@@ -493,23 +485,17 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             for line in file:
                 if re.search(pattern, line, re.IGNORECASE):
                     result.append(line)
-        # pandas读result
         df = pd.DataFrame(result)
         df = df.values.tolist()
-        # 每行分割
         for i in range(len(df)):
             df[i] = re.split(',', df[i][0])
-            # 去掉最后一列
             df[i].pop()
-        # 加载至tableWidget_find,不知几列
         self.tableWidget_find.setRowCount(len(df))
         self.tableWidget_find.setColumnCount(len(df[0]))
-        # Time	Type	Action	PID	Value32	Value64	Text	Pad
         self.tableWidget_find.setHorizontalHeaderLabels(['Time', 'Type', 'Action', 'PID', 'Value32', 'Value64', 'Text'])
         for i in range(len(df)):
             for j in range(len(df[0])):
                 self.tableWidget_find.setItem(i, j, QTableWidgetItem(df[i][j]))
-                # 宽度自适应，根据内容调整列宽,最后一列填充空白部分
                 self.tableWidget_find.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeToContents)
                 self.tableWidget_find.horizontalHeader().setSectionResizeMode(len(df[0]) - 1, QHeaderView.Stretch)
         print(Fore.GREEN + '[+] 搜索成功！' + Style.RESET_ALL)
@@ -519,16 +505,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             return
         str = self.lineEdit_str.text()
         profile = self.getprofile()
-        #cmd = config.volatility2 + " -f " + self.mem_path + " --profile=" + profile + " filescan | findstr " + str
         cmd = f'{config.volatility2} -f "{self.mem_path}" --profile={profile} filescan | findstr {str}'
-        #运行时 按钮变为不可用
         self.pushButton_withvol2find.setEnabled(False)
-        #按钮名字改为搜索中...
         self.pushButton_withvol2find.setText('搜索中...')
         print(Fore.YELLOW + '[*] 正在调用vol2进行文件搜索：' + cmd + Style.RESET_ALL)
         self.command_runner = CommandRunner(cmd)
         self.command_runner.start()
-        #线程结束后 按钮变为可用
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setEnabled(True))
         self.command_runner.finished.connect(lambda: self.pushButton_withvol2find.setText('filescan'))
     def withvol2dump(self):
@@ -632,26 +614,26 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
             self.command_runner.finished.connect(lambda: self.pushButton_vol2clipboard.setText('clipboard'))
     
     def getprofile(self):
-        self.regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
-        if os.path.exists(self.regpath):
+        # self.regpath = r"M:\registry\HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\BuildLabEx.txt"
+        # if os.path.exists(self.regpath):
 
-            data = open(self.regpath, 'r', encoding='utf-8').readlines()
-            newdata = data[2].split('.')
-            str1 = newdata[3].split('_')[0]
-            str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
-            if '10' not in str1 and 'SP' not in str1:
-                str1 = str1 + 'SP1'
-            if '64' in newdata[2]:
-                str2 = 'x64'
-            else:
-                str2 = 'x86'
-            self.profile = str1 + str2
+        #     data = open(self.regpath, 'r', encoding='utf-8').readlines()
+        #     newdata = data[2].split('.')
+        #     str1 = newdata[3].split('_')[0]
+        #     str1 = str1.replace('w', 'W').replace('sp', 'SP').replace('xp', 'XP')
+        #     if '10' not in str1 and 'SP' not in str1:
+        #         str1 = str1 + 'SP1'
+        #     if '64' in newdata[2]:
+        #         str2 = 'x64'
+        #     else:
+        #         str2 = 'x86'
+        #     self.profile = str1 + str2
             
-            print(Fore.GREEN + '[+] 获取profile成功！' + Style.RESET_ALL)
-            return self.profile
-        else:
-            self.profile = self.comboBox_profile.currentText()
-            return self.profile
+        #     print(Fore.GREEN + '[+] 获取profile成功！' + Style.RESET_ALL)
+        #     return self.profile
+        # else:
+        self.profile = self.comboBox_profile.currentText()
+        return self.profile
         
         
     def findstr(self):
@@ -734,6 +716,12 @@ class Lovelymem(QMainWindow, Ui_MainWindow):
 #----------------------------------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+    app = QApplication([])
+    # #展示logo2秒
+    logo = LogoWindow()
+    logo.show()
+    QCoreApplication.processEvents()
+    time.sleep(0.5)
+    logo.close()
     lovelymem = Lovelymem()
     sys.exit(app.exec())
