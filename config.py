@@ -1,8 +1,11 @@
 MemProcFsDir = r'Tools\MemProcFS\MemProcFS.exe'
 volatility2 = r'Tools\volatility2\vol.exe'
+volatility3 = r'Tools\volatility3\vol.py'
 gimp = r'Tools\gimp\bin\gimp-console-2.10.exe'
 profile  = ['Win7SP1x64', 'Win7SP1x86', 'WinXPSP3x86', 'WinXPSP2x86', 'WinXPSP2x64']
-pythonpath = r'mem_venv\Scripts\python.exe'
+pythonpath = r'python\python.exe' # python路径
+pypykatz = r'python\Scripts\pypykatz.exe'
+
 
 
 #-------------------------未来功能----------------------------
