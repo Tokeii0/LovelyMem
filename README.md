@@ -17,37 +17,59 @@ _✨ 基于*Memprocfs*和*Volatility*的可视化内存取证工具 ✨_
 </div>
 
 ### 这是什么
-一款基于memprocfs的快捷内存取证工具
+一款基于memprocfs、Volatility2、Volatility3的快捷内存取证工具
 
 区别于VolatilityPro：https://github.com/Tokeii0/VolatilityPro
 
 有着更快的取证速度以及更便捷的功能
+### 界面展示
+
+![image](https://github.com/Tokeii0/LovelyMem/assets/111427585/51593041-9c91-441a-acfe-fca04a748434)
 
 ### 功能展示
 https://www.bilibili.com/video/BV1TK411b78J/
+
 https://www.bilibili.com/video/BV1Hb4y1G77m/
 
+https://www.bilibili.com/video/BV1Px4y1H7DB/
 ### 适合什么题
   - 没有套娃的取证题目
     
 ### 使用方法
-
-因为不自带memprocfs，请先到memprocfs作者github页面下载相对应的版本
-
-https://github.com/ufrisk/MemProcFS/releases/tag/v5.8
-
-放在*Tools/memprocfs*目录下
-
-挂载文件系统需要*安装Dokany文件系统库*
-
-请下载并安装最新版本的 Dokany 版本 2：https://github.com/dokan-dev/dokany/releases/latest
-
-安装gimp https://www.gimp.org/download/
-
-目录下运行命令
-
-` python main.py `
+  -下载压缩包
+  -先加入QQ群 555741990 联系群主**免费**添加指定在线授权。
+  -复制设备密钥给群主添加授权
+  -运行[0] 点我启动.bat
+  
 ### 你都更新了点啥
+#### v0.6
+
+1. **源代码混淆及发布变更**
+    
+    - 从本版本开始，对源代码进行混淆，源代码将不再公布于 GitHub。
+2. **在线验证机制**
+    
+    - 用户需加入QQ群 555741990 联系群主**免费**添加指定授权。
+    - **离线授权**请移步爱发电进行**捐赠**。
+3. **功能调整与新增**
+    
+    - 移除对 VolPro 的合并，重构 Vol2 各种命令的快速导出功能。
+    - 支持 Volatility3，并新增部分 Windows 方法。
+    - 增加一键功能区，目前仅有一键获取 Windows 密码功能。
+4. **性能优化**
+    
+    - 重构 TableView 读取 CSV 文件的方法，速度显著提升。
+5. **界面与操作改进**
+    
+    - 按钮实体名称重新命名，统一为 Vol2 和 Vol3。
+    - 新增授权头像及头像框。
+    - 新增导出结果打包功能，正常退出软件后会自动打包并存储在 Archive 文件夹下。
+6. **运行环境整合**
+    
+    - 整合运行环境，实现点击即可运行的便捷操作。
+7. **工具扩展**
+    
+    - 增加 Hashcat 工具，目前尚未完全集成。
 #### v0.5 2024.5.29
   - *从下个版本开始不再开源，可能会进行爱发电对接，具体内容再看*
   - 更新版本至0.5
