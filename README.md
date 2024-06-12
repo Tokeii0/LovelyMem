@@ -47,6 +47,8 @@ https://www.bilibili.com/video/BV1Px4y1H7DB/
   -运行[0] 点我启动.bat
 ### 更新方法
   - 运行 整合包下面的 [-] 更新.bat 即可
+### 其他方面
+  - 关于dokan安装失败的问题可以参考 https://github.com/dokan-dev/dokany/issues/1200 解决
   
 ### 你都更新了点啥
 #### v0.6b
