@@ -15,8 +15,6 @@ _✨ 基于*Memprocfs*和*Volatility*的可视化内存取证工具 ✨_
   <a href="https://afdian.net/@Tokeii"><img src="https://img.shields.io/badge/爱发电-afdian.net-66ccff?style=flat-square" alt="aifadian"></a>
   <a href=".."><img src="https://img.shields.io/badge/Python%20-%203.10.11-def1f2?style=flat-square" alt="python"></a>
 </div>
-### 加入群聊 授权通知群
-![image](https://github.com/Tokeii0/LovelyMem/assets/111427585/cb29e01d-130f-4304-baab-6a91eebad7af)
 
 
 ### 这是什么
