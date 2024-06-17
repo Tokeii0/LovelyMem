@@ -15,6 +15,9 @@ _✨ 基于*Memprocfs*和*Volatility*的可视化内存取证工具 ✨_
   <a href="https://afdian.net/@Tokeii"><img src="https://img.shields.io/badge/爱发电-afdian.net-66ccff?style=flat-square" alt="aifadian"></a>
   <a href=".."><img src="https://img.shields.io/badge/Python%20-%203.10.11-def1f2?style=flat-square" alt="python"></a>
 </div>
+### 加入群聊 授权通知群
+![image](https://github.com/Tokeii0/LovelyMem/assets/111427585/cb29e01d-130f-4304-baab-6a91eebad7af)
+
 
 ### 这是什么
 一款基于memprocfs、Volatility2、Volatility3的快捷内存取证工具
@@ -69,7 +72,7 @@ https://www.bilibili.com/video/BV1Px4y1H7DB/
     - 从本版本开始，对源代码进行混淆，源代码将不再公布于 GitHub。
 2. **在线验证机制**
     
-    - 用户需加入QQ群 555741990 联系群主**免费**添加指定授权。(免费授权条件修改为:QQ等级至少俩太阳，且群聊>10级，群聊等级>80免费获得离线授权，如果被踢出群聊授权一并移除)
+    - 用户需加入QQ群 856729462 联系群主**免费**添加指定授权。
     - **离线授权**请移步爱发电进行**捐赠**。
 3. **功能调整与新增**
 
