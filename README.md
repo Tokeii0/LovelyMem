@@ -24,8 +24,8 @@ _✨ 基于*Memprocfs*和*Volatility*的可视化内存取证工具 ✨_
 
 有着更快的取证速度以及更便捷的功能
 ### 界面展示
+![image](https://github.com/Tokeii0/LovelyMem/assets/111427585/e60e3adb-8966-419b-a3e3-a57efdccdc1c)
 
-![image](https://github.com/Tokeii0/LovelyMem/assets/111427585/51593041-9c91-441a-acfe-fca04a748434)
 
 ### 功能展示
 https://www.bilibili.com/video/BV1TK411b78J/
@@ -52,6 +52,18 @@ https://www.bilibili.com/video/BV1Px4y1H7DB/
   - 关于dokan安装失败的问题可以参考 https://github.com/dokan-dev/dokany/issues/1200 解决
   
 ### 你都更新了点啥
+
+#### v0.7
+  1. 界面换新，现在所有执行的内容都回在新窗口中打开
+  2. 按钮改为圆角，改变配色
+  3. 移出vol2的dumpfile功能至新窗口右键菜单
+  4. proc2gimp也转移至新窗口右键菜单
+  5. 新窗口的搜索功能现在会在新窗口显示所有的结果以及对应的行，双击会转调至对应行
+  6. 新窗口的列从新版本起可以进行排序
+  7. vol2 新增一些我自己觉得可能用的到的功能
+  8. vol2 页签下新增一个自定义执行命令 只需要输入profile后面的命令，具体命令参考vol主页
+  9. 修复了一大堆bug，并新增了一堆bug
+  10. 头像以及授权表示暂时移动至一键功能区
 #### v0.6c
   1. 修复部分vol3对中文不支持的问题
   2. 资源文件分离
