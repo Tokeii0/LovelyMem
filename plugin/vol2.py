@@ -157,6 +157,13 @@ class Vol2Plugin(QObject):
         print(f"[+] 自动匹配的Profile: {profile}")
     
     def run_plugin(self, plugin_name, display_name, output_type='json', show_result=True):
+        # 检查profile是否为None，如果是则提示用户先获取profile
+        if self.profile is None:
+            print(
+                f"[!] {display_name} 执行失败: Profile未设置，请先获取内存镜像Profile"
+            )
+            return
+        
         vol2 = Vol2(self.mem_path, self.profile)
         cmd, output_file = vol2.construct_command(plugin_name, output_type)
         output_exists = os.path.exists(output_file)
@@ -187,6 +194,77 @@ class Vol2Plugin(QObject):
                 print(f"[!] 输出文件 {output_file} 不存在")
         else:
             print(f"[-] {display_name} 执行失败: {message}")
+        
+        # 发射任务完成信号
+        self.task_completed_signal.emit(display_name)
+        self.workers = [w for w in self.workers if w.isRunning()]
+
+    def run_plugin_with_fallback(self, plugin_name, display_name, show_result=True):
+        """运行插件，如果JSON格式失败则自动尝试text格式"""
+        vol2 = Vol2(self.mem_path, self.profile)
+        
+        # 首先尝试JSON格式
+        cmd, output_file = vol2.construct_command(plugin_name, 'json')
+        csv_file = output_file.replace('.json', '.csv')
+        
+        # 检查CSV文件是否已存在
+        if os.path.exists(csv_file) and os.path.getsize(csv_file) > 0:
+            if show_result:
+                self.display_output(display_name, csv_file)
+            return
+        
+        # 如果CSV不存在，尝试JSON格式
+        worker = WorkerThread(cmd)
+        worker.task_completed.connect(
+            lambda success, message: self.on_task_completed_with_fallback(
+                success, message, display_name, output_file, plugin_name, show_result
+            )
+        )
+        worker.finished.connect(worker.deleteLater)
+        worker.start()
+        self.workers.append(worker)
+        print(f"[*] 正在执行：{' '.join(cmd)}")
+
+    def on_task_completed_with_fallback(self, success, message, display_name, output_file, plugin_name, show_result):
+        """处理带fallback的任务完成"""
+        if success:
+            print(f"[+] {display_name} 执行完成")
+            Vol2(self.mem_path, self.profile).json_to_csv(output_file)
+            csv_file = output_file.replace('.json', '.csv')
+            if show_result:
+                self.display_output(display_name, csv_file)
+        else:
+            # JSON格式失败，尝试text格式
+            if "unified output format has not been implemented" in message:
+                print(f"[!] {display_name} 不支持JSON格式，尝试使用text格式")
+                vol2 = Vol2(self.mem_path, self.profile)
+                cmd, text_output_file = vol2.construct_command(plugin_name, 'text')
+                
+                worker = WorkerThread(cmd)
+                worker.task_completed.connect(
+                    lambda success, message: self.on_text_task_completed(
+                        success, message, display_name, text_output_file, show_result
+                    )
+                )
+                worker.finished.connect(worker.deleteLater)
+                worker.start()
+                self.workers.append(worker)
+                print(f"[*] 正在执行text格式：{' '.join(cmd)}")
+            else:
+                print(f"[-] {display_name} 执行失败: {message}")
+        
+        # 发射任务完成信号
+        self.task_completed_signal.emit(display_name)
+        self.workers = [w for w in self.workers if w.isRunning()]
+
+    def on_text_task_completed(self, success, message, display_name, output_file, show_result):
+        """处理text格式任务完成"""
+        if success:
+            print(f"[+] {display_name} (text格式) 执行完成")
+            if show_result:
+                self.display_output(display_name, output_file)
+        else:
+            print(f"[-] {display_name} (text格式) 执行失败: {message}")
         
         # 发射任务完成信号
         self.task_completed_signal.emit(display_name)
@@ -637,10 +715,10 @@ class Vol2Plugin(QObject):
         else:   
             self.run_plugin('bigpools', '大内存池')
     def vol2_session(self):
-        if os.path.exists('output/output_vol2_session.csv') and os.path.getsize('output/output_vol2_session.csv') > 0:
-            self.show_result('会话信息', 'output/output_vol2_session.csv')
+        if os.path.exists('output/output_vol2_sessions.csv') and os.path.getsize('output/output_vol2_sessions.csv') > 0:
+            self.show_result('会话信息', 'output/output_vol2_sessions.csv')
         else:   
-            self.run_plugin('session', '会话信息')
+            self.run_plugin_with_fallback('sessions', '会话信息')
     def vol2_wndscan(self):
         if os.path.exists('output/output_vol2_wndscan.csv') and os.path.getsize('output/output_vol2_wndscan.csv') > 0:
             self.show_result('窗口扫描', 'output/output_vol2_wndscan.csv')
