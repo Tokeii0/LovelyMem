@@ -157,6 +157,13 @@ class Vol2Plugin(QObject):
         print(f"[+] 自动匹配的Profile: {profile}")
     
     def run_plugin(self, plugin_name, display_name, output_type='json', show_result=True):
+        # 检查profile是否为None，如果是则提示用户先获取profile
+        if self.profile is None:
+            print(
+                f"[!] {display_name} 执行失败: Profile未设置，请先获取内存镜像Profile"
+            )
+            return
+        
         vol2 = Vol2(self.mem_path, self.profile)
         cmd, output_file = vol2.construct_command(plugin_name, output_type)
         output_exists = os.path.exists(output_file)
@@ -187,6 +194,77 @@ class Vol2Plugin(QObject):
                 print(f"[!] 输出文件 {output_file} 不存在")
         else:
             print(f"[-] {display_name} 执行失败: {message}")
+        
+        # 发射任务完成信号
+        self.task_completed_signal.emit(display_name)
+        self.workers = [w for w in self.workers if w.isRunning()]
+
+    def run_plugin_with_fallback(self, plugin_name, display_name, show_result=True):
+        """运行插件，如果JSON格式失败则自动尝试text格式"""
+        vol2 = Vol2(self.mem_path, self.profile)
+        
+        # 首先尝试JSON格式
+        cmd, output_file = vol2.construct_command(plugin_name, 'json')
+        csv_file = output_file.replace('.json', '.csv')
+        
+        # 检查CSV文件是否已存在
+        if os.path.exists(csv_file) and os.path.getsize(csv_file) > 0:
+            if show_result:
+                self.display_output(display_name, csv_file)
+            return
+        
+        # 如果CSV不存在，尝试JSON格式
+        worker = WorkerThread(cmd)
+        worker.task_completed.connect(
+            lambda success, message: self.on_task_completed_with_fallback(
+                success, message, display_name, output_file, plugin_name, show_result
+            )
+        )
+        worker.finished.connect(worker.deleteLater)
+        worker.start()
+        self.workers.append(worker)
+        print(f"[*] 正在执行：{' '.join(cmd)}")
+
+    def on_task_completed_with_fallback(self, success, message, display_name, output_file, plugin_name, show_result):
+        """处理带fallback的任务完成"""
+        if success:
+            print(f"[+] {display_name} 执行完成")
+            Vol2(self.mem_path, self.profile).json_to_csv(output_file)
+            csv_file = output_file.replace('.json', '.csv')
+            if show_result:
+                self.display_output(display_name, csv_file)
+        else:
+            # JSON格式失败，尝试text格式
+            if "unified output format has not been implemented" in message:
+                print(f"[!] {display_name} 不支持JSON格式，尝试使用text格式")
+                vol2 = Vol2(self.mem_path, self.profile)
+                cmd, text_output_file = vol2.construct_command(plugin_name, 'text')
+                
+                worker = WorkerThread(cmd)
+                worker.task_completed.connect(
+                    lambda success, message: self.on_text_task_completed(
+                        success, message, display_name, text_output_file, show_result
+                    )
+                )
+                worker.finished.connect(worker.deleteLater)
+                worker.start()
+                self.workers.append(worker)
+                print(f"[*] 正在执行text格式：{' '.join(cmd)}")
+            else:
+                print(f"[-] {display_name} 执行失败: {message}")
+        
+        # 发射任务完成信号
+        self.task_completed_signal.emit(display_name)
+        self.workers = [w for w in self.workers if w.isRunning()]
+
+    def on_text_task_completed(self, success, message, display_name, output_file, show_result):
+        """处理text格式任务完成"""
+        if success:
+            print(f"[+] {display_name} (text格式) 执行完成")
+            if show_result:
+                self.display_output(display_name, output_file)
+        else:
+            print(f"[-] {display_name} (text格式) 执行失败: {message}")
         
         # 发射任务完成信号
         self.task_completed_signal.emit(display_name)
@@ -234,21 +312,21 @@ class Vol2Plugin(QObject):
             
             self.show_result('文件扫描', 'output/output_vol2_filescan.csv')
         else:
-            self.run_plugin('filescan', '文件扫描')
+            self.run_plugin_with_fallback('filescan', '文件扫描')
 
     def vol2_timeliner(self):
         if os.path.exists('output/output_vol2_timeliner.csv') and os.path.getsize('output/output_vol2_timeliner.csv') > 0:
             
             self.show_result('时间线', 'output/output_vol2_timeliner.csv')
         else:
-            self.run_plugin('timeliner', '时间线')
+            self.run_plugin_with_fallback('timeliner', '时间线')
 
     def vol2_netscan(self):
         if os.path.exists('output/output_vol2_netscan.csv') and os.path.getsize('output/output_vol2_netscan.csv') > 0:
             
             self.show_result('网络扫描', 'output/output_vol2_netscan.csv')
         else:
-            self.run_plugin('netscan', '网络扫描')
+            self.run_plugin_with_fallback('netscan', '网络扫描')
 
     def vol2_iehistory(self):
         if os.path.exists('output/output_vol2_iehistory.text') and os.path.getsize('output/output_vol2_iehistory.text') > 0:
@@ -290,21 +368,21 @@ class Vol2Plugin(QObject):
             
             self.show_result('命令行', 'output/output_vol2_cmdline.csv')
         else:
-            self.run_plugin('cmdline', '命令行')
+            self.run_plugin_with_fallback('cmdline', '命令行')
 
     def vol2_cmdscan(self):
         if os.path.exists('output/output_vol2_cmdscan.csv') and os.path.getsize('output/output_vol2_cmdscan.csv') > 0:
             
             self.show_result('命令扫描', 'output/output_vol2_cmdscan.csv')
         else:
-            self.run_plugin('cmdscan', '命令扫描')
+            self.run_plugin_with_fallback('cmdscan', '命令扫描')
 
     def vol2_pslist(self):
         if os.path.exists('output/output_vol2_pslist.csv') and os.path.getsize('output/output_vol2_pslist.csv') > 0:
             
             self.show_result('进程列表', 'output/output_vol2_pslist.csv')
         else:
-            self.run_plugin('pslist', '进程列表')
+            self.run_plugin_with_fallback('pslist', '进程列表')
 
     def vol2_consoles(self):
         if os.path.exists('output/output_vol2_consoles.text') and os.path.getsize('output/output_vol2_consoles.text') > 0:
@@ -327,7 +405,7 @@ class Vol2Plugin(QObject):
             
             self.show_result('注册表', 'output/output_vol2_hivelist.csv')
         else:
-            self.run_plugin('hivelist', '注册表')
+            self.run_plugin_with_fallback('hivelist', '注册表')
     def vol2_dumpregistry(self):
         #  E:\Tools\python27\python27.exe E:\Tools\volatility2_python\vol.py --plugin=E:\Tools\volatility2_plugin -f E:/data1.raw --profile=Win7SP1x64 dumpregistry -D output/
         cmd = [
@@ -346,14 +424,14 @@ class Vol2Plugin(QObject):
             
             self.show_result('服务扫描', 'output/output_vol2_svcscan.csv')
         else:
-            self.run_plugin('svcscan', '服务扫描')
+            self.run_plugin_with_fallback('svcscan', '服务扫描')
 
     def vol2_userassist(self):
         if os.path.exists('output/output_vol2_userassist.csv') and os.path.getsize('output/output_vol2_userassist.csv') > 0:
             
             self.show_result('记录行为', 'output/output_vol2_userassist.csv')
         else:
-            self.run_plugin('userassist', '记录行为')
+            self.run_plugin_with_fallback('userassist', '记录行为')
 
     def vol2_shutdowntime(self):
         if os.path.exists('output/output_vol2_shutdowntime.text') and os.path.getsize('output/output_vol2_shutdowntime.text') > 0:
@@ -366,44 +444,44 @@ class Vol2Plugin(QObject):
             
             self.show_result('事件钩子', 'output/output_vol2_eventhooks.csv')
         else:
-            self.run_plugin('eventhooks', '事件钩子')
+            self.run_plugin_with_fallback('eventhooks', '事件钩子')
     def vol2_gditimers(self):
         if os.path.exists('output/output_vol2_gditimers.csv') and os.path.getsize('output/output_vol2_gditimers.csv') > 0:
             
             self.show_result('GDI定时器', 'output/output_vol2_gditimers.csv')
         else:
-            self.run_plugin('gditimers', 'GDI定时器')
+            self.run_plugin_with_fallback('gditimers', 'GDI定时器')
     def vol2_printkey(self):
         if os.path.exists('output/output_vol2_printkey.csv') and os.path.getsize('output/output_vol2_printkey.csv') > 0:
             
             self.show_result('注册表键值', 'output/output_vol2_printkey.csv')
         else:
-            self.run_plugin('printkey', '注册表键值')
+            self.run_plugin_with_fallback('printkey', '注册表键值')
     def vol2_atomscan(self):
         if os.path.exists('output/output_vol2_atomscan.csv') and os.path.getsize('output/output_vol2_atomscan.csv') > 0:
             
             self.show_result('原子表扫描', 'output/output_vol2_atomscan.csv')
         else:
-            self.run_plugin('atomscan', '原子表扫描')
+            self.run_plugin_with_fallback('atomscan', '原子表扫描')
     def vol2_deskscan(self):
         if os.path.exists('output/output_vol2_deskscan.csv') and os.path.getsize('output/output_vol2_deskscan.csv') > 0:
             
             self.show_result('桌面扫描', 'output/output_vol2_deskscan.csv')
         else:
-            self.run_plugin('deskscan', '桌面扫描')
+            self.run_plugin_with_fallback('deskscan', '桌面扫描')
 
     def vol2_verinfo(self):
         if os.path.exists('output/output_vol2_verinfo.csv') and os.path.getsize('output/output_vol2_verinfo.csv') > 0:
             
             self.show_result('版本信息', 'output/output_vol2_verinfo.csv')
         else:
-            self.run_plugin('verinfo', '版本信息')
+            self.run_plugin_with_fallback('verinfo', '版本信息')
     def vol2_userhandles(self):
         if os.path.exists('output/output_vol2_userhandles.csv') and os.path.getsize('output/output_vol2_userhandles.csv') > 0:
             
             self.show_result('用户句柄', 'output/output_vol2_userhandles.csv')
         else:
-            self.run_plugin('userhandles', '用户句柄')
+            self.run_plugin_with_fallback('userhandles', '用户句柄')
     def vol2_messagehooks(self):
         if os.path.exists('output/output_vol2_messagehooks.text') and os.path.getsize('output/output_vol2_messagehooks.text') > 0:
             
@@ -422,7 +500,7 @@ class Vol2Plugin(QObject):
         if os.path.exists('output/output_vol2_auditpol.csv') and os.path.getsize('output/output_vol2_auditpol.csv') > 0:
             self.show_result('审计策略', 'output/output_vol2_auditpol.csv')
         else:
-            self.run_plugin('auditpol', '审计策略')
+            self.run_plugin_with_fallback('auditpol', '审计策略')
 
     def vol2_windows(self):
         if os.path.exists('output/output_vol2_windows.text') and os.path.getsize('output/output_vol2_windows.text') > 0:
@@ -434,13 +512,13 @@ class Vol2Plugin(QObject):
         if os.path.exists('output/output_vol2_envars.csv') and os.path.getsize('output/output_vol2_envars.csv') > 0:
             self.show_result('环境变量', 'output/output_vol2_envars.csv')
         else:
-            self.run_plugin('envars', '环境变量')
+            self.run_plugin_with_fallback('envars', '环境变量')
 
     def vol2_driverscan(self):
         if os.path.exists('output/output_vol2_driverscan.csv') and os.path.getsize('output/output_vol2_driverscan.csv') > 0:
             self.show_result('驱动扫描', 'output/output_vol2_driverscan.csv')
         else:
-            self.run_plugin('driverscan', '驱动扫描')
+            self.run_plugin_with_fallback('driverscan', '驱动扫描')
 
     def vol2_lsadump(self):
         if os.path.exists('output/output_vol2_lsadump.text') and os.path.getsize('output/output_vol2_lsadump.text') > 0:
@@ -612,119 +690,119 @@ class Vol2Plugin(QObject):
         if os.path.exists('output/output_vol2_apihooks.csv') and os.path.getsize('output/output_vol2_apihooks.csv') > 0:
             self.show_result('API钩子检测', 'output/output_vol2_apihooks.csv')
         else:   
-            self.run_plugin('apihooks', 'API钩子检测')
+            self.run_plugin_with_fallback('apihooks', 'API钩子检测')
 
     def vol2_atoms(self):
         if os.path.exists('output/output_vol2_atoms.csv') and os.path.getsize('output/output_vol2_atoms.csv') > 0:
             self.show_result('原子表', 'output/output_vol2_atoms.csv')
         else:   
-            self.run_plugin('atoms', '原子表')
+            self.run_plugin_with_fallback('atoms', '原子表')
 
     def vol2_callbacks(self):
         if os.path.exists('output/output_vol2_callbacks.csv') and os.path.getsize('output/output_vol2_callbacks.csv') > 0:
             self.show_result('系统回调', 'output/output_vol2_callbacks.csv')
         else:   
-            self.run_plugin('callbacks', '系统回调')
+            self.run_plugin_with_fallback('callbacks', '系统回调')
 
     def vol2_driverirp(self):
         if os.path.exists('output/output_vol2_driverirp.csv') and os.path.getsize('output/output_vol2_driverirp.csv') > 0:
             self.show_result('驱动IRP钩子检测', 'output/output_vol2_driverirp.csv')
         else:   
-            self.run_plugin('driverirp', '驱动IRP钩子检测')
+            self.run_plugin_with_fallback('driverirp', '驱动IRP钩子检测')
     def vol2_bigpools(self):
         if os.path.exists('output/output_vol2_bigpools.csv') and os.path.getsize('output/output_vol2_bigpools.csv') > 0:
             self.show_result('大内存池', 'output/output_vol2_bigpools.csv')
         else:   
-            self.run_plugin('bigpools', '大内存池')
+            self.run_plugin_with_fallback('bigpools', '大内存池')
     def vol2_session(self):
-        if os.path.exists('output/output_vol2_session.csv') and os.path.getsize('output/output_vol2_session.csv') > 0:
-            self.show_result('会话信息', 'output/output_vol2_session.csv')
+        if os.path.exists('output/output_vol2_sessions.csv') and os.path.getsize('output/output_vol2_sessions.csv') > 0:
+            self.show_result('会话信息', 'output/output_vol2_sessions.csv')
         else:   
-            self.run_plugin('session', '会话信息')
+            self.run_plugin_with_fallback('sessions', '会话信息')
     def vol2_wndscan(self):
         if os.path.exists('output/output_vol2_wndscan.csv') and os.path.getsize('output/output_vol2_wndscan.csv') > 0:
             self.show_result('窗口扫描', 'output/output_vol2_wndscan.csv')
         else:   
-            self.run_plugin('wndscan', '窗口扫描')
+            self.run_plugin_with_fallback('wndscan', '窗口扫描')
     def vol2_gditimers(self):
         if os.path.exists('output/output_vol2_gditimers.csv') and os.path.getsize('output/output_vol2_gditimers.csv') > 0:
             self.show_result('GDI定时器', 'output/output_vol2_gditimers.csv')
         else:   
-            self.run_plugin('gditimers', 'GDI定时器')
+            self.run_plugin_with_fallback('gditimers', 'GDI定时器')
     def vol2_getservicesids(self):
         if os.path.exists('output/output_vol2_getservicesids.csv') and os.path.getsize('output/output_vol2_getservicesids.csv') > 0:
             self.show_result('服务信息', 'output/output_vol2_getservicesids.csv')
         else:   
-            self.run_plugin('getservicesids', '服务信息')
+            self.run_plugin_with_fallback('getservicesids', '服务信息')
     def vol2_handles(self):
         if os.path.exists('output/output_vol2_handles.csv') and os.path.getsize('output/output_vol2_handles.csv') > 0:
             self.show_result('进程句柄', 'output/output_vol2_handles.csv')
         else:   
-            self.run_plugin('handles', '进程句柄')
+            self.run_plugin_with_fallback('handles', '进程句柄')
 
     def vol2_malfind(self):
         if os.path.exists('output/output_vol2_malfind.csv') and os.path.getsize('output/output_vol2_malfind.csv') > 0:
             self.show_result('恶意代码检测', 'output/output_vol2_malfind.csv')
         else:   
-            self.run_plugin('malfind', '恶意代码检测')
+            self.run_plugin_with_fallback('malfind', '恶意代码检测')
 
     def vol2_modules(self):
         if os.path.exists('output/output_vol2_modules.csv') and os.path.getsize('output/output_vol2_modules.csv') > 0:
             self.show_result('加载模块', 'output/output_vol2_modules.csv')
         else:   
-            self.run_plugin('modules', '加载模块')
+            self.run_plugin_with_fallback('modules', '加载模块')
 
     def vol2_mutantscan(self):
         if os.path.exists('output/output_vol2_mutantscan.csv') and os.path.getsize('output/output_vol2_mutantscan.csv') > 0:
             self.show_result('互斥对象扫描', 'output/output_vol2_mutantscan.csv')
         else:   
-            self.run_plugin('mutantscan', '互斥对象扫描')
+            self.run_plugin_with_fallback('mutantscan', '互斥对象扫描')
 
     def vol2_privs(self):
         if os.path.exists('output/output_vol2_privs.csv') and os.path.getsize('output/output_vol2_privs.csv') > 0:
             self.show_result('进程权限', 'output/output_vol2_privs.csv')
         else:   
-            self.run_plugin('privs', '进程权限')
+            self.run_plugin_with_fallback('privs', '进程权限')
 
     def vol2_psxview(self):
         if os.path.exists('output/output_vol2_psxview.csv') and os.path.getsize('output/output_vol2_psxview.csv') > 0:
             self.show_result('隐藏进程检测', 'output/output_vol2_psxview.csv')
         else:   
-            self.run_plugin('psxview', '隐藏进程检测')
+            self.run_plugin_with_fallback('psxview', '隐藏进程检测')
 
     def vol2_shimcache(self):
         if os.path.exists('output/output_vol2_shimcache.csv') and os.path.getsize('output/output_vol2_shimcache.csv') > 0:
             self.show_result('应用程序兼容性缓存', 'output/output_vol2_shimcache.csv')
         else:   
-            self.run_plugin('shimcache', '应用程序兼容性缓存')
+            self.run_plugin_with_fallback('shimcache', '应用程序兼容性缓存')
 
     def vol2_ssdt(self):
         if os.path.exists('output/output_vol2_ssdt.csv') and os.path.getsize('output/output_vol2_ssdt.csv') > 0:
             self.show_result('SSDT表', 'output/output_vol2_ssdt.csv')
         else:   
-            self.run_plugin('ssdt', 'SSDT表')
+            self.run_plugin_with_fallback('ssdt', 'SSDT表')
 
     def vol2_timers(self):
         if os.path.exists('output/output_vol2_timers.csv') and os.path.getsize('output/output_vol2_timers.csv') > 0:
             self.show_result('内核定时器', 'output/output_vol2_timers.csv')
         else:   
-            self.run_plugin('timers', '内核定时器')
+            self.run_plugin_with_fallback('timers', '内核定时器')
     def vol2_symlinkscan(self):
         if os.path.exists('output/output_vol2_symlinkscan.csv') and os.path.getsize('output/output_vol2_symlinkscan.csv') > 0:
             self.show_result('符号链接扫描', 'output/output_vol2_symlinkscan.csv')
         else:   
-            self.run_plugin('symlinkscan', '符号链接扫描')
+            self.run_plugin_with_fallback('symlinkscan', '符号链接扫描')
     def vol2_unloadedmodules(self):
         if os.path.exists('output/output_vol2_unloadedmodules.csv') and os.path.getsize('output/output_vol2_unloadedmodules.csv') > 0:
             self.show_result('已卸载模块', 'output/output_vol2_unloadedmodules.csv')
         else:   
-            self.run_plugin('unloadedmodules', '已卸载模块')
+            self.run_plugin_with_fallback('unloadedmodules', '已卸载模块')
 
     def vol2_vadinfo(self):
         if os.path.exists('output/output_vol2_vadinfo.csv') and os.path.getsize('output/output_vol2_vadinfo.csv') > 0:
             self.show_result('VAD信息', 'output/output_vol2_vadinfo.csv')
         else:   
-            self.run_plugin('vadinfo', 'VAD信息')
+            self.run_plugin_with_fallback('vadinfo', 'VAD信息')
     def vol2_chromehistory(self):
         if os.path.exists('output/output_vol2_chromehistory.text') and os.path.getsize('output/output_vol2_chromehistory.text') > 0:
             self.show_text_result('Chrome历史', 'output/output_vol2_chromehistory.text')
@@ -755,18 +833,18 @@ class Vol2Plugin(QObject):
         if os.path.exists('output/output_vol2_shellbags.csv') and os.path.getsize('output/output_vol2_shellbags.csv') > 0:
             self.show_result('ShellBags信息', 'output/output_vol2_shellbags.csv')
         else:   
-            self.run_plugin('shellbags', 'ShellBags信息')
+            self.run_plugin_with_fallback('shellbags', 'ShellBags信息')
     # mftparser
     def vol2_mftparser(self):
         if os.path.exists('output/output_vol2_mftparser.csv') and os.path.getsize('output/output_vol2_mftparser.csv') > 0:
             self.show_result('MFT解析', 'output/output_vol2_mftparser.csv')
         else:   
-            self.run_plugin('mftparser', 'MFT解析')
+            self.run_plugin_with_fallback('mftparser', 'MFT解析')
     def vol2_wintree(self):
         if os.path.exists('output/output_vol2_wintree.csv') and os.path.getsize('output/output_vol2_wintree.csv') > 0:
             self.show_result('窗口结构', 'output/output_vol2_wintree.csv')
         else:   
-            self.run_plugin('wintree', '窗口结构')
+            self.run_plugin_with_fallback('wintree', '窗口结构')
     # 对于一些特殊的插件,可能需要单独处理
     # getprocbyaclin txt
     def vol2_getprocbyaclin(self):
