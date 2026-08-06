@@ -1,6 +1,6 @@
 
 
-# 版本即将领来 超大更新 敬请期待
+# 版本即将迎来 超大更新 敬请期待
 
 <!-- markdownlint-disable MD033 MD041 -->
 <p align="center">
