@@ -1,7 +1,7 @@
 {
   "name": "lovelymem-v2",
   "private": true,
-  "version": "0.1.0",
+  "version": "2.5.0",
   "type": "module",
   "scripts": {
     "dev": "vite",

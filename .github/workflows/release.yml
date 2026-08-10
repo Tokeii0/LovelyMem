@@ -1,0 +1,271 @@
+name: Build and release Lovelymem V2
+
+on:
+  push:
+    branches:
+      - "v2"
+    tags:
+      - "v*.*.*"
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - "src-tauri/Cargo.toml"
+      - "src-tauri/tauri.conf.json"
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release tag (must match the project version)"
+        required: true
+        default: "v2.5.0"
+        type: string
+      publish:
+        description: "Create or update the GitHub Release"
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_TERM_COLOR: always
+  UPX_VERSION: "5.2.0"
+  UPX_WIN64_SHA256: "b471ebf1b7f20f4a89150264ed9a008a2a5bfd247f3c6d1184a75bb59ca08f5d"
+
+jobs:
+  windows-release:
+    name: Windows x64 release
+    runs-on: windows-2022
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve and validate release version
+        shell: pwsh
+        env:
+          MANUAL_RELEASE_TAG: ${{ inputs.release_tag }}
+          MANUAL_PUBLISH: ${{ inputs.publish }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          $packageVersion = (Get-Content -Raw package.json | ConvertFrom-Json).version
+          $tauriVersion = (Get-Content -Raw src-tauri/tauri.conf.json | ConvertFrom-Json).version
+          $cargoToml = Get-Content -Raw src-tauri/Cargo.toml
+          if ($cargoToml -notmatch '(?m)^version\s*=\s*"([^"]+)"') {
+            throw 'Unable to read the Cargo package version'
+          }
+          $cargoVersion = $Matches[1]
+
+          $tag = if ($env:GITHUB_EVENT_NAME -eq 'workflow_dispatch') {
+            $env:MANUAL_RELEASE_TAG
+          } elseif ($env:GITHUB_REF_TYPE -eq 'tag') {
+            $env:GITHUB_REF_NAME
+          } else {
+            "v$packageVersion"
+          }
+
+          if ($tag -notmatch '^v(\d+\.\d+\.\d+)$') {
+            throw "Release tag must use vMAJOR.MINOR.PATCH: $tag"
+          }
+          $version = $Matches[1]
+
+          $versions = @{
+            package = $packageVersion
+            tauri = $tauriVersion
+            cargo = $cargoVersion
+          }
+          foreach ($entry in $versions.GetEnumerator()) {
+            if ($entry.Value -ne $version) {
+              throw "$($entry.Key) version $($entry.Value) does not match tag $tag"
+            }
+          }
+
+          $sourceCommit = (git rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $sourceCommit -notmatch '^[0-9a-f]{40}$') {
+            throw 'Unable to resolve the source commit'
+          }
+
+          git fetch --force --tags origin
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Unable to fetch existing release tags'
+          }
+
+          $existingTagCommit = git rev-parse --verify "refs/tags/$tag^{commit}" 2>$null
+          $tagExists = $LASTEXITCODE -eq 0
+          $publishRequested = $env:GITHUB_EVENT_NAME -eq 'push' -or $env:MANUAL_PUBLISH -eq 'true'
+          if ($tagExists -and $publishRequested) {
+            $existingTagCommit = ($existingTagCommit | Select-Object -First 1).Trim()
+            if ($existingTagCommit -ne $sourceCommit) {
+              throw "Tag $tag already points to $existingTagCommit; refusing to replace it with $sourceCommit"
+            }
+          }
+
+          "RELEASE_TAG=$tag" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "RELEASE_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "SOURCE_COMMIT=$sourceCommit" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Set up Rust
+        shell: pwsh
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
+          rustc --version
+          cargo --version
+
+      - name: Cache Cargo downloads
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: |
+            ~\.cargo\registry
+            ~\.cargo\git
+          key: windows-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: |
+            windows-cargo-
+
+      - name: Install frontend dependencies
+        shell: pwsh
+        run: npm ci
+
+      - name: Build Tauri executable
+        shell: pwsh
+        run: npx tauri build --no-bundle --ci --no-sign
+
+      - name: Download and verify UPX
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Join-Path $env:RUNNER_TEMP "upx-$env:UPX_VERSION-win64.zip"
+          $url = "https://github.com/upx/upx/releases/download/v$env:UPX_VERSION/upx-$env:UPX_VERSION-win64.zip"
+          Invoke-WebRequest -Uri $url -OutFile $archive
+
+          $actualHash = (Get-FileHash -Algorithm SHA256 -LiteralPath $archive).Hash.ToLowerInvariant()
+          if ($actualHash -ne $env:UPX_WIN64_SHA256) {
+            throw "UPX SHA-256 mismatch: $actualHash"
+          }
+
+          $destination = Join-Path $env:RUNNER_TEMP 'upx'
+          Expand-Archive -LiteralPath $archive -DestinationPath $destination -Force
+          $upx = Get-ChildItem -LiteralPath $destination -Filter upx.exe -Recurse | Select-Object -First 1
+          if (-not $upx) {
+            throw 'upx.exe was not found in the verified archive'
+          }
+          "UPX_EXE=$($upx.FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+      - name: Compress and test executable with UPX
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $binary = Join-Path $PWD 'src-tauri\target\release\lovelymem-v2.exe'
+          if (-not (Test-Path -LiteralPath $binary -PathType Leaf)) {
+            throw "Release executable was not found: $binary"
+          }
+
+          $before = (Get-Item -LiteralPath $binary).Length
+          & $env:UPX_EXE --best --lzma $binary
+          if ($LASTEXITCODE -ne 0) {
+            throw "UPX compression failed with exit code $LASTEXITCODE"
+          }
+          & $env:UPX_EXE -t $binary
+          if ($LASTEXITCODE -ne 0) {
+            throw "UPX integrity test failed with exit code $LASTEXITCODE"
+          }
+          $after = (Get-Item -LiteralPath $binary).Length
+
+          "UPX_BEFORE_BYTES=$before" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "UPX_AFTER_BYTES=$after" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          "UPX: $before bytes -> $after bytes" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+      - name: Build NSIS installer from the compressed executable
+        shell: pwsh
+        run: npx tauri bundle --bundles nsis --ci --no-sign --config src-tauri/tauri.release.conf.json
+
+      - name: Prepare release assets and checksums
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $artifactDir = Join-Path $PWD 'release-artifacts'
+          $portableRoot = Join-Path $env:RUNNER_TEMP "Lovelymem-V2-$env:RELEASE_VERSION-windows-x64"
+          New-Item -ItemType Directory -Path $artifactDir -Force | Out-Null
+          New-Item -ItemType Directory -Path $portableRoot -Force | Out-Null
+
+          $binary = Join-Path $PWD 'src-tauri\target\release\lovelymem-v2.exe'
+          $releaseExe = Join-Path $artifactDir "Lovelymem-V2-$env:RELEASE_VERSION-windows-x64.exe"
+          Copy-Item -LiteralPath $binary -Destination $releaseExe -Force
+          Copy-Item -LiteralPath $binary -Destination (Join-Path $portableRoot 'Lovelymem-V2.exe') -Force
+          Copy-Item -LiteralPath 'README.md' -Destination (Join-Path $portableRoot 'README.md') -Force
+          if (Test-Path -LiteralPath 'resources' -PathType Container) {
+            Copy-Item -LiteralPath 'resources' -Destination $portableRoot -Recurse -Force
+          }
+
+          $portableZip = Join-Path $artifactDir "Lovelymem-V2-$env:RELEASE_VERSION-windows-x64-portable.zip"
+          Compress-Archive -Path (Join-Path $portableRoot '*') -DestinationPath $portableZip -CompressionLevel Optimal -Force
+
+          $installer = Get-ChildItem -LiteralPath 'src-tauri\target\release\bundle\nsis' -Filter '*.exe' -File |
+            Sort-Object LastWriteTime -Descending |
+            Select-Object -First 1
+          if (-not $installer) {
+            throw 'NSIS installer was not generated'
+          }
+          $releaseInstaller = Join-Path $artifactDir "Lovelymem-V2-$env:RELEASE_VERSION-windows-x64-setup.exe"
+          Copy-Item -LiteralPath $installer.FullName -Destination $releaseInstaller -Force
+
+          $checksumLines = Get-ChildItem -LiteralPath $artifactDir -File |
+            Sort-Object Name |
+            ForEach-Object {
+              $hash = (Get-FileHash -Algorithm SHA256 -LiteralPath $_.FullName).Hash.ToLowerInvariant()
+              "$hash *$($_.Name)"
+            }
+          $checksumLines | Set-Content -LiteralPath (Join-Path $artifactDir 'SHA256SUMS.txt') -Encoding ascii
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Lovelymem-V2-${{ env.RELEASE_VERSION }}-windows-x64
+          path: release-artifacts/*
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create GitHub Release
+        if: ${{ github.event_name == 'push' || inputs.publish }}
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $notes = @(
+            "# Lovelymem V2 $env:RELEASE_TAG"
+            ""
+            "Windows x64 正式发行。"
+            ""
+            "- 主程序已使用 UPX $env:UPX_VERSION 压缩，并通过 ``upx -t`` 完整性测试。"
+            "- 同时提供独立 EXE、便携 ZIP、NSIS 安装器与 SHA-256 校验文件。"
+            "- 当前构建未进行商业代码签名，Windows 首次运行时可能显示安全提示。"
+          )
+          $notesPath = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          $notes | Set-Content -LiteralPath $notesPath -Encoding utf8
+          $assets = Get-ChildItem -LiteralPath 'release-artifacts' -File | Select-Object -ExpandProperty FullName
+
+          gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY *> $null
+          if ($LASTEXITCODE -eq 0) {
+            gh release edit $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY --title "Lovelymem V2 $env:RELEASE_TAG" --notes-file $notesPath
+            if ($LASTEXITCODE -ne 0) { throw 'Unable to update the existing release' }
+            gh release upload $env:RELEASE_TAG $assets --repo $env:GITHUB_REPOSITORY --clobber
+            if ($LASTEXITCODE -ne 0) { throw 'Unable to upload release assets' }
+          } else {
+            gh release create $env:RELEASE_TAG $assets --repo $env:GITHUB_REPOSITORY --target $env:SOURCE_COMMIT --title "Lovelymem V2 $env:RELEASE_TAG" --notes-file $notesPath
+            if ($LASTEXITCODE -ne 0) { throw 'Unable to create the release' }
+          }

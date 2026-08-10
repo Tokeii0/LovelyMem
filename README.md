@@ -15,6 +15,8 @@
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript 5">
   <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D4?style=flat-square&logo=windows&logoColor=white" alt="Windows x64">
   <img src="https://img.shields.io/badge/Language-简体中文%20%7C%20English-6C5CE7?style=flat-square" alt="Chinese and English">
+  <a href="https://github.com/Tokeii0/LovelyMem/actions/workflows/release.yml"><img src="https://github.com/Tokeii0/LovelyMem/actions/workflows/release.yml/badge.svg?branch=v2" alt="Release build"></a>
+  <a href="https://github.com/Tokeii0/LovelyMem/releases/latest"><img src="https://img.shields.io/github/v/release/Tokeii0/LovelyMem?style=flat-square&label=Release" alt="Latest release"></a>
 </p>
 
 <p align="center">
@@ -28,7 +30,7 @@
 </p>
 
 > [!IMPORTANT]
-> 当前 `v2` 分支仍在持续整理中。应用重点支持 Windows x64；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
+> `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE、便携 ZIP 或 NSIS 安装器；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
 
 ## 项目简介
 
@@ -145,6 +147,10 @@ cargo clippy
 ```
 
 当前 `bundle.active` 为 `false`，因此 `npm run tauri build` 主要生成发布可执行文件，不会自动生成 MSI 或 NSIS 安装包。
+
+### 自动发布
+
+`v2` 分支中的 `package.json`、`package-lock.json`、`src-tauri/Cargo.toml` 或 `src-tauri/tauri.conf.json` 更新后，GitHub Actions 会校验三处项目版本是否一致，构建 Windows x64 程序，对最终 EXE 执行 UPX 压缩与完整性测试，再生成独立 EXE、便携 ZIP、NSIS 安装器和 `SHA256SUMS.txt`。版本标签已经指向其他提交时，工作流会拒绝覆盖；发布新版本前请先同步更新版本号。
 
 ## 工具链配置
 
