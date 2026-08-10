@@ -98,10 +98,17 @@ jobs:
             throw 'Unable to fetch existing release tags'
           }
 
-          $existingTagCommit = git rev-parse --verify "refs/tags/$tag^{commit}" 2>$null
-          $tagExists = $LASTEXITCODE -eq 0
+          $matchingTags = @(git tag --list $tag)
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Unable to inspect existing release tags'
+          }
+          $tagExists = $matchingTags -contains $tag
           $publishRequested = $env:GITHUB_EVENT_NAME -eq 'push' -or $env:MANUAL_PUBLISH -eq 'true'
           if ($tagExists -and $publishRequested) {
+            $existingTagCommit = git rev-parse --verify "refs/tags/$tag^{commit}"
+            if ($LASTEXITCODE -ne 0) {
+              throw "Unable to resolve existing tag $tag"
+            }
             $existingTagCommit = ($existingTagCommit | Select-Object -First 1).Trim()
             if ($existingTagCommit -ne $sourceCommit) {
               throw "Tag $tag already points to $existingTagCommit; refusing to replace it with $sourceCommit"
@@ -259,8 +266,15 @@ jobs:
           $notes | Set-Content -LiteralPath $notesPath -Encoding utf8
           $assets = Get-ChildItem -LiteralPath 'release-artifacts' -File | Select-Object -ExpandProperty FullName
 
-          gh release view $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY *> $null
-          if ($LASTEXITCODE -eq 0) {
+          $releaseList = gh release list --repo $env:GITHUB_REPOSITORY --limit 1000 --json tagName
+          if ($LASTEXITCODE -ne 0) { throw 'Unable to inspect existing releases' }
+          $releaseExists = @(
+            $releaseList |
+              ConvertFrom-Json |
+              Where-Object { $_.tagName -eq $env:RELEASE_TAG }
+          ).Count -gt 0
+
+          if ($releaseExists) {
             gh release edit $env:RELEASE_TAG --repo $env:GITHUB_REPOSITORY --title "Lovelymem V2 $env:RELEASE_TAG" --notes-file $notesPath
             if ($LASTEXITCODE -ne 0) { throw 'Unable to update the existing release' }
             gh release upload $env:RELEASE_TAG $assets --repo $env:GITHUB_REPOSITORY --clobber
