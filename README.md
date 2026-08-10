@@ -43,6 +43,10 @@ Lovelymem V2 是一款基于 Rust、Tauri 2 与原生 TypeScript 构建的内存
 
 项目不会把第三方取证引擎打包进仓库。你可以在设置中配置已有工具路径，也可以在 Windows x64 上从对应官方来源一键下载受支持的工具链。
 
+## 界面展示
+<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/b4c115a0-31e9-46e4-9d51-c094674d96bc" />
+
+
 ## 从 Python 版到 V2
 
 Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/LovelyMem/tree/v1) 的取证思路，但不是一次简单的界面换皮：运行底座、页面组织、工具准备和调查工作流都已重新构建。
