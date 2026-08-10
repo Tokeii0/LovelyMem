@@ -31,7 +31,7 @@
 </p>
 
 > [!IMPORTANT]
-> `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE、便携 ZIP 或 NSIS 安装器；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
+> `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
 
 ## 项目简介
 
@@ -41,7 +41,7 @@ Lovelymem V2 是一款基于 Rust、Tauri 2 与原生 TypeScript 构建的内存
 
 ## 从 Python 版到 V2
 
-Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/LovelyMem) 的取证思路，但不是一次简单的界面换皮：运行底座、页面组织、工具准备和调查工作流都已重新构建。
+Lovelymem V2 延续了旧版 [[LovelyMem Python](https://github.com/Tokeii0/LovelyMem) ](https://github.com/Tokeii0/LovelyMem/tree/v1)的取证思路，但不是一次简单的界面换皮：运行底座、页面组织、工具准备和调查工作流都已重新构建。
 
 | 维度 | Python 版 | Lovelymem V2 |
 | --- | --- | --- |
@@ -52,8 +52,6 @@ Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/Lovel
 | 结果查看 | Qt 标签页、CSV 表格与扩展工具 | 内嵌结果工作区与进程、网络、文件、注册表、EVTX 等专用视图 |
 | AI 辅助 | 面向结果的自然语言分析与摘要 | 可浏览、检索并调用取证工具的可选 Agent |
 | 双语 | 简中 / English，切换后需重启完整生效 | 简中 / English 运行时切换并同步主要窗口 |
-
-完整的版本演进展示页位于 [pages/showcase.html](./pages/showcase.html)。运行 `npm run dev` 后访问 `http://127.0.0.1:14222/showcase.html` 即可预览。
 
 ## 核心能力
 
