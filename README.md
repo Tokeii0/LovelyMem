@@ -36,6 +36,8 @@
 
 > [!IMPORTANT]
 > `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
+> 
+> 若你想体验更佳的内存取证体验 我们还有Lovelymem V3 版本 [V3版本一键下载](https://lovely.mzy0.com/lovelymem.v3.exe) 
 
 ## 项目简介
 
