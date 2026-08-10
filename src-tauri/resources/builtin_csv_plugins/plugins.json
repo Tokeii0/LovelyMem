@@ -1,0 +1,215 @@
+{
+  "version": 1,
+  "plugins": [
+    {
+      "id": "builtin_dump_memmap_vol2",
+      "name": "导出该进程内存(vol2 memdump)",
+      "description": "使用 Volatility 2 memdump 导出指定进程内存",
+      "command": "embedded:builtin_dump_memmap_vol2",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🧠",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程内存",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_dump_memmap_vol3",
+      "name": "导出该进程内存映射(vol3 memmap)",
+      "description": "vol3 windows.memmap 导出该进程完整内存映射",
+      "command": "embedded:builtin_dump_memmap_vol3",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🧠",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程内存",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_procdump_vol2",
+      "name": "导出该进程可执行程序(vol2)",
+      "description": "vol2 procdump 导出进程主模块 PE",
+      "command": "embedded:builtin_procdump_vol2",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "📦",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "可执行程序",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_procdump_vol3",
+      "name": "导出该进程可执行程序(vol3)",
+      "description": "vol3 windows.pslist --dump 导出进程主模块 PE",
+      "command": "embedded:builtin_procdump_vol3",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "📦",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "可执行程序",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_dumpfiles_vol3",
+      "name": "导出文件(vol3)",
+      "description": "vol3 windows.dumpfiles 按物理/虚拟地址导出文件",
+      "command": "embedded:builtin_dumpfiles_vol3",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🗄️",
+      "output_filename": null,
+      "allowed_columns": [
+        "Offset"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "文件导出",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_dumpfiles_vol2",
+      "name": "导出文件(vol2)",
+      "description": "vol2 dumpfiles 按物理偏移导出文件",
+      "command": "embedded:builtin_dumpfiles_vol2",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🗄️",
+      "output_filename": null,
+      "allowed_columns": [
+        "Offset(P)"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "文件导出",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_proc_dll",
+      "name": "查看该进程所使用的DLL",
+      "description": "从 MemProcFS 复制该进程模块列表",
+      "command": "embedded:builtin_proc_dll",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🧩",
+      "output_filename": "PID_{cell_value}_modules.txt",
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程信息",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_proc_allfiles",
+      "name": "导出该进程所有文件",
+      "description": "导出该进程在内存中可恢复的全部文件（handles/modules/vads）到输出目录",
+      "command": "embedded:builtin_proc_allfiles",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "📁",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": true,
+      "category": "进程信息",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_proc_privileges",
+      "name": "查看该进程所用权限",
+      "description": "从 MemProcFS 复制该进程 token 权限列表",
+      "command": "embedded:builtin_proc_privileges",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🔐",
+      "output_filename": "{cell_value}_privileges.txt",
+      "allowed_columns": [
+        "PID",
+        "PPID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程信息",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_proc_cmdline_vol3",
+      "name": "查看该进程命令行(vol3)",
+      "description": "vol3 windows.cmdline 查看该进程启动命令行",
+      "command": "embedded:builtin_proc_cmdline_vol3",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "📋",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程信息",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    },
+    {
+      "id": "builtin_proc_envars_vol3",
+      "name": "查看该进程环境变量(vol3)",
+      "description": "vol3 windows.envars 查看该进程环境变量",
+      "command": "embedded:builtin_proc_envars_vol3",
+      "context_menu_enabled": true,
+      "hotkey": null,
+      "icon": "🏷️",
+      "output_filename": null,
+      "allowed_columns": [
+        "PID"
+      ],
+      "allowed_filenames": null,
+      "input_labels": null,
+      "open_output_folder": false,
+      "category": "进程信息",
+      "created_at": "2025-07-22T00:00:00Z",
+      "updated_at": "2025-07-22T00:00:00Z"
+    }
+  ]
+}

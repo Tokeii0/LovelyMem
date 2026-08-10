@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LovelyText - 文本查看器</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <link rel="stylesheet" href="../src/text-viewer/textViewer.css">
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 文本查看器内容将由JavaScript动态生成 -->
+    </div>
+    <script src="../src/text-viewer/textViewer.ts" type="module"></script>
+    <script>
+        // 等待窗口加载完成后初始化
+        window.addEventListener('load', () => {
+            //console.log('窗口加载完成，初始化文本查看器...');
+            //console.log('检查DOM状态...');
+            //console.log('App元素存在:', !!document.getElementById('app'));
+
+            try {
+                initTextViewer();
+            } catch (error) {
+                console.error('初始化失败:', error);
+            }
+        });
+
+        // 添加错误处理
+        window.addEventListener('error', (event) => {
+            console.error('窗口错误:', event.error);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('未处理的Promise拒绝:', event.reason);
+        });
+    </script>
+</body>
+</html>

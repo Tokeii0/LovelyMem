@@ -1,0 +1,183 @@
+/* Lovelymem V2 - 自定义确认/提示弹窗 */
+/* 从 modernStyles.css 拆分 (原 L17665-L17838) */
+
+/* ========================================
+   自定义确认弹窗和提示弹窗样式
+   ======================================== */
+.custom-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100000;
+  animation: customDialogFadeIn 0.2s ease;
+}
+
+@keyframes customDialogFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.custom-dialog-box {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 24px;
+  min-width: 320px;
+  max-width: 420px;
+  max-height: min(82vh, 720px);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: customDialogScaleIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes customDialogScaleIn {
+  from { 
+    transform: scale(0.9) translateY(-10px); 
+    opacity: 0; 
+  }
+  to { 
+    transform: scale(1) translateY(0); 
+    opacity: 1; 
+  }
+}
+
+.custom-dialog-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.custom-dialog-icon.warning {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.custom-dialog-icon.success {
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.custom-dialog-icon.info {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.custom-dialog-icon.error {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.custom-dialog-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.custom-dialog-message {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+  white-space: pre-line;
+  overflow-y: auto;
+  min-height: 0;
+  padding-right: 4px;
+}
+
+.custom-dialog-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.custom-dialog-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.custom-dialog-btn-cancel {
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.custom-dialog-btn-cancel:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.custom-dialog-btn-confirm {
+  background: var(--primary-color);
+  color: white;
+}
+
+.custom-dialog-btn-confirm:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.custom-dialog-btn-confirm.danger {
+  background: #ef4444;
+}
+
+.custom-dialog-btn-confirm.danger:hover {
+  background: #dc2626;
+}
+
+.custom-dialog-btn-ok {
+  background: var(--primary-color);
+  color: white;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.custom-dialog-btn-ok:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+/* 深色主题适配 */
+[data-theme="dark"] .custom-dialog-box {
+  background: var(--bg-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .custom-dialog-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+/* 樱花主题适配 */
+[data-theme="sakura"] .custom-dialog-box {
+  background: rgba(255, 248, 250, 0.98);
+  border-color: rgba(255, 183, 197, 0.3);
+}
+
+[data-theme="sakura"] .custom-dialog-btn-confirm:not(.danger) {
+  background: linear-gradient(135deg, #f472b6, #fb7185);
+}
+
+[data-theme="sakura"] .custom-dialog-btn-ok {
+  background: linear-gradient(135deg, #f472b6, #fb7185);
+}

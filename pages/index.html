@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- favicon: Prevent 404 and show app icon in title bar -->
+    <link rel="icon" href="/assets/logo_100.png" />
+    <!-- 主题系统 CSS - 必须先加载 -->
+    <link rel="stylesheet" href="../src/css/theme/base.css" />
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet" />
+    <!-- 组件样式入口 -->
+    <link rel="stylesheet" href="../src/modernStyles.css" />
+    <!-- 页面专属样式 -->
+    <link rel="stylesheet" href="../src/css/inline-styles.css" />
+    <link rel="stylesheet" href="../src/css/current-image-info.css" />
+    <link rel="stylesheet" href="../src/css/memprocfs-v2.css" />
+    <link rel="stylesheet" href="../src/css/components/ntfs-file-tree.css" />
+    <link rel="stylesheet" href="../src/css/components/handles-viewer.css" />
+    <link rel="stylesheet" href="../src/css/components/services-modules-viewer.css" />
+    <link rel="stylesheet" href="../src/css/components/process-net-viewer.css" />
+    <link rel="stylesheet" href="../src/css/volatility3-v2.css" />
+    <link rel="stylesheet" href="../src/css/volatility2-v2.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lovelymem V2 - 内存取证分析平台</title>
+    <script type="module" src="../src/main.ts" defer></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- 内联启动画面：消除白屏，JS 加载后由 StartupManager 接管 -->
+      <div id="inline-splash" style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;font-family:'Segoe UI',system-ui,sans-serif;overflow:hidden">
+        <div style="position:absolute;inset:0;overflow:hidden">
+          <div id="sp-b1" style="position:absolute;width:500px;height:500px;top:-10%;left:-5%;border-radius:50%;filter:blur(80px)"></div>
+          <div id="sp-b2" style="position:absolute;width:400px;height:400px;top:50%;right:-10%;border-radius:50%;filter:blur(80px)"></div>
+          <div id="sp-b3" style="position:absolute;width:350px;height:350px;bottom:-5%;left:30%;border-radius:50%;filter:blur(80px)"></div>
+        </div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center">
+          <div id="sp-logo" style="width:128px;height:128px;border-radius:50%;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem">
+            <img src="assets/logo_100.png" alt="" style="width:60%;height:60%;object-fit:contain">
+          </div>
+          <div id="sp-title" style="font-size:1.5rem;font-weight:600;letter-spacing:0.5px">Lovelymem V2</div>
+          <div id="sp-sub" style="font-size:0.78rem;letter-spacing:3px;text-transform:uppercase;margin-top:6px">Memory Forensics</div>
+        </div>
+      </div>
+      <script>
+        // 内联主题适配：从 localStorage 读取主题，立即着色
+        (function(){
+          var t=localStorage.getItem('theme')||'dark';
+          var s=document.getElementById('inline-splash');
+          var c={
+            dark:{bg:'#0f1117',b1:'rgba(99,102,241,0.15)',b2:'rgba(139,92,246,0.12)',b3:'rgba(34,197,94,0.08)',glass:'rgba(255,255,255,0.08)',border:'rgba(255,255,255,0.12)',shadow:'rgba(0,0,0,0.3)',text:'#f1f5f9',muted:'#94a3b8'},
+            light:{bg:'#f8fafc',b1:'rgba(79,70,229,0.12)',b2:'rgba(124,58,237,0.1)',b3:'rgba(22,163,74,0.06)',glass:'rgba(255,255,255,0.6)',border:'rgba(0,0,0,0.08)',shadow:'rgba(0,0,0,0.06)',text:'#1e293b',muted:'#64748b'},
+            sakura:{bg:'#fdf2f4',b1:'rgba(232,69,124,0.12)',b2:'rgba(240,98,146,0.1)',b3:'rgba(244,143,177,0.08)',glass:'rgba(255,228,235,0.5)',border:'rgba(232,69,124,0.15)',shadow:'rgba(74,32,48,0.06)',text:'#4a2030',muted:'#7a4054'}
+          };
+          var v=c[t]||c.dark;
+          s.style.background=v.bg;
+          document.getElementById('sp-b1').style.background=v.b1;
+          document.getElementById('sp-b2').style.background=v.b2;
+          document.getElementById('sp-b3').style.background=v.b3;
+          var l=document.getElementById('sp-logo');
+          l.style.background=v.glass;l.style.border='1px solid '+v.border;l.style.boxShadow='0 8px 32px '+v.shadow;
+          document.getElementById('sp-title').style.color=v.text;
+          document.getElementById('sp-sub').style.color=v.muted;
+        })();
+      </script>
+    </div>
+  </body>
+</html>

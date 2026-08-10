@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符串搜索 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 仅窗口外壳（标题栏）样式；面板样式由 StringSearchPanel 组件自带（模板内嵌 <style>） -->
+    <link rel="stylesheet" href="../src/modules/string-search/styles/string-search.css">
+    <script src="../src/modules/string-search/string-search.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="string-search-app">
+        <!-- Tauri 窗口标题栏 -->
+        <div class="ss-window-titlebar" data-tauri-drag-region>
+            <div class="ss-window-title" data-tauri-drag-region>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <span>字符串搜索</span>
+            </div>
+            <div class="ss-window-controls">
+                <button class="ss-window-btn" id="minimizeBtn" title="最小化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="ss-window-btn" id="maximizeBtn" title="最大化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+                </button>
+                <button class="ss-window-btn close" id="closeBtn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!--
+            字符串搜索面板：运行时由 StringSearchPanel.render() 注入到标题栏之后，
+            与内嵌版本（modernUIRenderer 的 string-search 标签页）共用同一份
+            模板 / 样式 / 逻辑，避免重复实现导致样式与功能漂移。
+        -->
+    </div>
+</body>
+</html>

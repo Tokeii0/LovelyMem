@@ -1,0 +1,60 @@
+/* Hex 查看器窗口样式（复用主题 CSS 变量） */
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg-primary, #f5f5f5);
+  color: var(--text-primary, #1a1a1a);
+}
+#hex-viewer-app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.hv-window-titlebar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 38px; padding: 0 10px;
+  background: var(--bg-secondary, #ececec);
+  border-bottom: 1px solid var(--border-color, #ddd);
+  user-select: none;
+}
+.hv-window-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; opacity: 0.85; }
+.hv-window-controls { display: flex; gap: 4px; }
+.hv-window-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 26px; border: none; background: transparent; cursor: pointer;
+  color: var(--text-primary, #333); border-radius: 5px;
+}
+.hv-window-btn:hover { background: var(--bg-hover, rgba(0,0,0,0.08)); }
+.hv-window-btn.close:hover { background: #e81123; color: #fff; }
+
+.hv-toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 10px; border-bottom: 1px solid var(--border-color, #ddd);
+}
+.hv-btn {
+  padding: 5px 12px; border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px; background: var(--bg-secondary, #fff);
+  color: var(--text-primary, #333); cursor: pointer; font-size: 12px;
+}
+.hv-btn:hover { background: var(--bg-hover, #f0f0f0); }
+.hv-btn.primary { background: var(--accent-color, #3b82f6); color: #fff; border-color: transparent; }
+.hv-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.hv-input {
+  padding: 5px 8px; border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px; background: var(--bg-input, #fff); color: var(--text-primary, #333);
+  font-size: 12px; width: 150px; font-family: "Consolas", monospace;
+}
+.hv-file-path { flex: 1 1 160px; font-size: 12px; opacity: 0.7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hv-page-info { font-size: 12px; opacity: 0.7; }
+
+.hv-dump {
+  flex: 1; overflow: auto; padding: 10px 12px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 13px; line-height: 1.5;
+  white-space: pre;
+}
+.hv-row { display: flex; gap: 16px; }
+.hv-off { color: var(--accent-color, #3b82f6); opacity: 0.9; }
+.hv-hex { letter-spacing: 0.5px; }
+.hv-hex .hi { background: rgba(59,130,246,0.18); border-radius: 2px; }
+.hv-ascii { opacity: 0.85; }
+.hv-empty, .hv-error { padding: 40px; text-align: center; opacity: 0.6; font-size: 13px; }
+.hv-error { color: #e74c3c; }

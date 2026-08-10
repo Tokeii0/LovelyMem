@@ -1,0 +1,64 @@
+/* Lovelymem V2 - 樱花主题 */
+/* Sakura Theme - 温柔浪漫的樱花配色方案 */
+
+[data-theme="sakura"] {
+  /* ========================================
+     主色调 - 樱花色系（更饱和、更有辨识度）
+     ======================================== */
+  --primary-color: #e8457c;
+  --primary-rgb: 232, 69, 124;
+  --secondary-color: #f06292;
+  --accent-color: #f48fb1;
+  --success-color: #66bb6a;
+  --warning-color: #ffa726;
+  --error-color: #ef5350;
+  --info-color: #ec407a;
+
+  /* ========================================
+     背景颜色 - 温柔粉色系
+     ======================================== */
+  --bg-primary: #fdf2f4;
+  --bg-secondary: #fff7f8;
+  --bg-tertiary: #fce4ec;
+  --bg-dark: #880e4f;
+  --bg-glass: rgba(232, 69, 124, 0.08);
+
+  /* ========================================
+     文字颜色 - 暖色调层次分明
+     ======================================== */
+  --text-primary: #4a2030;
+  --text-secondary: #7a4054;
+  --text-light: #b07080;
+  --text-white: #ffffff;
+  --text-muted: #c0889a;
+
+  /* ========================================
+     边框颜色
+     ======================================== */
+  --border-color: rgba(232, 69, 124, 0.15);
+  --border-light: rgba(232, 69, 124, 0.08);
+  --border-dark: rgba(232, 69, 124, 0.25);
+
+  /* ========================================
+     樱花主题专有颜色
+     ======================================== */
+  --sakura-pink: #f06292;
+  --sakura-light: #f8bbd0;
+  --sakura-medium: #e8457c;
+  --sakura-dark: #c2185b;
+  --sakura-deep: #880e4f;
+  --sakura-blossom: #f48fb1;
+  --sakura-petal: #fce4ec;
+  --sakura-branch: #6d4c41;
+  --sakura-soft: #fdf2f4;
+  --sakura-warm: #fce4ec;
+}
+
+/* ========================================
+   樱花主题 Body 样式
+   ======================================== */
+
+[data-theme="sakura"] body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}

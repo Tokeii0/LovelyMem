@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>符号表管理 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <link rel="stylesheet" href="../src/modules/symbol-manager/styles/symbol-manager.css">
+    <script src="../src/modules/symbol-manager/symbol-manager.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="symbol-manager-app">
+        <!-- 统一标题栏 -->
+        <div class="unified-titlebar">
+            <div class="unified-titlebar-left">
+                <span class="unified-titlebar-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span>
+                <span class="unified-titlebar-title">符号表管理</span>
+                <span class="unified-titlebar-subtitle">MemProcFS Symbols 目录管理</span>
+            </div>
+            <div class="unified-titlebar-right">
+                <div class="unified-window-controls">
+                    <button class="unified-window-btn minimize-btn sym-mgr-minimize-btn" title="最小化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn maximize-btn sym-mgr-maximize-btn" title="最大化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn close-btn sym-mgr-close-btn" title="关闭">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="sym-mgr-main">
+            <!-- 左侧配置面板 -->
+            <div class="sym-mgr-sidebar">
+                <div class="sidebar-content">
+                    <!-- 当前符号路径 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></span>
+                            符号目录
+                        </h3>
+                        <div class="info-row">
+                            <span class="info-label">MemProcFS：</span>
+                            <span class="info-value" id="memprocfsPath" title="">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Symbols：</span>
+                            <span class="info-value" id="symbolsDir" title="">-</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">状态：</span>
+                            <span class="info-value" id="symbolsStatus">未加载</span>
+                        </div>
+                    </div>
+
+                    <!-- 内核版本数据库 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg></span>
+                            内核版本库
+                        </h3>
+                        <div class="info-row">
+                            <span class="info-label">条目数：</span>
+                            <span class="info-value" id="kviCount">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">同步时间：</span>
+                            <span class="info-value" id="kviTime">未同步</span>
+                        </div>
+                        <button id="syncKviBtn" class="primary-btn" style="margin-top:8px;">
+                            <span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg></span>
+                            从 winbindex 同步
+                        </button>
+                        <div id="kviProgress" class="kvi-progress hidden"></div>
+                    </div>
+
+                    <!-- 统计信息 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="5" width="3" height="13"/></svg></span>
+                            统计
+                        </h3>
+                        <div class="info-row">
+                            <span class="info-label">条目数：</span>
+                            <span class="info-value" id="totalCount">0</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">总大小：</span>
+                            <span class="info-value" id="totalSize">0 B</span>
+                        </div>
+                    </div>
+
+                    <!-- 筛选 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 9v6l-4-2v-4z"/></svg></span>
+                            筛选
+                        </h3>
+                        <div class="input-group">
+                            <label for="filterCategory">分类</label>
+                            <select id="filterCategory">
+                                <option value="all">全部</option>
+                                <option value="kernel">Kernel</option>
+                                <option value="driver">Driver</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="filterKeyword">关键字</label>
+                            <input type="text" id="filterKeyword" placeholder="按 PDB 名 / GUID 过滤">
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="action-section">
+                        <button id="refreshBtn" class="primary-btn">
+                            <span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.3L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.3L3 16"/><path d="M3 21v-5h5"/></svg></span>
+                            刷新
+                        </button>
+                        <button id="openFolderBtn" class="secondary-btn">
+                            <span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v2"/><path d="M2 19l3-7h17l-3 7z"/></svg></span>
+                            打开目录
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧结果面板 -->
+            <div class="sym-mgr-results">
+                <div class="results-header">
+                    <h3 class="results-title">
+                        <span class="results-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></span>
+                        符号条目
+                        <span class="results-count" id="visibleCount">0</span>
+                    </h3>
+                </div>
+
+                <!-- 错误显示 -->
+                <div class="error-section hidden" id="errorSection">
+                    <div class="error-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></div>
+                    <div class="error-message" id="errorMessage"></div>
+                </div>
+
+                <!-- 分页控件 -->
+                <div class="pagination-bar hidden" id="paginationBar">
+                    <div class="pagination-left">
+                        <label for="pageSize">每页：</label>
+                        <select id="pageSize">
+                            <option value="50" selected>50</option>
+                            <option value="100">100</option>
+                            <option value="200">200</option>
+                        </select>
+                        <span class="page-info" id="pageInfo">0 / 0</span>
+                    </div>
+                    <div class="pagination-right">
+                        <button class="page-btn" id="prevPageBtn" title="上一页">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <span class="page-jump">
+                            跳至
+                            <input type="number" id="jumpPageInput" min="1" value="1">
+                            页
+                        </span>
+                        <button class="page-btn" id="nextPageBtn" title="下一页">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 表格 -->
+                <div class="table-wrapper" id="tableWrapper">
+                    <table class="sym-mgr-table" id="symbolsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>分类</th>
+                                <th>PDB 名称</th>
+                                <th>架构</th>
+                                <th>GUID</th>
+                                <th>Age</th>
+                                <th>大小</th>
+                                <th>修改时间</th>
+                                <th>系统版本</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="symbolsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 空状态 -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg></div>
+                    <div class="empty-title">符号表管理</div>
+                    <div class="empty-desc">用于查看和管理 MemProcFS 自动下载的 Windows PDB 符号</div>
+                    <div class="empty-tips">
+                        <div class="tip-item">
+                            <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2V18h6v-1.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg></span>
+                            <span>符号目录路径取自「应用设置 → MemProcFS 路径」所在文件夹的 <code>Symbols\</code> 子目录</span>
+                        </div>
+                        <div class="tip-item">
+                            <span class="tip-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2V18h6v-1.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg></span>
+                            <span>常见 Kernel PDB（ntkrnlmp.pdb 等）会基于 GUID 推测对应 Windows 版本</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

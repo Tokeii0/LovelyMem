@@ -1,0 +1,238 @@
+/* ============================================
+   Command Palette Styles
+   ============================================ */
+
+.command-palette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  padding-top: 15vh;
+  animation: cpFadeIn 0.12s ease-out;
+}
+
+@keyframes cpFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.command-palette-container {
+  width: min(580px, 90vw);
+  max-height: 420px;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: cpSlideDown 0.15s ease-out;
+  align-self: flex-start;
+}
+
+@keyframes cpSlideDown {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Header / Search */
+.cp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.cp-header-icon {
+  color: var(--text-secondary, #64748b);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.cp-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--text-primary, #1e293b);
+  font-family: inherit;
+}
+
+.cp-search-input::placeholder {
+  color: var(--text-tertiary, #94a3b8);
+}
+
+/* Results */
+.cp-results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 6px 0;
+  scrollbar-width: thin;
+}
+
+.cp-results::-webkit-scrollbar {
+  width: 4px;
+}
+
+.cp-results::-webkit-scrollbar-thumb {
+  background: var(--border-color, #cbd5e1);
+  border-radius: 2px;
+}
+
+.cp-category-header {
+  padding: 6px 16px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-tertiary, #94a3b8);
+  user-select: none;
+}
+
+.cp-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.08s;
+  user-select: none;
+}
+
+.cp-item:hover {
+  background: var(--bg-hover, #f1f5f9);
+}
+
+.cp-item-selected {
+  background: var(--accent-color, #6366f1) !important;
+  color: #fff !important;
+}
+
+.cp-item-selected .cp-item-icon,
+.cp-item-selected .cp-item-label,
+.cp-item-selected .cp-item-shortcut,
+.cp-item-selected .cp-item-shortcut kbd {
+  color: #fff !important;
+}
+
+.cp-item-icon {
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary, #64748b);
+  flex-shrink: 0;
+}
+
+.cp-item-label {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary, #1e293b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cp-item-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-tertiary, #94a3b8);
+}
+
+.cp-item-shortcut kbd {
+  display: inline-block;
+  padding: 1px 5px;
+  font-size: 11px;
+  font-family: inherit;
+  background: var(--bg-tertiary, #f1f5f9);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  color: var(--text-secondary, #64748b);
+  line-height: 1.4;
+}
+
+.cp-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-tertiary, #94a3b8);
+  font-size: 13px;
+}
+
+/* Footer */
+.cp-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px 16px;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.cp-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-tertiary, #94a3b8);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .command-palette-overlay {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .command-palette-container {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* ============================================
+   Feature Favorites Button Styles
+   ============================================ */
+
+.feature-fav-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s, transform 0.15s;
+  z-index: 2;
+}
+
+.modern-feature-card {
+  position: relative;
+}
+
+.modern-feature-card:hover .feature-fav-btn {
+  opacity: 1;
+}
+
+.feature-fav-btn.is-favorite {
+  opacity: 1;
+}
+
+.feature-fav-btn:hover {
+  background: var(--bg-hover, rgba(0, 0, 0, 0.06));
+  transform: scale(1.15);
+}
+
+.feature-fav-btn:active {
+  transform: scale(0.9);
+}
+
+.feature-fav-btn svg {
+  transition: fill 0.15s;
+}

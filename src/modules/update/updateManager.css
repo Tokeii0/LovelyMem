@@ -1,0 +1,386 @@
+/* 自动更新对话框样式 */
+.update-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.update-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.update-content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+  position: relative;
+}
+
+.update-content.critical-update {
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+  border: 2px solid #ff4757;
+}
+
+.update-header {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.update-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.4em;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.update-info {
+  padding: 20px;
+  color: white;
+}
+
+.version-info {
+  margin-bottom: 15px;
+}
+
+.version-info p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.version-info strong {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.critical-notice {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 15px 0;
+  font-weight: 500;
+  text-align: center;
+  animation: pulse 2s infinite;
+}
+
+.changelog-section {
+  margin: 15px 0;
+}
+
+.changelog-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.changelog-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.update-progress {
+  padding: 0 20px 20px;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
+.progress-text {
+  color: white;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.update-actions {
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.update-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.update-btn.primary {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+}
+
+.update-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.6);
+}
+
+.update-btn.secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.update-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* 更新通知指示器 - Glassmorphism */
+.update-indicator {
+  position: fixed;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  right: auto;
+  
+  /* 玻璃拟态背景 */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  
+  /* 边框 - 细微 */
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  
+  /* 文字 */
+  color: #334155;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.3px;
+  
+  /* 形状 */
+  padding: 10px 24px;
+  border-radius: 9999px;
+  
+  /* 阴影 - 彩色漫射阴影 */
+  box-shadow: 
+    0 10px 25px -5px rgba(59, 130, 246, 0.15), 
+    0 8px 10px -6px rgba(59, 130, 246, 0.1);
+    
+  z-index: 9999;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* 动画 */
+  animation: indicatorSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 悬停效果 */
+.update-indicator:hover {
+  transform: translateX(-50%) translateY(-2px);
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 20px 25px -5px rgba(59, 130, 246, 0.2), 
+    0 10px 10px -5px rgba(59, 130, 246, 0.1);
+}
+
+/* 紧急更新 - 红色系 */
+.update-indicator.critical {
+  box-shadow: 
+    0 10px 25px -5px rgba(239, 68, 68, 0.25), 
+    0 8px 10px -6px rgba(239, 68, 68, 0.15);
+  border-color: rgba(254, 202, 202, 0.5);
+  background: rgba(255, 255, 255, 0.95);
+  color: #dc2626;
+  animation: indicatorSlideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1), softPulse 2s infinite 1s;
+}
+
+/* 紧急更新悬停 */
+.update-indicator.critical:hover {
+  box-shadow: 
+    0 20px 25px -5px rgba(239, 68, 68, 0.3), 
+    0 10px 10px -5px rgba(239, 68, 68, 0.2);
+}
+
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 新增：顶部下滑动画 */
+@keyframes indicatorSlideDown {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+/* 新增：柔和脉冲 */
+@keyframes softPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.02); }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes urgentPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 600px) {
+  .update-content {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .update-actions {
+    flex-direction: column;
+  }
+  
+  .update-btn {
+    width: 100%;
+  }
+  
+  .update-indicator {
+    top: 60px; /* 移动端调整 */
+    font-size: 12px;
+    padding: 8px 16px;
+    width: auto;
+    white-space: nowrap;
+  }
+}
+
+/* 深色主题适配 */
+@media (prefers-color-scheme: dark) {
+  .update-content {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  }
+  
+  .update-content.critical-update {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  }
+
+  /* Update Indicator Dark Mode */
+  .update-indicator {
+    background: rgba(30, 41, 59, 0.85);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  }
+  
+  .update-indicator:hover {
+    background: rgba(51, 65, 85, 0.95);
+  }
+  
+  .update-indicator.critical {
+    background: rgba(69, 10, 10, 0.9);
+    color: #fca5a5;
+    border-color: rgba(127, 29, 29, 0.5);
+  }
+}

@@ -1,0 +1,6 @@
+# 使用 LLD 快速链接器，大幅加速链接阶段
+[target.x86_64-pc-windows-msvc]
+linker = "lld-link"
+
+[target.aarch64-pc-windows-msvc]
+linker = "lld-link"

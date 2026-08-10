@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQLite 查看器 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../src/modules/sqlite-viewer/styles/sqlite-viewer.css">
+    <script src="../src/modules/sqlite-viewer/sqlite-viewer.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="sqlite-viewer-app">
+        <!-- Tauri 窗口标题栏 -->
+        <div class="sv-window-titlebar" data-tauri-drag-region>
+            <div class="sv-window-title" data-tauri-drag-region>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+                <span>SQLite 查看器</span>
+            </div>
+            <div class="sv-window-controls">
+                <button class="sv-window-btn" id="minimizeBtn" title="最小化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="sv-window-btn" id="maximizeBtn" title="最大化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+                </button>
+                <button class="sv-window-btn close" id="closeBtn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+        <!-- 主体由 sqlite-viewer.ts 注入 -->
+    </div>
+</body>
+</html>

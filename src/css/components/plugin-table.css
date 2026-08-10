@@ -1,0 +1,392 @@
+/* Lovelymem V2 - 插件表格 + 插件编辑器 */
+/* 从 modernStyles.css 拆分 (原 L13824-L14213) */
+
+/* 插件表格容器 */
+.plugins-table-container {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* 插件表格 */
+.plugins-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: auto;
+}
+
+.plugins-table thead {
+  background: var(--bg-tertiary);
+}
+
+.plugins-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.plugins-table tbody tr {
+  transition: var(--transition);
+}
+
+.plugins-table tbody tr:hover {
+  background: var(--bg-tertiary);
+}
+
+.plugins-table tbody tr.disabled {
+  opacity: 0.5;
+}
+
+.plugins-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-light);
+  vertical-align: middle;
+}
+
+.plugins-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 状态列 */
+.plugin-status {
+  width: 60px;
+  text-align: center;
+}
+
+.status-indicator {
+  font-size: 16px;
+  cursor: help;
+}
+
+/* 图标列 */
+.plugin-icon {
+  width: 50px;
+  text-align: center;
+  font-size: 18px;
+}
+
+/* 名称列 */
+.plugin-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  min-width: 120px;
+}
+
+/* 描述列 */
+.plugin-description {
+  color: var(--text-secondary);
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 命令模板列 */
+.plugin-command {
+  max-width: 250px;
+}
+
+.plugin-command code {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: var(--primary-color);
+  background: var(--bg-tertiary);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 文件类型列 */
+.plugin-file-types {
+  min-width: 100px;
+}
+
+.file-types-badge {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  display: inline-block;
+}
+
+/* 操作列 */
+.plugin-actions {
+  width: 120px;
+  text-align: center;
+}
+
+.plugin-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.plugin-action-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--bg-tertiary);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.plugin-action-btn:hover {
+  background: var(--primary-color);
+  color: var(--text-white);
+  transform: scale(1.1);
+}
+
+.plugin-action-btn.delete:hover {
+  background: var(--error-color);
+  color: var(--text-white);
+}
+
+.plugin-manager-footer {
+  padding: 16px 24px;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cancel-btn {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.cancel-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  border-color: var(--primary-color);
+}
+
+.no-plugins-message {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* 插件编辑器样式 */
+.plugin-editor-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 750px;
+  background: var(--bg-secondary);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  z-index: 10001;
+  animation: dialogSlideIn 0.3s ease-out;
+  border: 1px solid var(--border-color);
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.plugin-editor-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.plugin-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.plugin-editor-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.plugin-editor-form {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+  max-height: calc(90vh - 200px);
+}
+
+/* 自定义滚动条样式 */
+.plugin-editor-form::-webkit-scrollbar {
+  width: 8px;
+}
+
+.plugin-editor-form::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+}
+
+.plugin-editor-form::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+
+.plugin-editor-form::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--text-primary);
+  font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  font-size: 14px;
+  transition: var(--transition);
+  color: var(--text-primary);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-help {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--primary-color);
+}
+
+.checkbox-label {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: auto !important;
+  margin: 0;
+}
+
+.plugin-editor-footer {
+  padding: 16px 24px;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.save-btn {
+  background: var(--primary-color);
+  color: var(--text-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .file-panel {
+    width: 480px;
+    right: -480px;
+  }
+
+  .plugin-manager-dialog {
+    width: 95%;
+    max-width: none;
+  }
+
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .file-panel {
+    width: 420px;
+    right: -420px;
+  }
+
+  .file-item {
+    padding: 10px 12px;
+  }
+
+  .file-name {
+    font-size: 13px;
+  }
+
+  .file-meta {
+    font-size: 10px;
+  }
+
+  .plugin-manager-dialog {
+    width: 98%;
+    height: 95vh;
+  }
+
+  .plugin-editor-dialog {
+    width: 95%;
+  }
+}

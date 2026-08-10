@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片隐写分析工具 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <link rel="stylesheet" href="../src/modules/stegsolve-analyzer/styles/stegsolve-analyzer.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- 水印脚本 -->
+</head>
+<body>
+    <!-- 统一标题栏 -->
+    <div class="unified-titlebar">
+        <div class="unified-titlebar-left">
+            <span class="unified-titlebar-icon">🔍</span>
+            <span class="unified-titlebar-title">图片隐写分析工具</span>
+        </div>
+        <div class="unified-titlebar-right">
+            <div class="unified-window-controls">
+                <button class="unified-window-btn minimize-btn" id="minimizeBtn" title="最小化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button class="unified-window-btn maximize-btn" id="maximizeBtn" title="最大化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    </svg>
+                </button>
+                <button class="unified-window-btn close-btn" id="closeBtn" title="关闭">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 主容器 -->
+    <div class="main-container">
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <div class="toolbar-section">
+                <button class="toolbar-btn" id="loadImageBtn" title="加载图像">
+                    <span class="btn-icon">📁</span>
+                    <span class="btn-text">加载图像</span>
+                </button>
+                <button class="toolbar-btn" id="saveImageBtn" title="保存图像" disabled>
+                    <span class="btn-icon">💾</span>
+                    <span class="btn-text">保存图像</span>
+                </button>
+                <button class="toolbar-btn" id="exportDataBtn" title="导出数据" disabled>
+                    <span class="btn-icon">📤</span>
+                    <span class="btn-text">导出数据</span>
+                </button>
+            </div>
+            <div class="toolbar-section">
+                <button class="toolbar-btn" id="resetBtn" title="重置视图">
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">重置</span>
+                </button>
+                <button class="toolbar-btn" id="fullscreenBtn" title="全屏显示">
+                    <span class="btn-icon">⛶</span>
+                    <span class="btn-text">全屏</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 主工作区 -->
+        <div class="workspace">
+            <!-- 左侧控制面板 -->
+            <div class="control-panel">
+                <div class="panel-section">
+                    <h3 class="panel-title">分析模式</h3>
+                    <div class="analysis-modes-horizontal">
+                        <button class="mode-tab active" data-mode="original">原图</button>
+                        <button class="mode-tab" data-mode="red">R</button>
+                        <button class="mode-tab" data-mode="green">G</button>
+                        <button class="mode-tab" data-mode="blue">B</button>
+                        <button class="mode-tab" data-mode="alpha">A</button>
+                        <button class="mode-tab" data-mode="grayscale">灰度</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">位平面分析</h3>
+                    <div class="bit-plane-controls">
+                        <div class="rgba-channels">
+                            <div class="channel-group">
+                                <h4>红色通道 (R)</h4>
+                                <div class="bit-checkboxes">
+                                    <label><input type="checkbox" data-channel="red" data-bit="0"> 0</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="1"> 1</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="2"> 2</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="3"> 3</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="4"> 4</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="5"> 5</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="6"> 6</label>
+                                    <label><input type="checkbox" data-channel="red" data-bit="7"> 7</label>
+                                </div>
+                            </div>
+                            <div class="channel-group">
+                                <h4>绿色通道 (G)</h4>
+                                <div class="bit-checkboxes">
+                                    <label><input type="checkbox" data-channel="green" data-bit="0"> 0</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="1"> 1</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="2"> 2</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="3"> 3</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="4"> 4</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="5"> 5</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="6"> 6</label>
+                                    <label><input type="checkbox" data-channel="green" data-bit="7"> 7</label>
+                                </div>
+                            </div>
+                            <div class="channel-group">
+                                <h4>蓝色通道 (B)</h4>
+                                <div class="bit-checkboxes">
+                                    <label><input type="checkbox" data-channel="blue" data-bit="0"> 0</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="1"> 1</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="2"> 2</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="3"> 3</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="4"> 4</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="5"> 5</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="6"> 6</label>
+                                    <label><input type="checkbox" data-channel="blue" data-bit="7"> 7</label>
+                                </div>
+                            </div>
+                            <div class="channel-group">
+                                <h4>Alpha通道 (A)</h4>
+                                <div class="bit-checkboxes">
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="0"> 0</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="1"> 1</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="2"> 2</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="3"> 3</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="4"> 4</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="5"> 5</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="6"> 6</label>
+                                    <label><input type="checkbox" data-channel="alpha" data-bit="7"> 7</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bit-plane-actions">
+                            <div class="mode-switch">
+                                <span class="mode-label">查看</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="extractModeSwitch">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="mode-label">提取</span>
+                            </div>
+                            <div class="bit-plane-buttons">
+                                <button class="extract-btn" id="bitPlaneOverviewBtn">全览</button>
+                                <button class="extract-btn" id="clearBitPlaneBtn">清除选择</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">图像变化</h3>
+                    <div class="filter-tabs-horizontal">
+                        <button class="filter-tab" data-filter="invert">反色</button>
+                        <button class="filter-tab" data-filter="xor">XOR</button>
+                        <button class="filter-tab" data-filter="add">加法</button>
+                        <button class="filter-tab" data-filter="sub">减法</button>
+                        <button class="filter-tab" data-filter="mul">乘法</button>
+                        <button class="filter-tab" data-filter="and">AND</button>
+                        <button class="filter-tab" data-filter="or">OR</button>
+                        <button class="filter-tab" data-filter="reset">重置</button>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+            <!-- 中央图像显示区 -->
+            <div class="image-display">
+                <div class="image-container" id="imageContainer">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-content">
+                            <div class="drop-icon">🖼️</div>
+                            <div class="drop-text">拖拽图像文件到此处</div>
+                            <div class="drop-subtext">或点击"加载图像"按钮选择文件</div>
+                            <div class="supported-formats">
+                                支持格式: PNG, JPG, BMP, GIF, TIFF, WebP
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="imageCanvas" style="display: none;"></canvas>
+
+                    <!-- 图像信息图标 -->
+                    <div class="image-info-icon" id="imageInfoIcon" style="display: none;">
+                        <span class="info-icon">ℹ️</span>
+                        <div class="image-info-tooltip" id="imageInfoTooltip">
+                            <div class="info-section">
+                                <h4>图像信息</h4>
+                                <div class="info-item">
+                                    <span class="info-label">尺寸:</span>
+                                    <span class="info-value" id="tooltipImageDimensions">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">格式:</span>
+                                    <span class="info-value" id="tooltipImageFormat">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">大小:</span>
+                                    <span class="info-value" id="tooltipImageSize">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">颜色深度:</span>
+                                    <span class="info-value" id="tooltipColorDepth">-</span>
+                                </div>
+                            </div>
+
+                            <div class="info-section">
+                                <h4>统计信息</h4>
+                                <div class="info-item">
+                                    <span class="info-label">总像素:</span>
+                                    <span class="info-value" id="tooltipTotalPixels">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">唯一颜色:</span>
+                                    <span class="info-value" id="tooltipUniqueColors">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">平均亮度:</span>
+                                    <span class="info-value" id="tooltipAvgBrightness">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">熵值:</span>
+                                    <span class="info-value" id="tooltipEntropy">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 图像控制条 -->
+                <div class="image-controls" id="imageControls" style="display: none;">
+                    <div class="zoom-controls">
+                        <button class="control-btn" id="zoomOutBtn">🔍-</button>
+                        <span class="zoom-level" id="zoomLevel">100%</span>
+                        <button class="control-btn" id="zoomInBtn">🔍+</button>
+                        <button class="control-btn" id="fitToScreenBtn">适应屏幕</button>
+                    </div>
+                    <div class="navigation-controls">
+                        <button class="control-btn" id="prevImageBtn">◀ 上一张</button>
+                        <button class="control-btn" id="nextImageBtn">下一张 ▶</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧结果面板 -->
+            <div class="result-panel">
+
+
+                <div class="panel-section">
+                    <h3 class="panel-title">隐写分析</h3>
+                    <div class="analysis-tabs">
+                        <button class="analysis-tab active" data-analysis="histogram">直方图</button>
+                        <button class="analysis-tab" data-analysis="chi-square">卡方检验</button>
+                        <button class="analysis-tab" data-analysis="entropy">熵分析</button>
+                        <button class="analysis-tab" data-analysis="frequency">频域分析</button>
+                        <button class="analysis-tab" data-analysis="palette">调色板</button>
+                    </div>
+
+                    <!-- 直方图分析 -->
+                    <div class="analysis-content" id="histogramAnalysis">
+                        <div class="histogram-container">
+                            <canvas id="histogramCanvas" width="300" height="200"></canvas>
+                        </div>
+                        <div class="histogram-controls">
+                            <label>
+                                <input type="radio" name="histogramChannel" value="rgb" checked> RGB
+                            </label>
+                            <label>
+                                <input type="radio" name="histogramChannel" value="red"> 红色
+                            </label>
+                            <label>
+                                <input type="radio" name="histogramChannel" value="green"> 绿色
+                            </label>
+                            <label>
+                                <input type="radio" name="histogramChannel" value="blue"> 蓝色
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 卡方检验 -->
+                    <div class="analysis-content" id="chiSquareAnalysis" style="display: none;">
+                        <div class="chi-square-results">
+                            <div class="result-item">
+                                <span class="result-label">卡方值:</span>
+                                <span class="result-value" id="chiSquareValue">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">P值:</span>
+                                <span class="result-value" id="pValue">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">隐写概率:</span>
+                                <span class="result-value" id="stegoProb">-</span>
+                            </div>
+                        </div>
+                        <button class="analysis-btn" id="runChiSquareBtn">执行卡方检验</button>
+                    </div>
+
+                    <!-- 熵分析 -->
+                    <div class="analysis-content" id="entropyAnalysis" style="display: none;">
+                        <div class="entropy-results">
+                            <div class="result-item">
+                                <span class="result-label">整体熵值:</span>
+                                <span class="result-value" id="overallEntropy">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">R通道熵:</span>
+                                <span class="result-value" id="redEntropy">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">G通道熵:</span>
+                                <span class="result-value" id="greenEntropy">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">B通道熵:</span>
+                                <span class="result-value" id="blueEntropy">-</span>
+                            </div>
+                        </div>
+                        <div class="entropy-map-container">
+                            <canvas id="entropyMapCanvas" width="200" height="150"></canvas>
+                            <div class="entropy-map-label">熵图可视化</div>
+                        </div>
+                        <button class="analysis-btn" id="runEntropyBtn">生成熵分析</button>
+                    </div>
+
+                    <!-- 频域分析 -->
+                    <div class="analysis-content" id="frequencyAnalysis" style="display: none;">
+                        <div class="frequency-tabs">
+                            <button class="freq-tab active" data-freq="fft">FFT频谱</button>
+                            <button class="freq-tab" data-freq="dct">DCT系数</button>
+                        </div>
+
+                        <div class="frequency-content" id="fftContent">
+                            <div class="spectrum-container">
+                                <canvas id="spectrumCanvas" width="300" height="200"></canvas>
+                                <div class="spectrum-label">频谱图</div>
+                            </div>
+                            <button class="analysis-btn" id="runFFTBtn">生成FFT频谱</button>
+                        </div>
+
+                        <div class="frequency-content" id="dctContent" style="display: none;">
+                            <div class="dct-container">
+                                <canvas id="dctCanvas" width="300" height="200"></canvas>
+                                <div class="dct-label">DCT系数可视化</div>
+                            </div>
+                            <div class="dct-results">
+                                <div class="result-item">
+                                    <span class="result-label">JPEG质量估计:</span>
+                                    <span class="result-value" id="jpegQuality">-</span>
+                                </div>
+                                <div class="result-item">
+                                    <span class="result-label">DCT异常:</span>
+                                    <span class="result-value" id="dctAnomalies">-</span>
+                                </div>
+                            </div>
+                            <button class="analysis-btn" id="runDCTBtn">分析DCT系数</button>
+                        </div>
+                    </div>
+
+                    <!-- 调色板分析 -->
+                    <div class="analysis-content" id="paletteAnalysis" style="display: none;">
+                        <div class="palette-info">
+                            <div class="result-item">
+                                <span class="result-label">图像类型:</span>
+                                <span class="result-value" id="imageType">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">调色板大小:</span>
+                                <span class="result-value" id="paletteSize">-</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">未使用颜色:</span>
+                                <span class="result-value" id="unusedColors">-</span>
+                            </div>
+                        </div>
+
+                        <div class="palette-container">
+                            <canvas id="paletteCanvas" width="300" height="100"></canvas>
+                            <div class="palette-label">调色板</div>
+                        </div>
+
+                        <div class="palette-controls">
+                            <label>
+                                <input type="checkbox" id="showIndexLSB"> 显示索引LSB
+                            </label>
+                            <label>
+                                <input type="checkbox" id="highlightUnused"> 高亮未使用颜色
+                            </label>
+                        </div>
+
+                        <button class="analysis-btn" id="runPaletteBtn">分析调色板</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3 class="panel-title">数据提取</h3>
+                    <div class="extraction-controls">
+                        <div class="extract-method-tabs">
+                            <button class="method-tab active" data-method="lsb">LSB (低位优先)</button>
+                            <button class="method-tab" data-method="msb">MSB (高位优先)</button>
+                            <button class="method-tab" data-method="sequential">顺序提取</button>
+                            <button class="method-tab" data-method="reverse">逆序提取</button>
+                        </div>
+                        <div class="extract-options-horizontal">
+                            <label>
+                                <input type="checkbox" id="extractFromSelected" checked> 从选中位平面提取
+                            </label>
+                            <label>
+                                <input type="checkbox" id="extractText"> 文本检测
+                            </label>
+                            <label>
+                                <input type="checkbox" id="extractHex"> Hex显示
+                            </label>
+                        </div>
+                        <button class="extract-btn" id="startExtractionBtn">开始提取</button>
+                    </div>
+                    <div class="extracted-data" id="extractedData">
+                        <div class="data-format-tabs">
+                            <button class="format-tab active" data-format="text">文本</button>
+                            <button class="format-tab" data-format="hex">Hex</button>
+                            <button class="format-tab" data-format="binary">二进制</button>
+                        </div>
+                        <textarea class="data-textarea" id="dataTextarea" placeholder="提取的数据将显示在这里..." readonly></textarea>
+                        <div class="data-controls">
+                            <button class="data-btn" id="copyDataBtn">复制数据</button>
+                            <button class="data-btn" id="saveDataBtn">保存数据</button>
+                            <button class="data-btn" id="clearDataBtn">清除数据</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <div class="status-left">
+                <span class="status-text" id="statusText">就绪</span>
+            </div>
+            <div class="status-right">
+                <span class="progress-text" id="progressText"></span>
+                <div class="progress-bar" id="progressBar" style="display: none;">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">处理中...</div>
+        </div>
+    </div>
+
+    <!-- 脚本引入 -->
+    <script type="module" src="../src/modules/stegsolve-analyzer/stegsolve-analyzer.ts"></script>
+</body>
+</html>

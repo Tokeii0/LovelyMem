@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Finder - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <link rel="stylesheet" href="../src/modules/image-finder/styles/image-finder.css">
+    <!-- Material 设计语言润色层（须在功能 CSS 之后加载） -->
+    <link rel="stylesheet" href="../src/css/material-window.css">
+    <script src="../src/modules/image-finder/image-finder.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="image-finder-app" class="mw-window">
+        <!-- 统一标题栏 -->
+        <div class="unified-titlebar">
+            <div class="unified-titlebar-left">
+                <span class="unified-titlebar-icon" data-icon="image"></span>
+                <span class="unified-titlebar-title">Image Finder</span>
+                <span class="unified-titlebar-subtitle">高性能图像文件提取工具</span>
+            </div>
+            <div class="unified-titlebar-right">
+                <div class="unified-window-controls">
+                    <button class="unified-window-btn minimize-btn image-finder-minimize-btn" title="最小化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn maximize-btn image-finder-maximize-btn" title="最大化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn close-btn image-finder-close-btn" title="关闭">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="image-finder-main">
+            <!-- 左侧配置面板 -->
+            <div class="image-finder-sidebar">
+                <div class="sidebar-content">
+                    <!-- 搜索模式选择区域 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" data-icon="search"></span>
+                            搜索模式
+                        </h3>
+                        <div class="search-mode-selector">
+                            <button class="search-mode-btn active" data-mode="file" title="文件搜索">
+                                <span class="mode-icon" data-icon="file"></span>
+                                <span class="mode-text">文件搜索</span>
+                            </button>
+                            <button class="search-mode-btn" data-mode="process" title="进程搜索">
+                                <span class="mode-icon" data-icon="settings"></span>
+                                <span class="mode-text">进程搜索</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 文件选择区域 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" data-icon="folder"></span>
+                            <span id="inputSectionTitle">文件选择</span>
+                        </h3>
+
+                        <div class="input-group" id="fileInputGroup">
+                            <label for="inputFilePath">输入文件路径</label>
+                            <div class="file-input-container">
+                                <input type="text" id="inputFilePath" placeholder="选择要分析的文件..." readonly>
+                                <button type="button" id="browseInputFile" class="browse-btn" title="浏览文件">
+                                    <span class="mw-ico" data-icon="folder-open"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 进程选择器（进程模式时显示） -->
+                        <div class="input-group hidden" id="processInputGroup">
+                            <label for="processSelector">选择进程</label>
+                            <!-- 进程选择器将动态创建 -->
+                        </div>
+
+                        <div class="input-group">
+                            <label for="outputDirectory">输出目录</label>
+                            <div class="file-input-container">
+                                <input type="text" id="outputDirectory" placeholder="选择输出目录..." value="extracted_images">
+                                <button type="button" id="browseOutputDir" class="browse-btn" title="浏览目录">
+                                    <span class="mw-ico" data-icon="folder-open"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 提取配置区域 -->
+                    <div class="config-section">
+                        <h3 class="section-title">
+                            <span class="section-icon" data-icon="settings"></span>
+                            提取配置
+                        </h3>
+
+                        <div class="input-group">
+                            <label for="chunkSize">块大小 (MB)</label>
+                            <input type="number" id="chunkSize" value="256" min="1" max="1024">
+                            <div class="input-hint">并行处理的块大小，影响内存使用和性能</div>
+                        </div>
+
+                        <div class="input-group">
+                            <label for="maxPngSize">PNG最大大小 (MB)</label>
+                            <input type="number" id="maxPngSize" value="50" min="1" max="500">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="maxJpgSize">JPG最大大小 (MB)</label>
+                            <input type="number" id="maxJpgSize" value="20" min="1" max="200">
+                        </div>
+
+                        <div class="checkbox-group">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="generateThumbnails" checked>
+                                <span class="checkmark"></span>
+                                <span class="option-text">生成缩略图</span>
+                            </label>
+                        </div>
+
+                        <div class="input-group" id="thumbnailSizeGroup">
+                            <label for="thumbnailSize">缩略图大小 (px)</label>
+                            <input type="number" id="thumbnailSize" value="150" min="50" max="500">
+                        </div>
+                    </div>
+
+                    <!-- 操作按钮区域 -->
+                    <div class="action-section">
+                        <button id="startExtraction" class="primary-btn">
+                            <span class="btn-icon" data-icon="play"></span>
+                            开始提取
+                        </button>
+                        <button id="stopExtraction" class="secondary-btn" disabled>
+                            <span class="btn-icon" data-icon="stop"></span>
+                            停止提取
+                        </button>
+                    </div>
+
+                    <!-- 进度显示区域 -->
+                    <div class="progress-section hidden" id="progressSection">
+                        <h3 class="section-title">
+                            <span class="section-icon" data-icon="chart"></span>
+                            提取进度
+                        </h3>
+
+                        <div class="progress-container">
+                            <div class="progress-bar-container">
+                                <progress id="progressBar" max="100" value="0"></progress>
+                                <span class="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-info">
+                                <div class="progress-text" id="progressText">准备中...</div>
+                                <div class="status-text" id="statusText">等待开始</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 统计信息区域 -->
+                    <div class="stats-section hidden" id="statsSection">
+                        <h3 class="section-title">
+                            <span class="section-icon" data-icon="trending"></span>
+                            提取统计
+                        </h3>
+                        <div class="extraction-stats" id="extractionStats">
+                            <!-- 统计信息将在这里动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧结果面板 -->
+            <div class="image-finder-results">
+                <!-- 结果容器 -->
+                <div class="results-container hidden" id="resultsContainer">
+                    <div class="results-header">
+                        <h3 class="results-title">
+                            <span class="results-icon" data-icon="image"></span>
+                            提取的图像
+                        </h3>
+                        <div class="results-controls">
+                            <!-- 视图模式切换 -->
+                            <div class="view-mode-group">
+                                <button class="view-mode-btn active" data-mode="grid" title="网格视图"><span class="mw-ico" data-icon="grid"></span></button>
+                                <button class="view-mode-btn" data-mode="list" title="列表视图"><span class="mw-ico" data-icon="list"></span></button>
+                            </div>
+
+                            <!-- 布局切换按钮（仅网格模式） -->
+                            <div class="layout-toggle-group" id="layoutToggleGroup">
+                                <button class="layout-toggle-btn active" data-columns="3" title="一行3个">3</button>
+                                <button class="layout-toggle-btn" data-columns="5" title="一行5个">5</button>
+                                <button class="layout-toggle-btn" data-columns="7" title="一行7个">7</button>
+                            </div>
+
+                            <!-- 筛选和排序控制 -->
+                            <div class="filter-controls">
+                                <!-- 图片类型筛选 -->
+                                <select id="typeFilter" class="filter-select" title="按类型筛选">
+                                    <option value="all">所有类型</option>
+                                    <option value="PNG">PNG</option>
+                                    <option value="JPG">JPG</option>
+                                </select>
+
+                                <!-- 文件大小筛选 -->
+                                <select id="sizeFilter" class="filter-select" title="按大小筛选">
+                                    <option value="all">所有大小</option>
+                                    <option value="small">&lt; 100KB</option>
+                                    <option value="medium">100KB - 1MB</option>
+                                    <option value="large">&gt; 1MB</option>
+                                </select>
+
+                                <!-- 排序选择 -->
+                                <select id="sortBy" class="filter-select" title="排序方式">
+                                    <option value="name">按名称</option>
+                                    <option value="size">按大小</option>
+                                    <option value="type">按类型</option>
+                                    <option value="offset">按偏移</option>
+                                </select>
+
+                                <!-- 排序方向 -->
+                                <button class="sort-direction-btn" id="sortDirection" data-direction="asc" title="排序方向"><span class="mw-ico" data-icon="arrow-up"></span></button>
+                            </div>
+
+                            <div class="results-actions">
+                                <button class="results-action-btn" id="openOutputDir" title="打开输出目录">
+                                    <span class="mw-ico" data-icon="folder"></span> 打开目录
+                                </button>
+                                <button class="results-action-btn" id="refreshResults" title="刷新结果">
+                                    <span class="mw-ico" data-icon="refresh"></span> 刷新
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 缩略图网格 -->
+                    <div class="thumbnail-grid" id="thumbnailGrid">
+                        <!-- 缩略图将在这里动态生成 -->
+                    </div>
+                </div>
+
+                <!-- 错误显示 -->
+                <div class="error-section hidden" id="errorSection">
+                    <div class="error-icon" data-icon="error"></div>
+                    <div class="error-message" id="errorMessage"></div>
+                </div>
+
+                <!-- 空状态 -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon" data-icon="image"></div>
+                    <div class="empty-title">Image Finder</div>
+                    <div class="empty-desc">选择输入文件并配置参数，然后点击"开始提取"来查找图像文件</div>
+                </div>
+
+                <!-- 提取加载状态 -->
+                <div class="extraction-loading hidden" id="extractionLoading">
+                    <div class="loading-spinner"></div>
+                    <h3>正在提取图像文件...</h3>
+                    <p>请稍候，正在处理您的提取请求</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 图像详情模态框 -->
+    <div class="modal-overlay hidden" id="imageDetailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>图像详情</h3>
+                <button class="modal-close-btn" id="closeImageDetail"><span class="mw-ico" data-icon="close"></span></button>
+            </div>
+            <div class="modal-body" id="imageDetailContent">
+                <!-- 图像详情内容将在这里动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 图片预览模态框 -->
+    <div class="modal-overlay hidden" id="imagePreviewModal">
+        <div class="preview-modal-content">
+            <div class="preview-header">
+                <div class="preview-title" id="previewTitle">图片预览</div>
+                <div class="preview-controls">
+                    <span class="preview-counter" id="previewCounter">1 / 10</span>
+                    <button class="preview-control-btn" id="prevImage" title="上一张"><span class="mw-ico" data-icon="chevron-left"></span></button>
+                    <button class="preview-control-btn" id="nextImage" title="下一张"><span class="mw-ico" data-icon="chevron-right"></span></button>
+                    <button class="modal-close-btn" id="closeImagePreview"><span class="mw-ico" data-icon="close"></span></button>
+                </div>
+            </div>
+            <div class="preview-body">
+                <div class="preview-image-container">
+                    <img id="previewImage" class="preview-image" alt="预览图片">
+                    <div class="preview-loading hidden" id="previewLoading">
+                        <div class="loading-spinner"></div>
+                        <p>加载中...</p>
+                    </div>
+                </div>
+                <div class="preview-info">
+                    <div class="preview-filename" id="previewFilename">filename.png</div>
+                    <div class="preview-details" id="previewDetails">
+                        <span>类型: PNG</span>
+                        <span>大小: 1.2 MB</span>
+                        <span>偏移: 0x12345678</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上下文菜单 -->
+    <div class="context-menu hidden" id="contextMenu">
+        <div class="context-menu-item" data-action="open">
+            <span class="context-menu-icon" data-icon="eye"></span>
+            <span class="context-menu-text">打开图像</span>
+        </div>
+        <div class="context-menu-item" data-action="info">
+            <span class="context-menu-icon" data-icon="info"></span>
+            <span class="context-menu-text">查看详情</span>
+        </div>
+        <div class="context-menu-item" data-action="copy-path">
+            <span class="context-menu-icon" data-icon="clipboard"></span>
+            <span class="context-menu-text">复制路径</span>
+        </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" data-action="delete">
+            <span class="context-menu-icon" data-icon="trash"></span>
+            <span class="context-menu-text">删除文件</span>
+        </div>
+    </div>
+</body>
+</html>

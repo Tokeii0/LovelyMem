@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Lovelymem V2 版本演进展示：从 Python 与 PySide6 工具集，到 Rust、Tauri 2 与 TypeScript 构建的桌面内存取证工作台。"
+    />
+    <meta name="theme-color" content="#07111f" />
+    <link rel="icon" href="/assets/logo_100.png" />
+    <script>
+      try {
+        const previewParameters = new URLSearchParams(window.location.search);
+        const forceMotion = previewParameters.get('motion') === 'on';
+        const replayIntro = previewParameters.get('replay') === '1';
+        if (forceMotion) document.documentElement.classList.add('force-motion');
+        if (!replayIntro && sessionStorage.getItem('lovelymem-showcase-intro-seen') === '1') {
+          document.documentElement.classList.add('skip-intro');
+        }
+      } catch {
+        // The intro still has a CSS failsafe when storage is unavailable.
+      }
+    </script>
+    <link rel="stylesheet" href="../src/showcase/showcase.css" />
+    <title>Lovelymem V2 · 从 Python 到 Rust</title>
+    <script type="module" src="../src/showcase/showcase.ts" defer></script>
+  </head>
+
+  <body>
+    <div class="page-intro" aria-hidden="true" data-intro>
+      <div class="intro-panel intro-panel-top"></div>
+      <div class="intro-panel intro-panel-bottom"></div>
+      <div class="intro-scan"></div>
+      <div class="intro-center">
+        <svg class="intro-mark" viewBox="0 0 200 200">
+          <path
+            d="M100 25 118 68 165 72 129 103 140 148 100 124 60 148 71 103 35 72 82 68Z"
+          />
+          <path d="M40 145c20-10 40 10 60 10s40-20 60-10" />
+          <path d="M40 170c20-10 40 10 60 10s40-20 60-10" />
+        </svg>
+        <div class="intro-lockup"><span>LOVELYMEM</span><strong>V2</strong></div>
+        <small>MEMORY FORENSICS / REBUILT</small>
+      </div>
+    </div>
+
+    <a class="skip-link" href="#main-content">跳到主要内容</a>
+
+    <div class="cursor-aura" aria-hidden="true" data-cursor-aura></div>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="site-header" data-header>
+      <span class="scroll-progress" aria-hidden="true" data-scroll-progress></span>
+      <div class="header-inner shell">
+        <a class="brand" href="#top" aria-label="Lovelymem V2 首页">
+          <svg class="brand-mark" viewBox="0 0 200 200" aria-hidden="true">
+            <path
+              d="M100 25 118 68 165 72 129 103 140 148 100 124 60 148 71 103 35 72 82 68Z"
+              fill="currentColor"
+              stroke="currentColor"
+              stroke-width="12"
+              stroke-linejoin="round"
+            />
+            <path d="M40 145c20-10 40 10 60 10s40-20 60-10" />
+            <path d="M40 170c20-10 40 10 60 10s40-20 60-10" />
+          </svg>
+          <span>
+            <strong>Lovelymem</strong>
+            <small>V2 · Memory Forensics</small>
+          </span>
+        </a>
+
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-navigation"
+          data-nav-toggle
+        >
+          <span></span><span></span><span></span>
+          <span class="sr-only">打开导航</span>
+        </button>
+
+        <nav id="site-navigation" class="site-nav" aria-label="页面导航" data-nav>
+          <a href="#evolution">版本演进</a>
+          <a href="#comparison">详细对比</a>
+          <a href="#capabilities">V2 能力</a>
+          <a href="#architecture">新架构</a>
+          <a class="nav-cta" href="#start">开始构建</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section id="top" class="hero shell">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> BUILT AGAIN, FROM THE CORE</p>
+          <h1>
+            <span class="hero-line"><span>从 Python 工具集，</span></span>
+            <span class="hero-line"><span>到 <em>Rust 取证工作台</em>。</span></span>
+          </h1>
+          <p class="hero-lead">
+            LovelyMem v0.98 让内存取证更容易上手。Lovelymem V2 延续这条路线，重写运行底座、工作区与工具链，把一次次命令执行组织成可持续调查的完整流程。
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#comparison">
+              查看完整变化
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
+            </a>
+            <a
+              class="button button-secondary"
+              href="https://github.com/Tokeii0/LovelyMem"
+              target="_blank"
+              rel="noreferrer"
+            >
+              回看 Python 版
+            </a>
+          </div>
+
+          <ul class="hero-tags" aria-label="V2 技术标签">
+            <li>Rust 2024</li>
+            <li>Tauri 2</li>
+            <li>TypeScript</li>
+            <li>Windows x64</li>
+          </ul>
+        </div>
+
+        <div
+          class="workbench-wrap"
+          role="img"
+          aria-label="Lovelymem V2 工作区结构示意；包含工作区、案件指标和调查时间线演示数据"
+          data-workbench
+        >
+          <div class="workbench-glow" aria-hidden="true"></div>
+          <div class="workbench">
+            <div class="window-bar">
+              <div class="window-brand">
+                <span class="mini-mark">★</span>
+                <span>Lovelymem V2</span>
+              </div>
+              <div class="window-actions" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+
+            <div class="workspace">
+              <aside class="workspace-nav" aria-hidden="true">
+                <span class="nav-dot active"></span>
+                <span class="nav-dot"></span>
+                <span class="nav-dot"></span>
+                <span class="nav-dot"></span>
+                <span class="nav-dot nav-dot-bottom"></span>
+              </aside>
+
+              <div class="workspace-sidebar">
+                <p class="workspace-kicker">WORKSPACES</p>
+                <div class="workspace-item active"><b>M</b><span>MemProcFS V2</span></div>
+                <div class="workspace-item"><b>V3</b><span>Volatility 3</span></div>
+                <div class="workspace-item"><b>N</b><span>MemNixFS</span></div>
+                <div class="workspace-item"><b>+</b><span>调查工具</span></div>
+                <div class="case-status">
+                  <i></i>
+                  <span>镜像已加载</span>
+                </div>
+              </div>
+
+              <div class="workspace-main">
+                <div class="case-heading">
+                  <div>
+                    <span class="case-label">ACTIVE CASE</span>
+                    <strong>memory-image.raw</strong>
+                  </div>
+                  <span class="case-chip">16.0 GB</span>
+                </div>
+
+                <div class="metric-grid">
+                  <div class="metric-card">
+                    <span>Processes</span>
+                    <strong>142</strong>
+                    <small>4 flagged</small>
+                  </div>
+                  <div class="metric-card">
+                    <span>Network</span>
+                    <strong>37</strong>
+                    <small>11 active</small>
+                  </div>
+                  <div class="metric-card">
+                    <span>Artifacts</span>
+                    <strong>2,418</strong>
+                    <small>indexed</small>
+                  </div>
+                </div>
+
+                <div class="investigation-panel">
+                  <div class="panel-heading">
+                    <span>Investigation timeline</span>
+                    <i>Live view</i>
+                  </div>
+                  <div class="event-row strong"><time>14:32:08</time><b>Process tree generated</b><span>142 rows</span></div>
+                  <div class="event-row"><time>14:32:11</time><b>Network artifacts indexed</b><span>37 rows</span></div>
+                  <div class="event-row"><time>14:32:16</time><b>Registry signals correlated</b><span>8 signals</span></div>
+                  <div class="event-row"><time>14:32:21</time><b>Agent context ready</b><span>ready</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="mockup-note">界面结构示意 · 数据为演示内容</p>
+        </div>
+      </section>
+
+      <section class="signal-strip" aria-label="V2 能力概览">
+        <div class="shell signal-grid">
+          <div class="signal-item reveal"><strong data-count="6">6</strong><span>受管工具一键下载</span></div>
+          <div class="signal-item reveal"><strong data-count="10">10</strong><span>独立取证工具</span></div>
+          <div class="signal-item reveal"><strong data-count="2">2</strong><span>界面语言</span></div>
+          <div class="signal-item reveal"><strong class="signal-hash">SHA-256</strong><span>工具下载强制校验</span></div>
+        </div>
+      </section>
+
+      <section id="evolution" class="section shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span></span> EVOLUTION, NOT ERASURE</p>
+          <h2>不是否定旧版，<br />而是把经验重新组织。</h2>
+          <p>
+            Python 版已经验证了“把 MemProcFS 与 Volatility 放进图形界面”的方向。V2 保留有效的工作流，再把部署、结果上下文和长期维护能力向前推进。
+          </p>
+        </div>
+
+        <div class="era-grid">
+          <article class="era-card era-legacy reveal">
+            <div class="era-topline">
+              <span class="era-index">01</span>
+              <span class="era-badge">LEGACY · v0.98</span>
+            </div>
+            <h3>LovelyMem Python</h3>
+            <p>以 Python 3.10 与 PySide6 为核心，将多种取证命令、表格、任务与扩展工具带入一个 Qt 桌面界面。</p>
+            <ul>
+              <li>MemProcFS、Volatility 2 / 3</li>
+              <li>Windows 与 Linux 分析入口</li>
+              <li>YAML 与设置窗口配置路径</li>
+              <li>基础中英文与 AI 辅助分析</li>
+            </ul>
+          </article>
+
+          <div class="era-arrow reveal" aria-hidden="true">
+            <span>REWRITE</span>
+            <svg viewBox="0 0 84 24"><path d="M1 12h78M68 2l11 10-11 10" /></svg>
+          </div>
+
+          <article class="era-card era-v2 reveal">
+            <div class="era-topline">
+              <span class="era-index">02</span>
+              <span class="era-badge">CURRENT · V2</span>
+            </div>
+            <h3>Lovelymem V2</h3>
+            <p>用 Rust 承担系统与数据密集型能力，以 Tauri 2 和 TypeScript 构建模块化、多页面的调查工作台。</p>
+            <ul>
+              <li>Rust 后端与异步任务编排</li>
+              <li>MemNixFS Linux 镜像挂载流程</li>
+              <li>官方源工具链下载与失败回滚</li>
+              <li>多窗口调查视图与工具调用 Agent</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section id="comparison" class="section comparison-section">
+        <div class="shell">
+          <div class="section-heading compact reveal">
+            <p class="eyebrow"><span></span> SIDE BY SIDE</p>
+            <h2>变化，落实到每一层。</h2>
+            <p>
+              以下对比来自旧版
+              <a
+                class="inline-link"
+                href="https://github.com/Tokeii0/LovelyMem/tree/afb08284fa82390dad4d9fc41e42c4e6431a2c67"
+                target="_blank"
+                rel="noreferrer"
+              ><code>NewWorld @ afb08284</code></a>
+              与当前 V2 代码，不使用未经基准测试的性能倍数。
+            </p>
+          </div>
+
+          <p class="table-scroll-hint" aria-hidden="true">左右滑动查看 V2 对比 <span>→</span></p>
+          <div
+            class="comparison-table-wrap reveal"
+            tabindex="0"
+            role="region"
+            aria-label="Python 版与 Lovelymem V2 的详细对比表，可横向滚动"
+          >
+            <table class="comparison-table">
+              <thead>
+                <tr>
+                  <th scope="col">对比维度</th>
+                  <th scope="col"><span>Python 版</span><small>LovelyMem v0.98</small></th>
+                  <th scope="col"><span>V2</span><small>Lovelymem V2</small></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">应用底座</th>
+                  <td>Python 3.10 + PySide6 / Qt</td>
+                  <td><strong>Rust 2024 + Tauri 2 + TypeScript</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">取证引擎</th>
+                  <td>MemProcFS、Volatility 2 / 3，含 Linux 模式</td>
+                  <td><strong>保留原有引擎，并加入 MemNixFS 工作流</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">工具准备</th>
+                  <td>下载工具后手动维护 YAML 或设置路径</td>
+                  <td><strong>智能探测，6 项官方工具逐项或批量安装</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">下载安全</th>
+                  <td>外部工具由使用者自行获取与校验</td>
+                  <td><strong>HTTPS 白名单、SHA-256、安全解压、探针与回滚</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">结果体验</th>
+                  <td>Qt 标签页、表格和扩展工具</td>
+                  <td><strong>CSV 内嵌工作区与进程、网络、文件、注册表、EVTX 专用视图</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">大文件路径</th>
+                  <td>pandas、Dask、PyArrow 等 Python 数据栈</td>
+                  <td><strong>Rust 流式 I/O、内存映射与并行处理组件</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">AI 辅助</th>
+                  <td>面向结果的自然语言分析与摘要</td>
+                  <td><strong>可浏览、搜索并调用取证工具的 Agent 工作流</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">语言切换</th>
+                  <td>简中 / English，切换后需重启完整生效</td>
+                  <td><strong>简中 / English 运行时切换，并同步主要窗口</strong></td>
+                </tr>
+                <tr>
+                  <th scope="row">页面组织</th>
+                  <td>单个 Qt 主窗口承载主要功能区</td>
+                  <td><strong>多页面前端与独立查看器窗口，按调查任务拆分</strong></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p class="evidence-note reveal">
+            <span>说明</span>
+            “架构更适合大文件”不等于已经完成跨版本性能基准。V2 的性能结论应以相同镜像、相同硬件和相同任务的可复现实测为准。
+          </p>
+        </div>
+      </section>
+
+      <section id="capabilities" class="section shell">
+        <div class="section-heading reveal">
+          <p class="eyebrow"><span></span> WHAT V2 CHANGES</p>
+          <h2>从“能运行命令”，<br />到“能完成调查”。</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card feature-wide reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 9h8M8 13h5" /></svg>
+            </div>
+            <p class="feature-number">01 / WORKSPACE</p>
+            <h3>证据留在上下文里</h3>
+            <p>命令输出不再只是散落的 CSV。进程、网络、文件、注册表、EVTX 与时间线拥有面向调查的专用视图，并能继续进入搜索、关联和报告流程。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 19h14" /></svg>
+            </div>
+            <p class="feature-number">02 / TOOLCHAIN</p>
+            <h3>工具链成为产品能力</h3>
+            <p>Python、MemProcFS、Volatility 与 MemNixFS 可从官方来源安装，完成校验、探针、配置回填与失败回滚。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3 4 7v5c0 5 3.4 8 8 9 4.6-1 8-4 8-9V7zM9 12l2 2 4-4" /></svg>
+            </div>
+            <p class="feature-number">03 / SAFETY</p>
+            <h3>默认拒绝不可信安装</h3>
+            <p>官方域名、HTTPS、SHA-256、安全解压与暂存切换构成下载边界；系统驱动仍保留人工安装与确认。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 19v2m8-2v2M8 9h8M8 13h3" /></svg>
+            </div>
+            <p class="feature-number">04 / NATIVE CORE</p>
+            <h3>系统能力回到 Rust</h3>
+            <p>进程、文件、数据库、图像与大文件处理由 Rust 后端承载，前端专注工作流呈现和交互。</p>
+          </article>
+
+          <article class="feature-card reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M5 4h14v12H8l-3 3zm4 5h6m-6 3h4" /></svg>
+            </div>
+            <p class="feature-number">05 / AGENT</p>
+            <h3>AI 从回答走向执行</h3>
+            <p>可选 Agent 能在授权范围内浏览文件、检索内容、分析 CSV 与注册表，并调用取证工具；提供商和数据边界由用户配置。</p>
+          </article>
+
+          <article class="feature-card feature-wide reveal">
+            <div class="feature-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" /></svg>
+            </div>
+            <p class="feature-number">06 / LANGUAGE</p>
+            <h3>跨窗口运行时双语</h3>
+            <p>简体中文与 English 不再只停留在局部设置。V2 的翻译运行时覆盖主界面和主要独立查看器，并在语言变更后同步窗口状态。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="tools-band">
+        <div class="shell tools-layout">
+          <div class="tools-copy reveal">
+            <p class="eyebrow light"><span></span> INVESTIGATION KIT</p>
+            <h2>十个独立工具，<br />围绕证据本身。</h2>
+            <p>从字符串和图片，到时间线、SQLite、Hex、IOC 与注册表分析；需要深入时打开，完成后回到主调查上下文。</p>
+          </div>
+
+          <div class="tool-cloud reveal" aria-label="Lovelymem V2 独立取证工具">
+            <span>String Search</span>
+            <span>EXIF</span>
+            <span>Image Finder</span>
+            <span>Stegsolve</span>
+            <span>Super Timeline</span>
+            <span>Memory Visualizer</span>
+            <span>SQLite</span>
+            <span>Hex</span>
+            <span>IOC</span>
+            <span>Registry CSV</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="architecture" class="section shell">
+        <div class="section-heading compact reveal">
+          <p class="eyebrow"><span></span> A CLEARER PIPELINE</p>
+          <h2>新的不是皮肤，是分层。</h2>
+          <p>工具、数据和界面之间建立明确边界，让失败能够被定位，让新的调查视图能够独立演进。</p>
+        </div>
+
+        <div class="pipeline reveal" aria-label="Lovelymem V2 架构流程">
+          <article>
+            <span>01</span>
+            <b>Evidence</b>
+            <small>Windows / Linux memory</small>
+          </article>
+          <i aria-hidden="true"></i>
+          <article>
+            <span>02</span>
+            <b>Rust Core</b>
+            <small>I/O · process · parsers</small>
+          </article>
+          <i aria-hidden="true"></i>
+          <article>
+            <span>03</span>
+            <b>Tool Adapters</b>
+            <small>MemProcFS · Volatility · MemNixFS</small>
+          </article>
+          <i aria-hidden="true"></i>
+          <article>
+            <span>04</span>
+            <b>Investigation UI</b>
+            <small>views · search · timeline</small>
+          </article>
+          <i aria-hidden="true"></i>
+          <article>
+            <span>05</span>
+            <b>Outcome</b>
+            <small>report · export · agent</small>
+          </article>
+        </div>
+      </section>
+
+      <section id="start" class="section start-section">
+        <div class="shell start-card reveal">
+          <div>
+            <p class="eyebrow light"><span></span> BUILD THE WORKBENCH</p>
+            <h2>从源码启动 V2。</h2>
+            <p>Windows x64 · Node.js · Rust stable · WebView2</p>
+          </div>
+          <div class="command-card" aria-label="启动命令">
+            <div class="command-top"><span>PowerShell</span><i></i><i></i><i></i></div>
+            <code><span>&gt;</span> npm ci<br /><span>&gt;</span> npm run tauri dev</code>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div class="footer-brand">
+          <span class="mini-mark">★</span>
+          <div><strong>Lovelymem V2</strong><small>Memory forensics, rebuilt.</small></div>
+        </div>
+        <p>仅用于合法授权的内存取证、应急响应与安全研究。</p>
+        <span>© <span data-year>2026</span> Lovelymem</span>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1323 @@
+/* Lovelymem V2 - 图标选择器 + 工具管理对话框 + 暗色/樱花主题 */
+/* 从 modernStyles.css 拆分 (原 L14214-L15545) */
+
+/* 图标选择器样式 */
+.icon-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.icon-selector-overlay.show {
+  opacity: 1;
+}
+
+.icon-selector-modal {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.icon-selector-overlay.show .icon-selector-modal {
+  transform: scale(1);
+}
+
+.icon-selector-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.icon-selector-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.icon-selector-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+}
+
+.icon-selector-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.icon-selector-content {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.current-icon-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.current-icon-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.current-icon-display {
+  font-size: 24px;
+  padding: 5px 10px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  min-width: 50px;
+}
+
+.current-icon-display img {
+  max-width: 24px;
+  max-height: 24px;
+  object-fit: contain;
+}
+
+.icon-categories {
+  margin-bottom: 20px;
+}
+
+.icon-category {
+  margin-bottom: 20px;
+}
+
+.category-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 10px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  gap: 8px;
+}
+
+.icon-option {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+}
+
+.icon-option:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary-color);
+  transform: scale(1.05);
+}
+
+.icon-option:active {
+  transform: scale(0.95);
+}
+
+.custom-icon-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.custom-icon-input label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.custom-icon-input input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.custom-icon-input input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.use-custom-icon-btn {
+  padding: 8px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.use-custom-icon-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+/* 标签页样式 */
+.icon-selector-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border-color);
+  background: var(--bg-secondary);
+  padding: 0 20px;
+}
+
+.icon-selector-tabs .tab-btn {
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  margin-bottom: -2px;
+}
+
+.icon-selector-tabs .tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.icon-selector-tabs .tab-btn.active {
+  color: var(--primary-color);
+  border-bottom-color: var(--primary-color);
+}
+
+/* 标签页内容 */
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* 本地图标选择区域 */
+.local-icon-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.local-icon-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.local-icon-input-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.local-icon-input-wrapper {
+  display: flex;
+  gap: 8px;
+}
+
+#local-icon-path {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.browse-local-icon-btn {
+  padding: 10px 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.browse-local-icon-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.browse-local-icon-btn:active {
+  transform: translateY(0);
+}
+
+/* 本地图标预览 */
+.local-icon-preview-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.local-icon-preview-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.local-icon-preview-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 120px;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-hover);
+  padding: 10px;
+  overflow: hidden;
+}
+
+#local-icon-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* 使用本地图标按钮 */
+.use-local-icon-btn {
+  padding: 10px 20px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.use-local-icon-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.use-local-icon-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.use-local-icon-btn:disabled {
+  background: var(--border-color);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.icon-selector-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.cancel-btn,
+.reset-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+}
+
+.cancel-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.reset-btn {
+  background: var(--warning-color, #f59e0b);
+  color: white;
+  border-color: var(--warning-color, #f59e0b);
+}
+
+.reset-btn:hover {
+  background: var(--warning-hover, #d97706);
+  transform: translateY(-1px);
+}
+
+/* 区域图标右键菜单样式 */
+.area-icon-context-menu {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 8px 0;
+  min-width: 160px;
+  z-index: 10000;
+}
+
+.area-icon-context-menu .context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  color: var(--text-primary);
+}
+
+.area-icon-context-menu .context-menu-item:hover {
+  background: var(--bg-hover);
+}
+
+.area-icon-context-menu .menu-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.area-icon-context-menu .menu-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 功能网格右键菜单样式 */
+.feature-grid-context-menu {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  min-width: 180px;
+  z-index: 10000;
+  animation: contextMenuSlideIn 0.2s ease-out;
+}
+
+.feature-grid-context-menu .context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.feature-grid-context-menu .context-menu-item:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateX(2px);
+  color: #667eea;
+}
+
+.feature-grid-context-menu .menu-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.feature-grid-context-menu .menu-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* 添加工具对话框样式 */
+.add-tool-dialog,
+.tools-manager-dialog {
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.add-tool-dialog .dialog-header,
+.tools-manager-dialog .dialog-header {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.add-tool-dialog .close-btn,
+.tools-manager-dialog .close-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.add-tool-dialog .close-btn:hover,
+.tools-manager-dialog .close-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+/* 工具管理对话框特定样式 */
+.tools-manager-dialog .tools-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.tools-manager-dialog .tools-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tools-manager-dialog .tools-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.tools-manager-dialog .tools-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+}
+
+.tools-manager-dialog .tools-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.tools-manager-dialog .tool-item {
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.tools-manager-dialog .tool-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tools-manager-dialog .tool-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.tools-manager-dialog .tool-actions button {
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.tools-manager-dialog .tool-actions button:hover {
+  transform: translateY(-1px);
+}
+
+.add-tool-dialog .form-group label {
+  font-size: 14px;
+}
+
+.add-tool-dialog .form-group input,
+.add-tool-dialog .form-group textarea,
+.add-tool-dialog .form-group select {
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-tool-dialog .form-group input:focus,
+.add-tool-dialog .form-group textarea:focus,
+.add-tool-dialog .form-group select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 自定义分类输入框样式 */
+.add-tool-dialog input[name="category-custom"] {
+  transition: all 0.3s ease;
+}
+
+.add-tool-dialog input[name="category-custom"]:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.add-tool-dialog .save-btn:hover {
+  background: #0056b3;
+}
+
+.add-tool-dialog .cancel-btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.add-tool-dialog .browse-command-btn {
+  background: #e0e0e0;
+  color: #333;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.add-tool-dialog .browse-command-btn:hover {
+  background: #d0d0d0;
+  border-color: #999;
+  transform: translateY(-1px);
+}
+
+.add-tool-dialog .select-icon-btn {
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.add-tool-dialog .select-icon-btn:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  transform: translateY(-1px);
+}
+
+/* 工具变量样式 */
+.add-tool-dialog .tool-variables {
+  font-size: 13px;
+}
+
+.add-tool-dialog .tool-var-category {
+  line-height: 1.5;
+}
+
+.add-tool-dialog .var-item {
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.add-tool-dialog .var-item:hover {
+  background: #007bff !important;
+  color: white !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* 工具管理对话框中的按钮样式 */
+.tools-manager-dialog .edit-btn {
+  transition: all 0.2s ease;
+}
+
+.tools-manager-dialog .edit-btn:hover {
+  background: #0056b3 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+/* 暗色主题支持 */
+[data-theme="dark"] .feature-grid-context-menu {
+  background: rgba(26, 32, 44, 0.98);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .feature-grid-context-menu .context-menu-item {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .feature-grid-context-menu .context-menu-item:hover {
+  background: rgba(102, 126, 234, 0.25);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .add-tool-dialog,
+[data-theme="dark"] .tools-manager-dialog {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  color: #e2e8f0;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .add-tool-dialog h2,
+[data-theme="dark"] .tools-manager-dialog h2 {
+  color: #f7fafc;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .add-tool-dialog .form-group label,
+[data-theme="dark"] .tools-manager-dialog .form-group label {
+  color: #cbd5e0;
+  font-weight: 600;
+}
+
+[data-theme="dark"] .add-tool-dialog .form-group input,
+[data-theme="dark"] .add-tool-dialog .form-group textarea,
+[data-theme="dark"] .add-tool-dialog .form-group select {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  color: #f7fafc;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .add-tool-dialog .form-group input:focus,
+[data-theme="dark"] .add-tool-dialog .form-group textarea:focus,
+[data-theme="dark"] .add-tool-dialog .form-group select:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2), inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+}
+
+[data-theme="dark"] .add-tool-dialog .cancel-btn {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  color: #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .add-tool-dialog .cancel-btn:hover {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-color: #667eea;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .add-tool-dialog .save-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .add-tool-dialog .save-btn:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+[data-theme="dark"] .add-tool-dialog .browse-command-btn {
+  background: #404040;
+  color: #e0e0e0;
+  border: 1px solid #555;
+}
+
+[data-theme="dark"] .add-tool-dialog .browse-command-btn:hover {
+  background: #505050;
+  border-color: #666;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .add-tool-dialog .select-icon-btn {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  color: #e2e8f0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .add-tool-dialog .select-icon-btn:hover {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  border-color: #667eea;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .add-tool-dialog .tool-variables {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  color: #e2e8f0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .add-tool-dialog .tool-var-category strong {
+  color: #cbd5e0;
+}
+
+[data-theme="dark"] .add-tool-dialog .var-item {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  color: #e2e8f0;
+  border: 1px solid rgba(113, 128, 150, 0.3);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .add-tool-dialog .var-item:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+/* 工具管理对话框特定样式 */
+[data-theme="dark"] .tools-manager-dialog .tool-item {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .tools-manager-dialog .tool-name {
+  color: #f7fafc;
+}
+
+[data-theme="dark"] .tools-manager-dialog .tool-description {
+  color: #cbd5e0;
+}
+
+[data-theme="dark"] .tools-manager-dialog .tool-command {
+  color: #a0aec0;
+  background: rgba(26, 32, 44, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+[data-theme="dark"] .tools-manager-dialog .edit-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .tools-manager-dialog .edit-btn:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+[data-theme="dark"] .tools-manager-dialog .toggle-btn.enabled {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+  box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
+}
+
+[data-theme="dark"] .tools-manager-dialog .toggle-btn.disabled {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+  box-shadow: 0 2px 4px rgba(245, 101, 101, 0.3);
+}
+
+[data-theme="dark"] .tools-manager-dialog .delete-btn {
+  background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%) !important;
+  box-shadow: 0 2px 4px rgba(245, 101, 101, 0.3);
+}
+
+[data-theme="dark"] .tools-manager-dialog .delete-btn:hover {
+  background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(245, 101, 101, 0.4);
+}
+
+[data-theme="dark"] .add-tool-dialog .close-btn:hover,
+[data-theme="dark"] .tools-manager-dialog .close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f7fafc;
+}
+
+[data-theme="dark"] .tools-manager-dialog .tools-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .tools-manager-dialog .tools-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme="dark"] .tools-manager-dialog .tools-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .tools-manager-dialog .tool-icon {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .add-tool-dialog input[name="category-custom"] {
+  background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  border: 1px solid #718096;
+  color: #f7fafc;
+}
+
+[data-theme="dark"] .add-tool-dialog input[name="category-custom"]:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+
+/* 樱花主题支持 */
+[data-theme="sakura"] .feature-grid-context-menu {
+  background: rgba(255, 245, 248, 0.98);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  box-shadow: 0 10px 40px rgba(236, 72, 153, 0.15);
+}
+
+[data-theme="sakura"] .feature-grid-context-menu .context-menu-item {
+  color: #881337;
+}
+
+[data-theme="sakura"] .feature-grid-context-menu .context-menu-item:hover {
+  background: rgba(236, 72, 153, 0.2);
+  color: #be185d;
+}
+
+[data-theme="sakura"] .add-tool-dialog,
+[data-theme="sakura"] .tools-manager-dialog {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  color: #881337;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  box-shadow: 0 25px 50px rgba(236, 72, 153, 0.2);
+}
+
+[data-theme="sakura"] .add-tool-dialog h2,
+[data-theme="sakura"] .tools-manager-dialog h2 {
+  color: #701a75;
+  text-shadow: 0 1px 2px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .form-group label,
+[data-theme="sakura"] .tools-manager-dialog .form-group label {
+  color: #be185d;
+  font-weight: 600;
+}
+
+[data-theme="sakura"] .add-tool-dialog .form-group input,
+[data-theme="sakura"] .add-tool-dialog .form-group textarea,
+[data-theme="sakura"] .add-tool-dialog .form-group select {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #881337;
+  box-shadow: inset 0 2px 4px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .form-group input:focus,
+[data-theme="sakura"] .add-tool-dialog .form-group textarea:focus,
+[data-theme="sakura"] .add-tool-dialog .form-group select:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15), inset 0 2px 4px rgba(236, 72, 153, 0.1);
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+}
+
+[data-theme="sakura"] .add-tool-dialog .cancel-btn {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #be185d;
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .cancel-btn:hover {
+  background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+  border-color: #ec4899;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(236, 72, 153, 0.2);
+}
+
+[data-theme="sakura"] .add-tool-dialog .save-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.3);
+}
+
+[data-theme="sakura"] .add-tool-dialog .save-btn:hover {
+  background: linear-gradient(135deg, #be185d 0%, #9d174d 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(236, 72, 153, 0.4);
+}
+
+[data-theme="sakura"] .add-tool-dialog .browse-command-btn {
+  background: #ffeef0;
+  color: #8b4a6b;
+  border: 1px solid #e8b4cb;
+}
+
+[data-theme="sakura"] .add-tool-dialog .browse-command-btn:hover {
+  background: #ffd9dd;
+  border-color: #d4a5b8;
+  transform: translateY(-1px);
+}
+
+[data-theme="sakura"] .add-tool-dialog .select-icon-btn {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #be185d;
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .select-icon-btn:hover {
+  background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+  border-color: #ec4899;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(236, 72, 153, 0.2);
+}
+
+[data-theme="sakura"] .add-tool-dialog .tool-variables {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #881337;
+  box-shadow: inset 0 2px 4px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .tool-var-category strong {
+  color: #be185d;
+}
+
+[data-theme="sakura"] .add-tool-dialog .var-item {
+  background: linear-gradient(135deg, #fbcfe8 0%, #f9a8d4 100%);
+  color: #881337;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  box-shadow: 0 1px 3px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog .var-item:hover {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%) !important;
+  color: white !important;
+  border-color: rgba(236, 72, 153, 0.5);
+  box-shadow: 0 2px 6px rgba(236, 72, 153, 0.3);
+}
+
+/* 工具管理对话框特定样式 */
+[data-theme="sakura"] .tools-manager-dialog .tool-item {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tool-name {
+  color: #701a75;
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tool-description {
+  color: #be185d;
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tool-command {
+  color: #9d174d;
+  background: rgba(252, 231, 243, 0.7);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+[data-theme="sakura"] .tools-manager-dialog .edit-btn {
+  background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
+  box-shadow: 0 2px 4px rgba(236, 72, 153, 0.3);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .edit-btn:hover {
+  background: linear-gradient(135deg, #be185d 0%, #9d174d 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(236, 72, 153, 0.4);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .toggle-btn.enabled {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .toggle-btn.disabled {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%) !important;
+  box-shadow: 0 2px 4px rgba(248, 113, 113, 0.3);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .delete-btn {
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 100%) !important;
+  box-shadow: 0 2px 4px rgba(248, 113, 113, 0.3);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .delete-btn:hover {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(248, 113, 113, 0.4);
+}
+
+[data-theme="sakura"] .add-tool-dialog .close-btn:hover,
+[data-theme="sakura"] .tools-manager-dialog .close-btn:hover {
+  background: rgba(236, 72, 153, 0.1);
+  color: #be185d;
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tools-list::-webkit-scrollbar-track {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tools-list::-webkit-scrollbar-thumb {
+  background: rgba(236, 72, 153, 0.3);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tools-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(236, 72, 153, 0.5);
+}
+
+[data-theme="sakura"] .tools-manager-dialog .tool-icon {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+[data-theme="sakura"] .add-tool-dialog input[name="category-custom"] {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  color: #881337;
+}
+
+[data-theme="sakura"] .add-tool-dialog input[name="category-custom"]:focus {
+  border-color: #ec4899;
+  box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.15);
+}
+
+/* 图标选择器对话框样式 */
+.icon-selector-dialog {
+  position: relative;
+  backdrop-filter: blur(10px);
+}
+
+.icon-selector-dialog .icon-option:hover {
+  background: #e3f2fd !important;
+  border-color: #2196f3 !important;
+  transform: scale(1.1) !important;
+}
+
+.icon-selector-dialog .use-custom-btn:hover {
+  background: #218838;
+}
+
+.icon-selector-dialog .cancel-btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+/* 图标选择器标签页样式 */
+.icon-selector-dialog .icon-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 16px;
+}
+
+.icon-selector-dialog .tab-btn {
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.icon-selector-dialog .tab-btn:hover {
+  color: #007bff !important;
+}
+
+.icon-selector-dialog .tab-btn.active {
+  font-weight: 600;
+}
+
+/* 程序图标特殊样式 */
+.icon-selector-dialog .app-icon {
+  min-height: 70px !important;
+}
+
+.icon-selector-dialog .app-icon img {
+  transition: transform 0.2s ease;
+}
+
+.icon-selector-dialog .app-icon:hover img {
+  transform: scale(1.2);
+}
+
+.icon-selector-dialog .app-icon span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* exe 图标特殊样式 */
+.icon-selector-dialog .app-icon div[style*="linear-gradient"] {
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.icon-selector-dialog .app-icon:hover div[style*="linear-gradient"] {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+.icon-selector-dialog .app-icon div[style*="linear-gradient"]::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: 2px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px 4px 0 0;
+  pointer-events: none;
+}
+
+/* 深色主题 */
+[data-theme="dark"] .icon-selector-dialog {
+  background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+  color: #e2e8f0;
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+[data-theme="dark"] .icon-selector-dialog h2 {
+  color: #f7fafc;
+}
+
+[data-theme="dark"] .icon-selector-dialog .current-icon-preview {
+  background: #4a5568;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .icon-selector-dialog .icon-option {
+  background: #4a5568;
+  border-color: #718096;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .icon-selector-dialog .icon-option:hover {
+  background: #667eea !important;
+  border-color: #667eea !important;
+}
+
+[data-theme="dark"] .icon-selector-dialog .custom-icon-input {
+  background: #4a5568;
+  border-color: #718096;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .icon-selector-dialog .cancel-btn {
+  background: #4a5568;
+  border-color: #718096;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .icon-selector-dialog .cancel-btn:hover {
+  background: #2d3748;
+  border-color: #667eea;
+}
+
+[data-theme="dark"] .icon-selector-dialog .tab-btn {
+  color: #a0aec0;
+}
+
+[data-theme="dark"] .icon-selector-dialog .tab-btn:hover {
+  color: #667eea !important;
+}
+
+[data-theme="dark"] .icon-selector-dialog .tab-btn.active {
+  color: #667eea !important;
+  border-bottom-color: #667eea !important;
+}
+
+[data-theme="dark"] .icon-selector-dialog .icon-tabs {
+  border-bottom-color: #4a5568;
+}
+
+/* 樱花主题 */
+[data-theme="sakura"] .icon-selector-dialog {
+  background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+  color: #881337;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+}
+
+[data-theme="sakura"] .icon-selector-dialog h2 {
+  color: #701a75;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .current-icon-preview {
+  background: #fce7f3;
+  color: #881337;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .icon-option {
+  background: #fce7f3;
+  border-color: rgba(236, 72, 153, 0.3);
+  color: #881337;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .icon-option:hover {
+  background: #ec4899 !important;
+  border-color: #ec4899 !important;
+  color: white !important;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .custom-icon-input {
+  background: #fce7f3;
+  border-color: rgba(236, 72, 153, 0.3);
+  color: #881337;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .use-custom-btn {
+  background: #ec4899;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .use-custom-btn:hover {
+  background: #be185d;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .cancel-btn {
+  background: #fce7f3;
+  border-color: rgba(236, 72, 153, 0.3);
+  color: #be185d;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .cancel-btn:hover {
+  background: #fbcfe8;
+  border-color: #ec4899;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .tab-btn {
+  color: #be185d;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .tab-btn:hover {
+  color: #ec4899 !important;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .tab-btn.active {
+  color: #ec4899 !important;
+  border-bottom-color: #ec4899 !important;
+}
+
+[data-theme="sakura"] .icon-selector-dialog .icon-tabs {
+  border-bottom-color: rgba(236, 72, 153, 0.3);
+}
+
+/* @keyframes contextMenuSlideIn - 已移至 base.css，避免重复定义 */

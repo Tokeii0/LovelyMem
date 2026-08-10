@@ -1,0 +1,423 @@
+/* 文件管理器专用样式 - 适配全局主题 */
+
+/* 重置和基础样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* 标题栏样式继承自主界面，但需要补充文字样式 */
+
+/* 标题栏文字样式 */
+.logo-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.app-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.title-bar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* 主要内容区域 */
+.file-manager-content {
+  position: absolute;
+  top: 45px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  /* 确保内容区域正确计算高度，避免溢出 */
+  overflow: hidden;
+}
+
+/* 文件面板头部 */
+.file-panel-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg,
+    var(--bg-secondary) 0%,
+    var(--bg-tertiary) 100%);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+/* 搜索容器样式 */
+.search-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-width: 180px;
+  max-width: 220px;
+  flex: 1;
+}
+
+.search-container:focus-within {
+  border-color: var(--primary-color);
+  background: var(--bg-secondary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color), transparent 90%);
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: var(--text-primary);
+  padding: 0;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.search-container:focus-within .search-clear,
+.search-input:not(:placeholder-shown) + .search-clear {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.search-clear:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+/* 文件面板内容 */
+.file-panel-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  /* 为status-bar预留空间，避免内容被遮挡 */
+  margin-bottom: 0;
+  min-height: 0; /* 确保flex子元素可以正确收缩 */
+}
+
+.file-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--bg-primary);
+  /* 为status-bar预留底部空间 */
+  padding-bottom: 16px;
+  min-height: 0; /* 确保可以正确收缩 */
+}
+
+/* 滚动条样式继承全局，这里只做微调 */
+.file-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.file-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.file-list::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+  border-radius: 4px;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* 状态栏 */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 20px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  /* 确保状态栏固定在底部，不遮挡内容 */
+  position: relative;
+  z-index: 1;
+  min-height: 36px; /* 设置最小高度确保一致性 */
+}
+
+.status-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* 空状态 */
+.file-list-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* 错误状态 */
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--error-color);
+  font-size: 14px;
+}
+
+/* 移除所有硬编码的暗色主题样式，因为现在使用 CSS 变量 */
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .file-panel-header {
+    padding: 12px 16px;
+  }
+  
+  .file-panel-controls {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .sort-controls {
+    order: -1;
+  }
+  
+  .action-buttons {
+    justify-content: center;
+  }
+}
+
+/* 动画效果 */
+.file-item {
+  transition: all 0.2s ease;
+}
+
+.file-item:hover {
+  transform: translateY(-1px);
+}
+
+.sort-btn {
+  transition: all 0.2s ease;
+}
+
+.action-btn {
+  transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+}
+
+/* 焦点样式 */
+.search-input:focus {
+  outline: none;
+  box-shadow: none; /* 由父容器处理 */
+}
+
+.title-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+/* 选择状态 */
+.file-item.selected {
+  background: color-mix(in srgb, var(--primary-color), transparent 90%);
+  border-color: var(--primary-color);
+}
+
+/* 搜索模式切换按钮 */
+.search-mode-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.search-mode-toggle:hover {
+  background: var(--bg-tertiary);
+  color: var(--primary-color);
+}
+
+.search-mode-toggle[data-mode="content"] {
+  color: var(--success-color);
+}
+
+.search-mode-toggle[data-mode="content"]:hover {
+  background: color-mix(in srgb, var(--success-color), transparent 90%);
+  color: var(--success-color);
+}
+
+.search-container {
+  position: relative;
+}
+
+/* 搜索下拉框 */
+.search-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.search-dropdown-header {
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.search-result-count {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.search-dropdown-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.search-dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-dropdown-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.search-dropdown-list::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+  border-radius: 3px;
+}
+
+.search-dropdown-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.dropdown-file-group {
+  border-bottom: 1px solid var(--border-light);
+}
+
+.dropdown-file-group:last-child {
+  border-bottom: none;
+}
+
+.dropdown-file-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown-file-header:hover {
+  background: var(--bg-tertiary);
+}
+
+.dropdown-file-header svg {
+  color: var(--primary-color);
+  flex-shrink: 0;
+}
+
+.dropdown-filename {
+  flex: 1;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-count {
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.dropdown-loading,
+.dropdown-empty,
+.dropdown-error {
+  padding: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.dropdown-error {
+  color: var(--error-color);
+}

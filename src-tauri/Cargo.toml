@@ -1,0 +1,102 @@
+[package]
+name = "lovelymem-v2"
+version = "2.5.0"
+description = "内存取证工具"
+authors = ["Tokeii"]
+edition = "2024"
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "lovelymem_v2_lib"
+crate-type = ["cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.5.5", features = [] }
+
+[dependencies]
+tauri = { version = "2.10", features = ["protocol-asset"] }
+tauri-plugin-opener = "2.5"
+tauri-plugin-dialog = "2.6"
+tauri-plugin-fs = "2"
+tauri-plugin-http = "2.5"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0.149"
+dirs = "5.0"
+tokio = { version = "1.49", features = ["rt-multi-thread", "macros", "sync", "time", "io-util", "fs", "process"] }
+csv = "1.2"
+chrono = { version = "0.4.43", features = ["serde"] }
+uuid = { version = "1.20", features = ["v4"] }
+rand = "0.8"
+memmap2 = "0.9"
+rayon = "1.8"
+anyhow = "1.0.101"
+memchr = "2.8"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "bmp", "ico", "tiff", "webp", "rayon"] }
+rqrr = "0.10.1"
+sha2 = "0.10"
+sha1 = "0.10"
+base64 = "0.22"
+hex = "0.4"
+# WeChat database decryption dependencies
+aes = "0.8"
+cbc = "0.1"
+hmac = "0.12"
+pbkdf2 = { version = "0.12", features = ["hmac"] }
+encoding_rs = "0.8"
+md5 = "0.8.0"
+crc32fast = "1.4"
+reqwest = { version = "0.12.28", features = ["json", "stream"] }
+futures-util = "0.3"
+urlencoding = "2.1"
+tempfile = "3.25"
+regex = "1.12"
+url = "2.5"
+num_cpus = "1.16"
+byteorder = "1.5"
+# EVTX parser for Windows Event Log files
+evtx = "0.8.5"
+# Directory walking for recursive file searches
+walkdir = "2.5"
+# EXIF reading dependencies
+kamadak-exif = "0.6"
+# String obfuscation for additional protection
+obfstr = "0.4"
+# System information for process management
+sysinfo = "0.30"
+# Lazy static for global instances
+lazy_static = "1.4"
+portable-pty = "0.8"
+# SQLite for Vol3 identifier cache fixing
+rusqlite = { version = "0.31", features = ["bundled"] }
+# ZIP archive extraction for official toolchain packages
+zip = { version = "8.5", default-features = false, features = ["deflate-flate2"] }
+async-trait = "0.1.89"
+# PE file parsing for executable analysis
+goblin = "0.8"
+yara-x = "1.14.0"
+# PDB parser for MemProcFS symbol table inspection
+pdb = "0.8"
+# gzip decompression for winbindex JSON
+flate2 = "1.0"
+
+
+[target.'cfg(windows)'.dependencies]
+winapi = { version = "0.3", features = ["wincrypt", "dpapi", "winbase", "errhandlingapi", "winerror", "shellapi", "winuser", "wingdi", "wincon", "consoleapi", "debugapi", "processthreadsapi", "sysinfoapi", "memoryapi"] }
+
+[profile.release]
+# 改为 unwind 以便在 ARM64 系统上更好地处理错误，避免直接闪退
+panic = "unwind"
+lto = true
+opt-level = 2
+strip = true
+codegen-units = 1
+
+# 开发期优化：最快编译速度
+[profile.dev]
+opt-level = 0
+
+# 依赖库保持优化（已缓存，只编译一次）
+[profile.dev.package."*"]
+opt-level = 1

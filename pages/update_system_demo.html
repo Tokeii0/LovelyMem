@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lovelymem V2 更新系统演示</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            transition: all 0.3s ease;
+        }
+
+        .demo-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .theme-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .theme-btn.light {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            color: #212529;
+            border: 1px solid #dee2e6;
+        }
+
+        .theme-btn.dark {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: #ecf0f1;
+        }
+
+        .theme-btn.pink {
+            background: linear-gradient(135deg, #ffeef8 0%, #f8d7da 100%);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+
+        .demo-btn {
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .demo-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.4);
+        }
+
+        .demo-btn.critical {
+            background: linear-gradient(135deg, #ff6b9d 0%, #ff4757 100%);
+        }
+
+        /* 主题样式 */
+        body.theme-dark {
+            background: #1a1a1a;
+            color: #ecf0f1;
+        }
+
+        body.theme-dark .demo-container {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        body.theme-dark .demo-section {
+            border-color: #34495e;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        body.theme-pink {
+            background: #fdf2f8;
+            color: #4a1a2a;
+        }
+
+        body.theme-pink .demo-container {
+            background: #fff0f6;
+            color: #4a1a2a;
+        }
+
+        body.theme-pink .demo-section {
+            border-color: #f3a8c7;
+            background: rgba(190, 24, 93, 0.08);
+        }
+
+        .status-area {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #00d4aa;
+        }
+
+        body.theme-dark .status-area {
+            background: #34495e;
+            color: #ecf0f1;
+        }
+
+        body.theme-pink .status-area {
+            background: #fff5f5;
+            border-left-color: #e53e3e;
+        }
+    </style>
+</head>
+<body class="theme-light">
+    <div class="demo-container">
+        <h1>🚀 Lovelymem V2 更新系统演示</h1>
+        
+        <div class="theme-switcher">
+            <button class="theme-btn light" onclick="switchTheme('light')">🌞 浅色主题</button>
+            <button class="theme-btn dark" onclick="switchTheme('dark')">🌙 深色主题</button>
+            <button class="theme-btn pink" onclick="switchTheme('pink')">🌸 粉色主题</button>
+        </div>
+
+        <div class="demo-section">
+            <h3>📥 更新通知指示器测试</h3>
+            <p>点击下面的按钮来测试不同类型的更新通知指示器：</p>
+            <button class="demo-btn" onclick="showNormalIndicator()">显示普通更新指示器</button>
+            <button class="demo-btn critical" onclick="showCriticalIndicator()">显示关键更新指示器</button>
+            <button class="demo-btn" onclick="hideIndicator()">隐藏指示器</button>
+        </div>
+
+        <div class="demo-section">
+            <h3>💬 更新对话框测试</h3>
+            <p>点击下面的按钮来测试不同类型的更新对话框：</p>
+            <button class="demo-btn" onclick="showNormalDialog()">显示普通更新对话框</button>
+            <button class="demo-btn critical" onclick="showCriticalDialog()">显示关键更新对话框</button>
+        </div>
+
+        <div class="status-area" id="status-area">
+            <strong>状态：</strong> <span id="status-text">准备就绪</span>
+        </div>
+
+        <div class="demo-section">
+            <h3>📋 功能说明</h3>
+            <ul>
+                <li><strong>更新指示器：</strong> 位于页面顶部居中，使用糖果绿配色</li>
+                <li><strong>主题适配：</strong> 支持浅色、深色、粉色三种主题</li>
+                <li><strong>关键更新：</strong> 使用红色配色和紧急动画效果</li>
+                <li><strong>响应式设计：</strong> 适配移动设备显示</li>
+                <li><strong>动画效果：</strong> 流畅的进入和交互动画</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 模拟更新管理器功能
+        function switchTheme(theme) {
+            document.body.className = `theme-${theme}`;
+            updateStatus(`已切换到${theme === 'light' ? '浅色' : theme === 'dark' ? '深色' : '粉色'}主题`);
+        }
+
+        function updateStatus(text) {
+            document.getElementById('status-text').textContent = text;
+        }
+
+        function showNormalIndicator() {
+            hideIndicator();
+            
+            const indicator = document.createElement('div');
+            indicator.className = 'update-indicator';
+            indicator.innerHTML = '🚀 新版本 v1.0.1.722 可用';
+            indicator.onclick = () => {
+                updateStatus('点击了普通更新指示器');
+                showNormalDialog();
+            };
+            
+            // 添加样式
+            indicator.style.cssText = `
+                position: fixed;
+                top: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                cursor: pointer;
+                z-index: 9999;
+                box-shadow: 0 3px 12px rgba(0, 212, 170, 0.4);
+                font-size: 13px;
+                font-weight: 600;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                animation: slideInDown 0.5s ease-out;
+            `;
+            
+            document.body.appendChild(indicator);
+            updateStatus('显示了普通更新指示器');
+        }
+
+        function showCriticalIndicator() {
+            hideIndicator();
+            
+            const indicator = document.createElement('div');
+            indicator.className = 'update-indicator critical';
+            indicator.innerHTML = '🚨 关键更新 v1.0.0.723 可用';
+            indicator.onclick = () => {
+                updateStatus('点击了关键更新指示器');
+                showCriticalDialog();
+            };
+            
+            // 添加样式
+            indicator.style.cssText = `
+                position: fixed;
+                top: 15px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: linear-gradient(135deg, #ff6b9d 0%, #ff4757 100%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                cursor: pointer;
+                z-index: 9999;
+                box-shadow: 0 3px 12px rgba(255, 107, 157, 0.4);
+                font-size: 13px;
+                font-weight: 600;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                animation: slideInDown 0.5s ease-out, urgentPulse 1s infinite;
+            `;
+            
+            document.body.appendChild(indicator);
+            updateStatus('显示了关键更新指示器');
+        }
+
+        function hideIndicator() {
+            const indicator = document.querySelector('.update-indicator');
+            if (indicator) {
+                indicator.remove();
+                updateStatus('隐藏了更新指示器');
+            }
+        }
+
+        function showNormalDialog() {
+            updateStatus('显示普通更新对话框（实际应用中会调用UpdateManager.showUpdateDialog）');
+            alert('这里会显示普通更新对话框\n\n在实际应用中，会调用 UpdateManager 的 showUpdateDialog 方法来显示完整的更新对话框。');
+        }
+
+        function showCriticalDialog() {
+            updateStatus('显示关键更新对话框（实际应用中会调用UpdateManager.showUpdateDialog）');
+            alert('这里会显示关键更新对话框\n\n在实际应用中，会调用 UpdateManager 的 showUpdateDialog 方法来显示完整的更新对话框，并且会应用关键更新的样式。');
+        }
+
+        // 添加动画样式
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInDown {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50%) translateY(-30px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(-50%) translateY(0);
+                }
+            }
+
+            @keyframes urgentPulse {
+                0%, 100% {
+                    transform: translateX(-50%) scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: translateX(-50%) scale(1.05);
+                    opacity: 0.8;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始状态
+        updateStatus('演示页面已加载，请选择要测试的功能');
+    </script>
+</body>
+</html>

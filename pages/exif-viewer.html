@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EXIF查看器 - Lovelymem V2</title>
+
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="../src/modules/exif-viewer/styles/exif-viewer.css">
+
+    <!-- 水印脚本 -->
+
+    <!-- 图标字体 -->
+    <style>
+        .icon {
+            font-style: normal;
+            font-size: 1em;
+        }
+
+        /* 确保body占满整个窗口 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- EXIF查看器容器 -->
+    <div id="exif-viewer-container">
+        <!-- 内容将由JavaScript动态生成 -->
+    </div>
+
+    <!-- Tauri API脚本 -->
+    <script type="module">
+        // 确保Tauri API可用
+        if (!window.__TAURI__) {
+            console.error('Tauri API不可用');
+        }
+    </script>
+
+    <!-- 主应用脚本 -->
+    <script type="module" src="../src/modules/exif-viewer/exif-viewer.ts"></script>
+</body>
+</html>

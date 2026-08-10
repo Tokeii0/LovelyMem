@@ -1,0 +1,8 @@
+# 排除output文件夹变动导致的刷新
+output/
+target/
+node_modules/
+dist/
+*.log
+
+*.tmp 

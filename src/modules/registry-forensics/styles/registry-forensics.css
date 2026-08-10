@@ -1,0 +1,71 @@
+/* 注册表取证窗口样式（复用主题 CSS 变量） */
+
+html, body {
+  margin: 0; padding: 0; height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg-primary, #f5f5f5);
+  color: var(--text-primary, #1a1a1a);
+}
+#reg-forensics-app { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+
+.rf-window-titlebar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 38px; padding: 0 10px;
+  background: var(--bg-secondary, #ececec);
+  border-bottom: 1px solid var(--border-color, #ddd);
+  user-select: none;
+}
+.rf-window-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; opacity: 0.85; }
+.rf-window-controls { display: flex; gap: 4px; }
+.rf-window-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 26px; border: none; background: transparent; cursor: pointer;
+  color: var(--text-primary, #333); border-radius: 5px;
+}
+.rf-window-btn:hover { background: var(--bg-hover, rgba(0,0,0,0.08)); }
+.rf-window-btn.close:hover { background: #e81123; color: #fff; }
+
+.rf-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 8px 10px; border-bottom: 1px solid var(--border-color, #ddd);
+}
+.rf-btn {
+  padding: 5px 12px; border: 1px solid var(--border-color, #ccc);
+  border-radius: 6px; background: var(--bg-secondary, #fff);
+  color: var(--text-primary, #333); cursor: pointer; font-size: 12px;
+}
+.rf-btn:hover { background: var(--bg-hover, #f0f0f0); }
+.rf-kind-badge {
+  font-size: 11px; padding: 2px 9px; border-radius: 10px;
+  background: var(--accent-color, #3b82f6); color: #fff;
+}
+.rf-summary { font-size: 12px; opacity: 0.75; }
+.rf-summary .rf-risk { color: #e74c3c; font-weight: 600; }
+.rf-filter {
+  padding: 5px 8px; border: 1px solid var(--border-color, #ccc); border-radius: 6px;
+  background: var(--bg-input, #fff); color: var(--text-primary, #333); font-size: 12px; width: 200px;
+}
+.rf-check { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+
+.rf-body { flex: 1; overflow: auto; }
+table.rf-grid { border-collapse: collapse; width: 100%; font-size: 12px; }
+table.rf-grid th, table.rf-grid td {
+  border-bottom: 1px solid var(--border-color, #eee);
+  padding: 6px 10px; text-align: left; vertical-align: top;
+}
+table.rf-grid th {
+  background: var(--bg-secondary, #f0f0f0); position: sticky; top: 0; z-index: 1; font-weight: 600;
+}
+table.rf-grid td.rf-path { font-family: "Consolas", monospace; max-width: 520px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+table.rf-grid tr.rf-suspicious td { background: rgba(231, 76, 60, 0.10); }
+.rf-risk-tag { color: #e74c3c; font-size: 11px; }
+
+/* 运行次数条形 */
+.rf-count-cell { display: flex; align-items: center; gap: 6px; min-width: 90px; }
+.rf-count-bar {
+  height: 8px; border-radius: 4px; background: var(--accent-color, #3b82f6); min-width: 2px;
+}
+.rf-count-num { font-size: 11px; opacity: 0.8; }
+
+.rf-empty, .rf-error { padding: 40px; text-align: center; opacity: 0.6; font-size: 13px; }
+.rf-error { color: #e74c3c; }

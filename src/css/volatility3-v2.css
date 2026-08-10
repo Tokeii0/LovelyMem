@@ -1,0 +1,600 @@
+/**
+ * Volatility3 V2 工作区样式
+ * 顶部Tab标签页布局 + 下方CSV数据表格
+ * 设计风格：扁平化，无渐变，主题自适应
+ * 与 MemProcFS V2 共享大部分样式，使用 vol3-v2 前缀
+ */
+
+/* ================= 工作区主容器 ================= */
+.vol3-v2-workspace {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-primary);
+}
+
+/* ================= 顶部配置栏 ================= */
+.vol3-v2-config-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+  flex-shrink: 0;
+}
+
+.vol3-v2-config-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vol3-v2-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.vol3-v2-checkbox input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.vol3-v2-config-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.vol3-v2-info-icon {
+  font-size: 14px;
+}
+
+/* ================= 顶部分组栏 (一级导航) ================= */
+.vol3-v2-group-bar {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-primary);
+  gap: 8px;
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+.vol3-v2-group-bar::-webkit-scrollbar {
+  height: 0;
+}
+
+.vol3-v2-group-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.vol3-v2-group-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* 分组按钮 - 激活状态 (Vol3 使用绿色系) */
+.vol3-v2-group-btn.active {
+  background: var(--vol3-accent, #10b981);
+  color: white;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.vol3-v2-group-btn .group-icon {
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.vol3-v2-group-btn .group-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ================= Tab标签栏 (二级导航) ================= */
+.vol3-v2-tabs-bar {
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-primary);
+  padding: 0 12px;
+  flex-shrink: 0;
+  overflow: hidden;
+  height: 42px;
+  min-height: 42px;
+  max-height: 42px;
+}
+
+.vol3-v2-tabs {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 42px;
+}
+
+.vol3-v2-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.vol3-v2-tab {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 0 4px !important;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap !important;
+  position: relative;
+  flex-wrap: nowrap !important;
+  text-align: left !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  line-height: 40px !important;
+  box-sizing: border-box !important;
+}
+
+/* 覆盖全局 .error 样式对 Tab 的影响 */
+.vol3-v2-tabs-bar .vol3-v2-tab.error,
+.vol3-v2-tab.error {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  padding: 0 4px !important;
+  text-align: left !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  max-height: 40px !important;
+  line-height: 40px !important;
+  color: #ef4444 !important;
+  background: transparent !important;
+  font-size: 13px !important;
+  gap: 6px !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.vol3-v2-tabs-bar .vol3-v2-tab.error.active,
+.vol3-v2-tab.error.active {
+  border-bottom-color: #ef4444 !important;
+}
+
+.vol3-v2-tab.error > .tab-icon,
+.vol3-v2-tab.error > .tab-name,
+.vol3-v2-tab.error > .tab-status {
+  display: inline-flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.vol3-v2-tab > * {
+  display: inline-flex !important;
+  flex-shrink: 0 !important;
+  vertical-align: middle !important;
+}
+
+.vol3-v2-tab:hover {
+  color: var(--text-primary);
+}
+
+/* Tab - 激活状态 (Vol3 绿色) */
+.vol3-v2-tab.active {
+  color: var(--vol3-accent, #10b981);
+  border-bottom-color: var(--vol3-accent, #10b981);
+  font-weight: 600;
+}
+
+.vol3-v2-tab .tab-icon {
+  font-size: 14px;
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.vol3-v2-tab .tab-icon svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Tab 计数徽章 */
+.vol3-v2-tab .tab-count {
+  display: none; /* 默认隐藏，有数据时显示 */
+  font-size: 10px;
+  line-height: 1;
+  padding: 2px 5px;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--text-secondary);
+  border-radius: 10px;
+  margin-left: 2px;
+  font-weight: normal;
+  transition: all 0.3s ease;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+}
+
+.vol3-v2-tab.active .tab-count {
+  background: var(--vol3-accent-bg, rgba(16, 185, 129, 0.1));
+  color: var(--vol3-accent, #10b981);
+}
+
+/* Tab 状态指示器 */
+.vol3-v2-tab .tab-status {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-left: 4px;
+  font-size: 11px;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.vol3-v2-tab .tab-name {
+  display: inline-flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  line-height: 1 !important;
+}
+
+.vol3-v2-tab .tab-status .status-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--border-primary);
+  border-top-color: var(--vol3-accent, #10b981);
+  border-radius: 50%;
+  animation: vol3-spin 0.8s linear infinite;
+}
+
+@keyframes vol3-spin {
+  to { transform: rotate(360deg); }
+}
+
+.vol3-v2-tab .tab-status .status-check {
+  color: var(--vol3-accent, #10b981);
+  font-weight: bold;
+}
+
+.vol3-v2-tab .tab-status .status-error {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+/* Tab 状态样式 */
+.vol3-v2-tab.running {
+  color: var(--vol3-accent, #10b981);
+}
+
+.vol3-v2-tab.completed {
+  color: var(--text-primary);
+}
+
+.vol3-v2-tab.completed::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 6px;
+  height: 6px;
+  background: var(--vol3-accent, #10b981);
+  border-radius: 50%;
+}
+
+/* ================= CSV数据区域 ================= */
+.vol3-v2-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+
+.vol3-v2-csv-viewer {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+}
+
+/* 只有在有 animate-enter 类时才触发动画 */
+.vol3-v2-csv-viewer.animate-enter {
+  animation: vol3-fadeSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes vol3-fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= 执行中状态 ================= */
+.vol3-v2-executing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  padding: 20px;
+  text-align: center;
+  background: var(--bg-primary);
+}
+
+.vol3-v2-spinner {
+  display: none;
+}
+
+.vol3-v2-executing-icon {
+  color: var(--text-tertiary, #d1d5db);
+  line-height: 0;
+}
+
+.vol3-v2-executing-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.vol3-v2-executing-message {
+  font-size: 13px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  word-break: break-word;
+}
+
+.vol3-v2-progress-bar-container {
+  width: 100%;
+  max-width: 400px;
+  height: 6px;
+  background: var(--bg-secondary, #e5e7eb);
+  border-radius: 3px;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.vol3-v2-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--vol3-accent, #10b981), #34d399);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.vol3-v2-progress-bar-pulse {
+  width: 30% !important;
+  animation: vol3-progress-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes vol3-progress-pulse {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.vol3-v2-progress-detail {
+  font-size: 11px;
+  color: var(--text-tertiary, #9ca3af);
+  font-family: 'Cascadia Code', 'Consolas', monospace;
+}
+
+.vol3-v2-cancel-btn {
+  padding: 8px 24px;
+  border: 1px solid var(--border-primary, #d1d5db);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vol3-v2-cancel-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* ================= 错误详情样式 ================= */
+.vol3-v2-workspace .embedded-csv-error,
+.vol3-v2-workspace .embedded-csv-empty,
+.vol3-v2-workspace .embedded-csv-loading,
+.vol3-v2-workspace .error,
+.vol3-v2-csv-viewer .embedded-csv-error,
+.vol3-v2-csv-viewer .error {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  height: auto !important;
+  min-height: 200px !important;
+  max-height: 100% !important;
+  gap: 12px !important;
+  padding: 20px !important;
+  text-align: center !important;
+  background: var(--bg-primary) !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+  animation: none !important;
+}
+
+/* 禁用错误状态下的动画 */
+.vol3-v2-csv-viewer.animate-enter .embedded-csv-error,
+.vol3-v2-csv-viewer.animate-enter .error {
+  animation: none !important;
+  transform: none !important;
+}
+
+.vol3-v2-workspace .embedded-csv-error-icon {
+  font-size: 48px;
+}
+
+.vol3-v2-workspace .embedded-csv-error-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ef4444;
+}
+
+.vol3-v2-workspace .embedded-csv-error-message {
+  font-size: 14px;
+  color: var(--text-secondary);
+  max-width: 600px;
+}
+
+.vol3-v2-workspace .embedded-csv-error-details {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 16px;
+  text-align: left;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.vol3-v2-workspace .embedded-csv-error-details-title {
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.vol3-v2-workspace .embedded-csv-error-details-content {
+  margin: 0;
+  padding: 16px;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #ef4444;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.vol3-v2-workspace .embedded-csv-retry-btn {
+  margin-top: 16px;
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  background: var(--vol3-accent, #10b981);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.vol3-v2-workspace .embedded-csv-retry-btn:hover {
+  background: #059669;
+  transform: translateY(-1px);
+}
+
+/* ================= 主题适配 ================= */
+
+/* Light 主题 */
+:root {
+  --vol3-accent: #10b981;
+  --vol3-accent-bg: rgba(16, 185, 129, 0.1);
+}
+
+/* Dark 主题 */
+[data-theme="dark"] {
+  --vol3-accent: #34d399;
+  --vol3-accent-bg: rgba(52, 211, 153, 0.15);
+}
+
+[data-theme="dark"] .vol3-v2-group-btn.active {
+  background: #34d399;
+}
+
+[data-theme="dark"] .vol3-v2-tab.active {
+  color: #34d399;
+  border-bottom-color: #34d399;
+}
+
+/* Sakura 主题 */
+[data-theme="sakura"] {
+  --vol3-accent: #f97316;
+  --vol3-accent-bg: rgba(249, 115, 22, 0.1);
+}
+
+[data-theme="sakura"] .vol3-v2-group-btn.active {
+  background: #f97316;
+}
+
+[data-theme="sakura"] .vol3-v2-tab.active {
+  color: #ea580c;
+  border-bottom-color: #f97316;
+}
+
+/* ================= 响应式调整 ================= */
+@media (max-width: 900px) {
+  .vol3-v2-group-btn .group-name {
+    display: none;
+  }
+  
+  .vol3-v2-config-info {
+    display: none;
+  }
+}

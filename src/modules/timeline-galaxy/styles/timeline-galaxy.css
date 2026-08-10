@@ -1,0 +1,2012 @@
+/**
+ * 时间线星迹样式 - Timeline Galaxy Styles
+ */
+
+/* ==================== 容器布局 ==================== */
+.timeline-galaxy-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background: var(--tg-bg-primary, #0f172a);
+    overflow: hidden;
+    position: relative;
+    color: var(--tg-text-primary, #e2e8f0);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.timeline-galaxy-container.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+}
+
+/* ==================== 顶部工具栏 ==================== */
+.tg-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: var(--tg-bg-secondary, #1e293b);
+    border-bottom: 1px solid var(--tg-border-color, #334155);
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.tg-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.tg-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #60a5fa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.tg-title svg {
+    color: #60a5fa;
+    -webkit-text-fill-color: initial;
+}
+
+.tg-subtitle {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.tg-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 搜索框 */
+.tg-search {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.tg-search .search-icon {
+    position: absolute;
+    left: 12px;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+}
+
+.tg-search-input {
+    width: 220px;
+    padding: 8px 12px 8px 38px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0f172a80;
+    color: #e2e8f0;
+    font-size: 13px;
+    transition: all 0.2s ease;
+}
+
+.tg-search-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.tg-search-input::placeholder {
+    color: #64748b;
+}
+
+/* 下拉选择 */
+.tg-select {
+    padding: 8px 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0f172a80;
+    color: #e2e8f0;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+}
+
+.tg-select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.tg-select:hover {
+    background: #1e293b;
+}
+
+/* PID 输入框 */
+.tg-pid-input {
+    width: 80px;
+    padding: 8px 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0f172a80;
+    color: #e2e8f0;
+    font-size: 13px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.tg-pid-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* 时间筛选区域 */
+.tg-time-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid #334155;
+    border-radius: 8px;
+}
+
+.time-filter-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.time-separator {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.tg-datetime-input {
+    width: 160px;
+    padding: 6px 8px;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #e2e8f0;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.2s ease;
+}
+
+.tg-datetime-input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.tg-datetime-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+}
+
+.tg-btn-small {
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0;
+}
+
+.tg-pid-input:not(:placeholder-shown) {
+    border-color: #3b82f6;
+    color: #60a5fa;
+    font-weight: 600;
+}
+
+/* 工具栏按钮 */
+.tg-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0f172a80;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tg-btn:hover {
+    background: #1e293b;
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.tg-btn:active {
+    transform: scale(0.95);
+}
+
+/* ==================== 画布左上角图例 ==================== */
+.galaxy-legend {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid #334155;
+    border-radius: 10px;
+    z-index: 50;
+    min-width: 140px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+}
+
+.legend-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+.legend-icon.blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: #3b82f6;
+}
+
+.legend-icon.green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.legend-icon.violet {
+    background: rgba(139, 92, 246, 0.15);
+    color: #8b5cf6;
+}
+
+.legend-icon.amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.legend-label {
+    color: #64748b;
+    font-size: 10px;
+    min-width: 28px;
+}
+
+.legend-value {
+    color: #e2e8f0;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: auto;
+}
+
+.legend-value.small {
+    font-size: 9px;
+    color: #94a3b8;
+}
+
+/* ==================== 主内容区域 ==================== */
+.tg-main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* 星图区域 */
+.tg-galaxy-section {
+    flex: 1;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid #1e293b;
+    position: relative;
+}
+
+.tg-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    background: #0f172a;
+    border-bottom: 1px solid #1e293b;
+}
+
+.tg-section-header h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: #3b82f6;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tg-section-hint {
+    font-size: 11px;
+    color: #64748b;
+}
+
+.tg-canvas-wrapper {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #020617;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
+}
+
+.tg-svg {
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.tg-svg:active {
+    cursor: grabbing;
+}
+
+/* 加载状态 */
+.tg-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    z-index: 10;
+}
+
+.tg-loading .loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid #334155;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    animation: tg-spin 1s linear infinite;
+}
+
+.tg-loading .loading-text {
+    font-size: 14px;
+    color: #94a3b8;
+    animation: tg-pulse 2s ease-in-out infinite;
+}
+
+@keyframes tg-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes tg-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* 空状态 */
+.tg-empty {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    text-align: center;
+    z-index: 10;
+}
+
+.tg-empty .empty-icon {
+    color: #64748b;
+    opacity: 0.3;
+}
+
+.tg-empty .empty-icon svg {
+    width: 64px;
+    height: 64px;
+}
+
+.tg-empty .empty-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.tg-empty .empty-desc {
+    font-size: 14px;
+    color: #94a3b8;
+    max-width: 300px;
+}
+
+/* D3 图形样式 */
+.tg-link {
+    transition: stroke 0.2s ease, stroke-width 0.2s ease;
+    stroke-opacity: 0.85;
+}
+
+.tg-link:hover {
+    stroke-opacity: 1;
+    stroke-width: 3 !important;
+}
+
+.tg-node {
+    transition: all 0.3s ease;
+}
+
+.tg-node:hover .event-label {
+    opacity: 1 !important;
+}
+
+.node-label {
+    font-weight: 600;
+    pointer-events: none;
+    text-shadow: 
+        -1px -1px 0 #0f172a,
+        1px -1px 0 #0f172a,
+        -1px 1px 0 #0f172a,
+        1px 1px 0 #0f172a;
+}
+
+.event-label {
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    text-shadow: 
+        -1px -1px 0 #0f172a,
+        1px -1px 0 #0f172a,
+        -1px 1px 0 #0f172a,
+        1px 1px 0 #0f172a;
+}
+
+.pulse-slow {
+    animation: tg-glow-pulse 3s ease-in-out infinite;
+}
+
+/* ==================== 侧边详情面板 ==================== */
+.tg-detail-panel {
+    position: absolute;
+    top: 0;
+    right: -380px;
+    width: 360px;
+    height: 100%;
+    background: var(--tg-bg-secondary, #1e293b);
+    border-left: 1px solid var(--tg-border-color, #334155);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.3);
+    transition: right 0.3s ease;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tg-detail-panel.open {
+    right: 0;
+}
+
+.detail-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: var(--tg-bg-primary, #0f172a);
+    border-bottom: 1px solid var(--tg-border-color, #334155);
+}
+
+.detail-panel-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #60a5fa;
+}
+
+.detail-panel-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.detail-panel-close:hover {
+    background: #334155;
+    color: #e2e8f0;
+}
+
+.detail-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 20px;
+}
+
+.detail-section {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #334155;
+}
+
+.detail-section:last-child {
+    border-bottom: none;
+}
+
+.detail-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 12px;
+}
+
+.detail-label {
+    color: #64748b;
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.detail-value {
+    color: #e2e8f0;
+    word-break: break-all;
+}
+
+.detail-value.small {
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.detail-empty {
+    color: #64748b;
+    font-size: 12px;
+    font-style: italic;
+}
+
+.detail-error {
+    color: #f87171;
+    font-size: 12px;
+}
+
+.detail-loading {
+    color: #94a3b8;
+    font-size: 12px;
+    text-align: center;
+    padding: 20px;
+}
+
+.detail-more {
+    font-size: 11px;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 8px;
+}
+
+.threads-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.thread-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: #0f172a80;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 11px;
+}
+
+.thread-item:hover {
+    background: #334155;
+}
+
+.thread-tid {
+    color: #60a5fa;
+    font-weight: 500;
+    min-width: 70px;
+}
+
+.thread-state {
+    color: #10b981;
+    padding: 2px 6px;
+    background: #10b98120;
+    border-radius: 4px;
+}
+
+.thread-time {
+    color: #64748b;
+    margin-left: auto;
+    font-size: 10px;
+}
+
+.detail-back-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 16px;
+    background: #334155;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    color: #e2e8f0;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.detail-back-btn:hover {
+    background: #475569;
+}
+
+@keyframes tg-glow-pulse {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.2; }
+}
+
+/* 悬浮提示 */
+.tg-tooltip {
+    position: fixed;
+    padding: 10px 14px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 280px;
+}
+
+.tg-tooltip .tooltip-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3b82f6;
+    margin-bottom: 6px;
+}
+
+.tg-tooltip .tooltip-info {
+    font-size: 12px;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+/* 缩放控制 */
+.tg-zoom-controls {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    z-index: 50;
+}
+
+.zoom-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.zoom-btn:hover {
+    background: #334155;
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.zoom-btn:active {
+    transform: scale(0.95);
+}
+
+/* 线条控制面板 */
+.tg-link-controls {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 12px;
+    background: rgba(30, 41, 59, 0.95);
+    border: 1px solid #334155;
+    border-radius: 8px;
+    z-index: 50;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.link-control-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.link-control-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 2px 0;
+    transition: opacity 0.2s ease;
+}
+
+.link-control-item:hover {
+    opacity: 0.8;
+}
+
+.link-control-item input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    accent-color: #3b82f6;
+    cursor: pointer;
+}
+
+.link-color-dot {
+    width: 16px;
+    height: 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+}
+
+.link-label {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* ==================== 表格区域（可收缩） ==================== */
+.tg-table-section {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #0f172a;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-height: 40px;
+}
+
+.tg-table-section.collapsed {
+    flex: 0 0 40px !important;
+    max-height: 40px !important;
+    min-height: 40px !important;
+    height: 40px !important;
+}
+
+.tg-table-section.collapsed .tg-table-collapse-content {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* 收缩头部 */
+.tg-table-collapse-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: #1e293b;
+    border-top: 1px solid #334155;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s ease;
+    flex-shrink: 0;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.tg-table-collapse-header:hover {
+    background: #334155;
+}
+
+.collapse-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.collapse-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    color: #94a3b8;
+    transition: color 0.2s ease;
+}
+
+.tg-table-collapse-header:hover .collapse-icon {
+    color: #e2e8f0;
+}
+
+/* 收缩内容区 */
+.tg-table-collapse-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.tg-table-wrapper {
+    flex: 1;
+    overflow: auto;
+}
+
+.tg-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tg-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.tg-table th {
+    padding: 12px 16px;
+    background: #1e293b;
+    border-bottom: 1px solid #334155;
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tg-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid #1e293b;
+    vertical-align: middle;
+}
+
+.tg-table-row {
+    transition: background 0.2s ease;
+}
+
+.tg-table-row:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+/* 列宽度 */
+.col-time {
+    width: 180px;
+}
+
+.col-type {
+    width: 90px;
+}
+
+.col-action {
+    width: 70px;
+}
+
+.col-pid {
+    width: 80px;
+    text-align: center;
+}
+
+.col-text {
+    min-width: 300px;
+    text-align: left;
+}
+
+/* 时间样式 */
+.mono {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* Badge 样式 */
+.badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid;
+}
+
+.action-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* PID 链接 */
+.pid-link {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pid-link:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+}
+
+.pid-link.active {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    font-weight: 700;
+    border-bottom: 2px solid #3b82f6;
+}
+
+/* 文本内容 */
+.text-content {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #94a3b8;
+    word-break: break-all;
+    white-space: normal;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.value-hints {
+    display: flex;
+    gap: 16px;
+    margin-top: 4px;
+    font-size: 10px;
+    color: #475569;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.tg-table-row:hover .value-hints {
+    opacity: 1;
+}
+
+/* 空行 */
+.empty-row {
+    text-align: center;
+    padding: 48px 16px !important;
+}
+
+.empty-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: #64748b;
+}
+
+.empty-message svg {
+    width: 32px;
+    height: 32px;
+    opacity: 0.5;
+}
+
+.clear-filter-btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #3b82f6;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.clear-filter-btn:hover {
+    background: rgba(59, 130, 246, 0.1);
+    text-decoration: underline;
+}
+
+/* ==================== 分页控制 ==================== */
+.tg-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #1e293b;
+    border-top: 1px solid #334155;
+}
+
+.pagination-info {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.pagination-info span {
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    background: #0f172a;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #1e293b;
+    color: #e2e8f0;
+    border-color: #475569;
+}
+
+.page-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.page-indicator {
+    padding: 6px 12px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #e2e8f0;
+}
+
+/* ==================== 按钮样式 ==================== */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #3b82f6;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* ==================== 滚动条样式 ==================== */
+.tg-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.tg-table-wrapper::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+.tg-table-wrapper::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+.tg-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+/* ==================== 响应式适配 ==================== */
+@media (max-width: 1200px) {
+    .tg-stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .tg-toolbar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .tg-search-input {
+        width: 150px;
+    }
+
+    .tg-stats-row {
+        grid-template-columns: 1fr;
+    }
+
+    .tg-galaxy-section {
+        flex: 1;
+        min-height: 200px;
+    }
+}
+
+/* ==================== 亮色主题适配 ==================== */
+[data-theme="light"] .timeline-galaxy-container {
+    --tg-bg-primary: #f8fafc;
+    --tg-bg-secondary: #ffffff;
+    --tg-text-primary: #1e293b;
+    --tg-border-color: #e2e8f0;
+    background: var(--tg-bg-primary);
+    color: var(--tg-text-primary);
+}
+
+[data-theme="light"] .tg-toolbar {
+    background: var(--tg-bg-secondary);
+    border-color: var(--tg-border-color);
+}
+
+[data-theme="light"] .tg-title {
+    background: linear-gradient(135deg, #3b82f6, #10b981);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme="light"] .tg-search-input,
+[data-theme="light"] .tg-select,
+[data-theme="light"] .tg-pid-input,
+[data-theme="light"] .tg-btn {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #334155;
+}
+
+[data-theme="light"] .tg-time-filter {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .tg-datetime-input {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #334155;
+}
+
+[data-theme="light"] .tg-datetime-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.3);
+}
+
+[data-theme="light"] .time-filter-label,
+[data-theme="light"] .time-separator {
+    color: #64748b;
+}
+
+/* 浅色主题图例 */
+[data-theme="light"] .galaxy-legend {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .legend-label {
+    color: #64748b;
+}
+
+[data-theme="light"] .legend-value {
+    color: #1e293b;
+}
+
+/* 浅色主题收缩头部 */
+[data-theme="light"] .tg-table-collapse-header {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .tg-table-collapse-header:hover {
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .collapse-title {
+    color: #334155;
+}
+
+[data-theme="light"] .collapse-icon {
+    color: #475569;
+}
+
+[data-theme="light"] .tg-canvas-wrapper {
+    background: #f1f5f9;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+}
+
+[data-theme="light"] .node-label {
+    fill: #1e293b;
+    text-shadow: 
+        -1px -1px 0 #f8fafc,
+        1px -1px 0 #f8fafc,
+        -1px 1px 0 #f8fafc,
+        1px 1px 0 #f8fafc;
+}
+
+[data-theme="light"] .event-label {
+    fill: #64748b;
+    text-shadow: 
+        -1px -1px 0 #f8fafc,
+        1px -1px 0 #f8fafc,
+        -1px 1px 0 #f8fafc,
+        1px 1px 0 #f8fafc;
+}
+
+[data-theme="light"] .tg-link {
+    stroke-opacity: 0.8;
+}
+
+/* 浅色主题下加重连线颜色 */
+[data-theme="light"] .tg-svg line.tg-link {
+    filter: brightness(0.7) saturate(1.3);
+}
+
+/* 浅色主题详情面板 */
+[data-theme="light"] .tg-detail-panel {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .detail-panel-header {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .detail-panel-header h4 {
+    color: #3b82f6;
+}
+
+[data-theme="light"] .detail-panel-close {
+    color: #64748b;
+}
+
+[data-theme="light"] .detail-panel-close:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+
+[data-theme="light"] .detail-section {
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .detail-section-title {
+    color: #64748b;
+}
+
+[data-theme="light"] .detail-label {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .detail-value {
+    color: #334155;
+}
+
+[data-theme="light"] .detail-value.small {
+    color: #64748b;
+}
+
+[data-theme="light"] .thread-item {
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .thread-item:hover {
+    background: #e2e8f0;
+}
+
+[data-theme="light"] .thread-tid {
+    color: #3b82f6;
+}
+
+[data-theme="light"] .detail-back-btn {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #334155;
+}
+
+[data-theme="light"] .detail-back-btn:hover {
+    background: #e2e8f0;
+}
+
+[data-theme="light"] .tg-table-section {
+    background: #ffffff;
+}
+
+[data-theme="light"] .tg-table th {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+[data-theme="light"] .tg-table td {
+    border-color: #f1f5f9;
+}
+
+[data-theme="light"] .tg-table-row:hover {
+    background: rgba(59, 130, 246, 0.05);
+}
+
+[data-theme="light"] .mono,
+[data-theme="light"] .text-content {
+    color: #475569;
+}
+
+[data-theme="light"] .tg-pagination {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .page-btn,
+[data-theme="light"] .page-indicator {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #334155;
+}
+
+[data-theme="light"] .zoom-btn {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    color: #64748b;
+}
+
+[data-theme="light"] .tg-link-controls {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .link-control-title {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .link-label {
+    color: #64748b;
+}
+
+[data-theme="light"] .tg-tooltip {
+    background: #ffffff;
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .tg-section-header {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+[data-theme="light"] .tg-section-header h3 {
+    color: #3b82f6;
+}
+
+[data-theme="light"] .tg-loading .loading-spinner {
+    border-color: #e2e8f0;
+    border-top-color: #3b82f6;
+}
+
+[data-theme="light"] .tg-loading .loading-text {
+    color: #64748b;
+}
+
+[data-theme="light"] .tg-empty .empty-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .tg-empty .empty-desc {
+    color: #64748b;
+}
+
+[data-theme="light"] .pid-link {
+    color: #475569;
+}
+
+[data-theme="light"] .pid-link:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+[data-theme="light"] .pid-link.active {
+    background: rgba(59, 130, 246, 0.15);
+    color: #2563eb;
+}
+
+[data-theme="light"] .tg-table-wrapper::-webkit-scrollbar-track {
+    background: #f8fafc;
+}
+
+[data-theme="light"] .tg-table-wrapper::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+}
+
+[data-theme="light"] .tg-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ==================== 深色主题适配 ==================== */
+[data-theme="dark"] .timeline-galaxy-container {
+    --tg-bg-primary: #0f172a;
+    --tg-bg-secondary: #1e293b;
+    --tg-text-primary: #e2e8f0;
+    --tg-border-color: #334155;
+    background: var(--tg-bg-primary);
+    color: var(--tg-text-primary);
+}
+
+[data-theme="dark"] .tg-toolbar {
+    background: var(--tg-bg-secondary);
+    border-color: var(--tg-border-color);
+}
+
+[data-theme="dark"] .tg-search-input,
+[data-theme="dark"] .tg-select,
+[data-theme="dark"] .tg-pid-input,
+[data-theme="dark"] .tg-btn {
+    background: rgba(15, 23, 42, 0.5);
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .tg-search-input:focus,
+[data-theme="dark"] .tg-pid-input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* 深色主题图例 */
+[data-theme="dark"] .galaxy-legend {
+    background: rgba(15, 23, 42, 0.9);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .legend-label {
+    color: #64748b;
+}
+
+[data-theme="dark"] .legend-value {
+    color: #f8fafc;
+}
+
+/* 深色主题收缩头部 */
+[data-theme="dark"] .tg-table-collapse-header {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .tg-table-collapse-header:hover {
+    background: #334155;
+}
+
+[data-theme="dark"] .collapse-title {
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .collapse-icon {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tg-canvas-wrapper {
+    background: #020617;
+}
+
+[data-theme="dark"] .tg-table-section {
+    background: #0f172a;
+}
+
+[data-theme="dark"] .tg-table th {
+    background: #1e293b;
+    border-color: #334155;
+    color: #64748b;
+}
+
+[data-theme="dark"] .tg-table td {
+    border-color: #1e293b;
+}
+
+[data-theme="dark"] .mono,
+[data-theme="dark"] .text-content {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tg-pagination {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .page-btn,
+[data-theme="dark"] .page-indicator {
+    background: #0f172a;
+    border-color: #334155;
+    color: #e2e8f0;
+}
+
+[data-theme="dark"] .zoom-btn {
+    background: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tg-link-controls {
+    background: rgba(15, 23, 42, 0.95);
+    border-color: #334155;
+}
+
+[data-theme="dark"] .link-control-title {
+    color: #64748b;
+}
+
+[data-theme="dark"] .link-label {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .tg-tooltip {
+    background: #1e293b;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .tg-section-header {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+
+/* ==================== 樱花主题适配 ==================== */
+[data-theme="sakura"] .timeline-galaxy-container {
+    --tg-bg-primary: #fef9f9;
+    --tg-bg-secondary: #fffefe;
+    --tg-text-primary: #744c4c;
+    --tg-border-color: rgba(255, 183, 197, 0.3);
+    background: var(--tg-bg-primary);
+    color: var(--tg-text-primary);
+}
+
+[data-theme="sakura"] .tg-toolbar {
+    background: var(--tg-bg-secondary);
+    border-color: var(--tg-border-color);
+}
+
+[data-theme="sakura"] .tg-title {
+    background: linear-gradient(135deg, #ff9bb3, #ffb3c1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="sakura"] .tg-title svg {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-subtitle {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-search-input,
+[data-theme="sakura"] .tg-select,
+[data-theme="sakura"] .tg-pid-input,
+[data-theme="sakura"] .tg-btn {
+    background: #fef5f7;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .tg-time-filter {
+    background: #fef5f7;
+    border-color: rgba(255, 183, 197, 0.3);
+}
+
+[data-theme="sakura"] .tg-datetime-input {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .tg-datetime-input:focus {
+    border-color: #ff9bb3;
+    box-shadow: 0 0 0 2px rgba(255, 155, 179, 0.2);
+}
+
+[data-theme="sakura"] .tg-datetime-input::-webkit-calendar-picker-indicator {
+    filter: invert(0.3) sepia(1) saturate(5) hue-rotate(300deg);
+}
+
+[data-theme="sakura"] .time-filter-label,
+[data-theme="sakura"] .time-separator {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-search-input:focus,
+[data-theme="sakura"] .tg-pid-input:focus,
+[data-theme="sakura"] .tg-select:focus {
+    border-color: #ff9bb3;
+    box-shadow: 0 0 0 3px rgba(255, 155, 179, 0.2);
+}
+
+[data-theme="sakura"] .tg-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 183, 197, 0.3), rgba(255, 209, 220, 0.3));
+    color: #c2185b;
+    border-color: #ff9bb3;
+}
+
+/* Sakura 主题图例 */
+[data-theme="sakura"] .galaxy-legend {
+    background: rgba(255, 254, 254, 0.9);
+    border-color: rgba(255, 183, 197, 0.3);
+}
+
+[data-theme="sakura"] .legend-icon.blue {
+    background: rgba(255, 155, 179, 0.15);
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .legend-icon.green {
+    background: rgba(248, 187, 217, 0.2);
+    color: #f8bbd9;
+}
+
+[data-theme="sakura"] .legend-icon.violet {
+    background: rgba(233, 30, 99, 0.15);
+    color: #e91e63;
+}
+
+[data-theme="sakura"] .legend-icon.amber {
+    background: rgba(255, 192, 203, 0.25);
+    color: #ffb6c1;
+}
+
+[data-theme="sakura"] .legend-label {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .legend-value {
+    color: #744c4c;
+}
+
+/* Sakura 主题收缩头部 */
+[data-theme="sakura"] .tg-table-collapse-header {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .tg-table-collapse-header:hover {
+    background: rgba(255, 240, 245, 0.8);
+}
+
+[data-theme="sakura"] .collapse-title {
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .collapse-icon {
+    color: #7d4a54;
+}
+
+[data-theme="sakura"] .tg-section-header {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .tg-section-header h3 {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-section-hint {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-canvas-wrapper {
+    background: #fff0f5;
+    background-image: 
+        radial-gradient(circle at 20% 30%, rgba(255, 155, 179, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(233, 30, 99, 0.05) 0%, transparent 50%);
+}
+
+[data-theme="sakura"] .node-label {
+    fill: #744c4c;
+    text-shadow: 
+        -1px -1px 0 #fff0f5,
+        1px -1px 0 #fff0f5,
+        -1px 1px 0 #fff0f5,
+        1px 1px 0 #fff0f5;
+}
+
+[data-theme="sakura"] .tg-loading .loading-spinner {
+    border-color: rgba(255, 183, 197, 0.3);
+    border-top-color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-loading .loading-text {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-empty .empty-title {
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .tg-empty .empty-desc {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-table-section {
+    background: #fffefe;
+}
+
+[data-theme="sakura"] .tg-table th {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.2);
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .tg-table td {
+    border-color: rgba(255, 183, 197, 0.15);
+}
+
+[data-theme="sakura"] .tg-table-row:hover {
+    background: rgba(255, 183, 197, 0.08);
+}
+
+[data-theme="sakura"] .mono,
+[data-theme="sakura"] .text-content {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .pid-link {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .pid-link:hover {
+    background: rgba(255, 155, 179, 0.15);
+    color: #e91e63;
+}
+
+[data-theme="sakura"] .pid-link.active {
+    background: rgba(255, 155, 179, 0.2);
+    color: #c2185b;
+    border-bottom-color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-pagination {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .pagination-info {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .pagination-info span {
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .page-btn {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .page-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(255, 183, 197, 0.2), rgba(255, 209, 220, 0.2));
+    color: #e91e63;
+    border-color: #ff9bb3;
+}
+
+[data-theme="sakura"] .page-indicator {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .zoom-btn {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .zoom-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 183, 197, 0.2), rgba(255, 209, 220, 0.2));
+    color: #e91e63;
+    border-color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-link-controls {
+    background: rgba(255, 254, 254, 0.95);
+    border-color: rgba(255, 183, 197, 0.3);
+}
+
+[data-theme="sakura"] .link-control-title {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .link-label {
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .link-control-item input[type="checkbox"] {
+    accent-color: #e91e63;
+}
+
+[data-theme="sakura"] .tg-tooltip {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    box-shadow: 0 4px 20px rgba(255, 155, 179, 0.15);
+}
+
+[data-theme="sakura"] .tg-tooltip .tooltip-title {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .tg-tooltip .tooltip-info {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .btn-primary {
+    background: linear-gradient(135deg, #ff9bb3, #ffb3c1);
+    color: #ffffff;
+}
+
+[data-theme="sakura"] .btn-primary:hover {
+    background: linear-gradient(135deg, #ff8aa5, #ffa8b8);
+    box-shadow: 0 4px 12px rgba(255, 155, 179, 0.4);
+}
+
+[data-theme="sakura"] .clear-filter-btn {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .clear-filter-btn:hover {
+    background: rgba(255, 155, 179, 0.1);
+}
+
+[data-theme="sakura"] .tg-table-wrapper::-webkit-scrollbar-track {
+    background: #fef9f9;
+}
+
+[data-theme="sakura"] .tg-table-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(255, 183, 197, 0.4);
+}
+
+[data-theme="sakura"] .tg-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 183, 197, 0.6);
+}
+
+/* Sakura 主题连线颜色加重 */
+[data-theme="sakura"] .tg-link {
+    stroke-opacity: 0.85;
+}
+
+[data-theme="sakura"] .tg-svg line.tg-link {
+    filter: brightness(0.8) saturate(1.2);
+}
+
+/* Sakura 主题详情面板 */
+[data-theme="sakura"] .tg-detail-panel {
+    background: #fffefe;
+    border-color: rgba(255, 183, 197, 0.3);
+    box-shadow: -4px 0 20px rgba(255, 155, 179, 0.15);
+}
+
+[data-theme="sakura"] .detail-panel-header {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .detail-panel-header h4 {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .detail-panel-close {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .detail-panel-close:hover {
+    background: rgba(255, 183, 197, 0.2);
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .detail-section {
+    border-color: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .detail-section-title {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .detail-label {
+    color: #c08490;
+}
+
+[data-theme="sakura"] .detail-value {
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .detail-value.small {
+    color: #a0616d;
+}
+
+[data-theme="sakura"] .thread-item {
+    background: rgba(255, 240, 245, 0.8);
+}
+
+[data-theme="sakura"] .thread-item:hover {
+    background: rgba(255, 183, 197, 0.2);
+}
+
+[data-theme="sakura"] .thread-tid {
+    color: #ff9bb3;
+}
+
+[data-theme="sakura"] .thread-state {
+    color: #e91e63;
+    background: rgba(233, 30, 99, 0.1);
+}
+
+[data-theme="sakura"] .detail-back-btn {
+    background: #fef9f9;
+    border-color: rgba(255, 183, 197, 0.3);
+    color: #744c4c;
+}
+
+[data-theme="sakura"] .detail-back-btn:hover {
+    background: rgba(255, 183, 197, 0.2);
+}

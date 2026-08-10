@@ -1,0 +1,7 @@
+# 排除output文件夹变动导致的刷新
+output/
+src-tauri/target/
+node_modules/
+dist/
+*.log
+*.tmp 

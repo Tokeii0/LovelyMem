@@ -1,0 +1,730 @@
+/* Lovelymem V2 - 加载指示器 + 用户状态 + 进程管理器 + Volatility执行状态 */
+/* 从 modernStyles.css 拆分 (原 L10473-L11288) */
+
+/* ===== 额外的动画效果 ===== */
+
+/* 镜像加载进度指示器 */
+.image-loading-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff8f00, #ffc107, #ffeb3b);
+  animation: progressAdvance 4s ease-in-out infinite;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+@keyframes progressAdvance {
+  0% {
+    width: 0%;
+  }
+
+  25% {
+    width: 30%;
+  }
+
+  50% {
+    width: 60%;
+  }
+
+  75% {
+    width: 85%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+
+
+
+
+/* 工具类 */
+.animate-bounce {
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+
+  40% {
+    transform: translateY(-5px);
+  }
+
+  60% {
+    transform: translateY(-3px);
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-zoom-in {
+  animation: zoomIn 0.3s ease-out;
+}
+
+@keyframes zoomIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+/* 进程管理器样式 */
+.process-manager-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 800px;
+  max-width: 95vw;
+  height: 600px;
+  max-height: 85vh;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-light);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow: hidden;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.process-manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.process-manager-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 16px;
+  letter-spacing: 0.5px;
+}
+
+.process-manager-icon {
+  font-size: 18px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.process-manager-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.refresh-processes-btn,
+.close-process-manager-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.refresh-processes-btn:hover,
+.close-process-manager-btn:hover {
+  background: var(--bg-hover, rgba(255, 255, 255, 0.1));
+  color: var(--text-primary);
+  border-color: var(--border-dark);
+  transform: translateY(-1px);
+}
+
+.refresh-processes-btn:active,
+.close-process-manager-btn:active {
+  transform: translateY(0);
+}
+
+.process-manager-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.process-list-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.process-list-header {
+  display: grid;
+  grid-template-columns: 80px 200px 1fr 100px;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.process-header-item {
+  display: flex;
+  align-items: center;
+}
+
+.process-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* 滚动条样式 */
+.process-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.process-list::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.process-list::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+  border-radius: 4px;
+}
+
+.process-list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.process-item {
+  display: grid;
+  grid-template-columns: 80px 200px 1fr 100px;
+  gap: 16px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background-color 0.2s ease;
+  align-items: center;
+}
+
+.process-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.process-item-content {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+}
+
+.process-pid {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  color: var(--primary-color);
+}
+
+.process-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.process-command {
+  font-family: 'JetBrains Mono', 'Consolas', monospace;
+  font-size: 12px;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kill-process-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  color: var(--error-color);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.kill-process-btn:hover:not(.killing) {
+  background: var(--error-color);
+  color: #fff;
+  border-color: var(--error-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.kill-process-btn:active:not(.killing) {
+  transform: translateY(0);
+}
+
+.kill-process-btn.killing {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--warning-color);
+  color: var(--warning-color);
+  cursor: wait;
+  opacity: 0.8;
+}
+
+.kill-process-btn.killing span:first-child {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.process-loading,
+.no-processes,
+.process-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 60px 20px;
+  color: var(--text-light);
+  font-size: 15px;
+  height: 100%;
+}
+
+.loading-spinner {
+  font-size: 24px;
+  animation: spin 1s linear infinite;
+  color: var(--primary-color);
+}
+
+.error-icon,
+.no-processes-icon {
+  font-size: 32px;
+  opacity: 0.8;
+  margin-bottom: 8px;
+}
+
+.error-details {
+  font-size: 12px;
+  color: var(--error-color);
+  background: rgba(239, 68, 68, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  max-width: 80%;
+  text-align: center;
+  margin-top: 8px;
+}
+
+.retry-btn {
+  margin-top: 16px;
+  padding: 8px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.no-processes-icon,
+.error-icon {
+  font-size: 24px;
+}
+
+.process-error {
+  color: #f56565;
+  flex-direction: column;
+  text-align: center;
+}
+
+.error-details {
+  font-size: 11px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(245, 101, 101, 0.05);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(245, 101, 101, 0.1);
+  font-family: 'Consolas', 'Monaco', monospace;
+  max-width: 600px;
+  word-break: break-word;
+}
+
+.retry-btn {
+  margin-top: 12px;
+  padding: 6px 12px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.retry-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* 进程管理按钮样式 */
+.status-action-btn.process-manager {
+  background: transparent;
+  border-color: rgba(156, 163, 175, 0.3);
+}
+
+.status-action-btn.process-manager:hover {
+  background: rgba(156, 163, 175, 0.1);
+  border-color: rgba(156, 163, 175, 0.5);
+  color: var(--text-primary);
+}
+
+/* Volatility2 执行状态样式 */
+.modern-feature-card.vol2-running {
+  border-color: #3182ce;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(49, 130, 206, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(49, 130, 206, 0.3);
+}
+
+.modern-feature-card.vol2-success {
+  border-color: #38a169;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(56, 161, 105, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(56, 161, 105, 0.3);
+}
+
+.modern-feature-card.vol2-error {
+  border-color: #e53e3e;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(229, 62, 62, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(229, 62, 62, 0.3);
+}
+
+.modern-feature-card.vol2-completed {
+  border-color: #805ad5;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(128, 90, 213, 0.1) 100%);
+  box-shadow: 0 0 15px rgba(128, 90, 213, 0.2);
+  cursor: pointer;
+}
+
+.modern-feature-card.vol2-completed:hover {
+  border-color: #9f7aea;
+  box-shadow: 0 0 25px rgba(128, 90, 213, 0.4);
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Volatility3 执行状态样式 */
+.modern-feature-card.vol3-running {
+  border-color: #4ecdc4;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(78, 205, 196, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+}
+
+.modern-feature-card.vol3-success {
+  border-color: #38a169;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(56, 161, 105, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(56, 161, 105, 0.3);
+}
+
+.modern-feature-card.vol3-error {
+  border-color: #e53e3e;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(229, 62, 62, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(229, 62, 62, 0.3);
+}
+
+.modern-feature-card.vol3-completed {
+  border-color: #4ecdc4;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(78, 205, 196, 0.1) 100%);
+  box-shadow: 0 0 15px rgba(78, 205, 196, 0.2);
+  cursor: pointer;
+}
+
+.modern-feature-card.vol3-completed:hover {
+  border-color: #45b7b8;
+  box-shadow: 0 0 25px rgba(78, 205, 196, 0.4);
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Vol3Linux 执行状态样式 */
+.modern-feature-card.vol3linux-running {
+  border-color: #a29bfe;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(162, 155, 254, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(162, 155, 254, 0.3);
+}
+
+.modern-feature-card.vol3linux-success {
+  border-color: #38a169;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(56, 161, 105, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(56, 161, 105, 0.3);
+}
+
+.modern-feature-card.vol3linux-error {
+  border-color: #e53e3e;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(229, 62, 62, 0.1) 100%);
+  box-shadow: 0 0 20px rgba(229, 62, 62, 0.3);
+}
+
+.modern-feature-card.vol3linux-completed {
+  border-color: #a29bfe;
+  background: linear-gradient(135deg, var(--card-bg) 0%, rgba(162, 155, 254, 0.1) 100%);
+  box-shadow: 0 0 15px rgba(162, 155, 254, 0.2);
+  cursor: pointer;
+}
+
+.modern-feature-card.vol3linux-completed:hover {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 25px rgba(162, 155, 254, 0.4);
+  transform: translateY(-2px) scale(1.01);
+}
+
+/* Volatility2 动画效果 */
+@keyframes vol2-pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vol2-success-bounce {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes vol2-error-shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.pulse-animation {
+  animation: vol2-pulse 1.5s ease-in-out infinite;
+}
+
+.success-animation {
+  animation: vol2-success-bounce 0.6s ease-out;
+}
+
+.error-animation {
+  animation: vol2-error-shake 0.5s ease-in-out;
+}
+
+/* 深色主题下的Volatility2状态 */
+[data-theme="dark"] .modern-feature-card.vol2-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(49, 130, 206, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol2-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol2-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol2-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(128, 90, 213, 0.15) 100%);
+}
+
+/* 深色主题下的Volatility3状态 */
+[data-theme="dark"] .modern-feature-card.vol3-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(78, 205, 196, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(78, 205, 196, 0.15) 100%);
+}
+
+/* 深色主题下的Vol3Linux状态 */
+[data-theme="dark"] .modern-feature-card.vol3linux-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(162, 155, 254, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3linux-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3linux-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.15) 100%);
+}
+
+[data-theme="dark"] .modern-feature-card.vol3linux-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(162, 155, 254, 0.15) 100%);
+}
+
+/* 樱花主题下的Volatility2状态 */
+[data-theme="sakura"] .modern-feature-card.vol2-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(102, 126, 234, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol2-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol2-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol2-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(128, 90, 213, 0.12) 100%);
+}
+
+/* 樱花主题下的Volatility3状态 */
+[data-theme="sakura"] .modern-feature-card.vol3-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(78, 205, 196, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(78, 205, 196, 0.12) 100%);
+}
+
+/* 樱花主题下的Vol3Linux状态 */
+[data-theme="sakura"] .modern-feature-card.vol3linux-running {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(162, 155, 254, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3linux-success {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(56, 161, 105, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3linux-error {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(229, 62, 62, 0.12) 100%);
+}
+
+[data-theme="sakura"] .modern-feature-card.vol3linux-completed {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(162, 155, 254, 0.12) 100%);
+}

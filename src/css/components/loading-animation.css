@@ -1,0 +1,301 @@
+/* Lovelymem V2 - Canvas 3D 虫洞加载动画 */
+/* 粒子系统由 Canvas + requestAnimationFrame 驱动 */
+
+/* ========================================
+   Workspace Loading Container
+   ======================================== */
+
+.workspace-loading-container {
+  background: var(--bg-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Memory Core Loader — Canvas 虫洞
+   ═══════════════════════════════════════════════════════════ */
+
+.memory-core-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Canvas 全屏铺满 */
+.wormhole-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   状态信息卡片 (覆盖在 Canvas 之上)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.mcl-status-card {
+  text-align: center;
+  z-index: 20;
+  width: 420px;
+  max-width: 90vw;
+  background: rgba(var(--primary-rgb), 0.05);
+  border: 1px solid rgba(var(--primary-rgb), 0.12);
+  border-radius: 16px;
+  padding: 24px 28px 20px;
+  backdrop-filter: blur(12px);
+  animation: cardSlideUp 0.8s ease-out 0.3s backwards;
+  margin-top: 60px;
+}
+
+.mcl-status-label {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: var(--primary-color);
+  opacity: 0.5;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.mcl-status-text {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--primary-color);
+  margin-bottom: 18px;
+  min-height: 22px;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* 进度条 */
+.mcl-progress-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(var(--primary-rgb), 0.08);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mcl-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+  border-radius: 2px;
+  animation: progressSlide 1.8s ease-in-out infinite;
+}
+
+.mcl-progress-glow {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 60px;
+  height: 7px;
+  background: radial-gradient(ellipse, rgba(var(--primary-rgb), 0.5) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: progressSlide 1.8s ease-in-out infinite;
+}
+
+/* 数据指标 */
+.mcl-metrics {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-top: 16px;
+}
+
+.mcl-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.mcl-metric-val {
+  font-family: 'Consolas', 'SF Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1;
+  transition: opacity 0.2s;
+}
+
+.mcl-metric-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-top: 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.mcl-metric-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(var(--primary-rgb), 0.12);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   错误状态
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.mcl-error-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  animation: mclFadeIn 0.5s ease-out;
+}
+
+.mcl-error-icon-wrap {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1.5px solid rgba(239, 68, 68, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.mcl-error-icon {
+  width: 32px;
+  height: 32px;
+  color: #ef4444;
+}
+
+.mcl-error-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.mcl-error-message {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  max-width: 400px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.mcl-error-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+  border-radius: 8px;
+  color: var(--primary-color);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mcl-error-retry:hover {
+  background: rgba(var(--primary-rgb), 0.15);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   动画关键帧
+   ═══════════════════════════════════════════════════════════ */
+
+@keyframes mclFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes progressSlide {
+  0% { left: -40%; }
+  100% { left: 100%; }
+}
+
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   底部提示区
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.loader-footer {
+  position: absolute;
+  bottom: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 20;
+  animation: cardSlideUp 0.8s ease-out 0.6s backwards;
+}
+
+.footer-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  background: rgba(var(--primary-rgb), 0.04);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(var(--primary-rgb), 0.08);
+}
+
+.footer-message svg {
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.switch-area-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(var(--primary-rgb), 0.08);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+  color: var(--primary-color);
+  padding: 8px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(4px);
+}
+
+.switch-area-btn:hover {
+  background: rgba(var(--primary-rgb), 0.15);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.15);
+}
+
+.switch-area-btn:active {
+  transform: translateY(0);
+}

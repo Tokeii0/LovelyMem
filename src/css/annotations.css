@@ -1,0 +1,164 @@
+/* ============================================
+   Annotations System Styles
+   ============================================ */
+
+/* 标注标签 */
+.annotation-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.annotation-tag-suspicious {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.annotation-tag-attention {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.annotation-tag-normal {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+/* 带标注的表格行高亮 */
+tr.annotation-row-suspicious {
+  background: rgba(239, 68, 68, 0.04) !important;
+}
+
+tr.annotation-row-attention {
+  background: rgba(245, 158, 11, 0.04) !important;
+}
+
+tr.annotation-row-normal {
+  background: rgba(34, 197, 94, 0.04) !important;
+}
+
+/* 标注弹出框 */
+.annotation-popup {
+  position: fixed;
+  z-index: 99998;
+  width: 280px;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 10px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  animation: annotationFadeIn 0.12s ease-out;
+}
+
+@keyframes annotationFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.annotation-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.annotation-popup-tags {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.annotation-popup-tag-btn {
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  background: transparent;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.annotation-popup-tag-btn:hover {
+  transform: scale(1.05);
+}
+
+.annotation-popup-tag-btn.active {
+  border-color: currentColor;
+  font-weight: 600;
+}
+
+.annotation-popup textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--bg-secondary, #f8fafc);
+  color: var(--text-primary, #1e293b);
+  resize: vertical;
+  outline: none;
+}
+
+.annotation-popup textarea:focus {
+  border-color: var(--accent-color, #6366f1);
+}
+
+.annotation-popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.annotation-popup-btn {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.annotation-popup-btn:hover {
+  background: var(--bg-hover, #f1f5f9);
+}
+
+.annotation-popup-btn-primary {
+  background: var(--accent-color, #6366f1);
+  color: #fff;
+  border-color: var(--accent-color, #6366f1);
+}
+
+.annotation-popup-btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* 标注指示器（行左侧小圆点） */
+.annotation-indicator {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.annotation-indicator-suspicious { background: #ef4444; }
+.annotation-indicator-attention { background: #f59e0b; }
+.annotation-indicator-normal { background: #22c55e; }

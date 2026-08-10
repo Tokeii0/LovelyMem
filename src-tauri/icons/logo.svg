@@ -1,0 +1,35 @@
+<svg width="1024" height="1024" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景 (可选，如需透明背景可删除此元素) -->
+    <!-- <rect width="200" height="200" fill="#1E293B"/> -->
+    
+    <!-- 星星 - 金色 -->
+    <path d="M100 25 L118 68 L165 72 L129 103 L140 148 L100 124 L60 148 L71 103 L35 72 L82 68 Z" 
+          fill="#FBBF24" 
+          stroke="#FBBF24" 
+          stroke-width="12" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+    
+    <!-- 波浪1 - 浅蓝色 -->
+    <path d="M40 145 C 60 135, 80 155, 100 155 C 120 155, 140 135, 160 145" 
+          stroke="#3B82F6" 
+          stroke-width="14" 
+          stroke-linecap="round" 
+          fill="none"/>
+    
+    <!-- 波浪2 - 深蓝色 -->
+    <path d="M40 170 C 60 160, 80 180, 100 180 C 120 180, 140 160, 160 170" 
+          stroke="#2563EB" 
+          stroke-width="14" 
+          stroke-linecap="round" 
+          fill="none"/>
+    
+    <!-- 气泡1 - 大 -->
+    <circle cx="170" cy="50" r="6" fill="#60A5FA"/>
+    
+    <!-- 气泡2 - 中 -->
+    <circle cx="30" cy="100" r="4" fill="#93C5FD"/>
+    
+    <!-- 气泡3 - 小 -->
+    <circle cx="160" cy="110" r="3" fill="#BFDBFE"/>
+</svg>

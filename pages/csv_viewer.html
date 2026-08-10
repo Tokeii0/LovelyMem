@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LovelyForm - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <!-- 组件样式 -->
+    <link rel="stylesheet" href="../src/modules/csv-viewer/styles/csv-viewer.css">
+    <script src="../src/modules/csv-viewer/csv-viewer.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="csv-viewer-app">
+        <!-- 统一标题栏 -->
+        <div class="unified-titlebar">
+            <div class="unified-titlebar-left">
+                <span class="unified-titlebar-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18M3 15h18"/></svg></span>
+                <span class="unified-titlebar-title">LovelyForm</span>
+                <span class="unified-titlebar-subtitle" id="fileInfo">
+                    <span id="fileName">-</span> | <span id="totalRows">0</span> 行
+                </span>
+            </div>
+            <div class="unified-titlebar-right">
+                <button class="unified-titlebar-btn" id="tooltipRulesBtn" title="管理工具提示规则">
+                    <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                </button>
+                <div class="unified-titlebar-separator"></div>
+                <div class="unified-window-controls">
+                    <button class="unified-window-btn minimize-btn" id="minimizeBtn" title="最小化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn maximize-btn" id="maximizeBtn" title="最大化">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </button>
+                    <button class="unified-window-btn close-btn" id="closeBtn" title="关闭">
+                        <svg width="12" height="12" viewBox="0 0 12 12">
+                            <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 文件选择器侧边栏（右侧） -->
+        <div class="csv-file-selector" id="fileSelector">
+            <div class="csv-file-selector-header">
+                <button class="csv-file-selector-close" id="closeFileListBtn" title="收起">
+                    <svg width="16" height="16" viewBox="0 0 16 16">
+                        <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    </svg>
+                </button>
+                <div class="csv-file-selector-title">
+                    <span class="csv-file-selector-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></span>
+                    <span>文件列表</span>
+                </div>
+            </div>
+            <div class="csv-file-selector-search">
+                <input type="text" id="fileSearchInput" placeholder="搜索文件..." class="csv-file-search-input">
+            </div>
+            <div class="csv-file-selector-body" id="fileListContainer">
+                <div class="csv-file-selector-loading">
+                    <div class="csv-file-selector-spinner"></div>
+                    <span>加载文件列表...</span>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 加载状态 -->
+        <div class="csv-loading" id="loadingIndicator">
+            <!-- 背景粒子效果 -->
+            <div class="csv-loading-particles">
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+                <div class="csv-loading-particle"></div>
+            </div>
+
+            <!-- 主加载内容 -->
+            <div class="csv-loading-container">
+                <!-- 多层旋转加载器 -->
+                <div class="csv-loading-spinner-container">
+                    <div class="csv-loading-spinner-outer"></div>
+                    <div class="csv-loading-spinner-middle"></div>
+                    <div class="csv-loading-spinner-inner"></div>
+                    <div class="csv-loading-center-dot"></div>
+                </div>
+
+                <!-- 加载文字和进度 -->
+                <div class="csv-loading-text-container">
+                    <div class="csv-loading-text">
+                        <span class="csv-loading-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18M3 15h18"/></svg></span>
+                        <span class="csv-loading-title">正在加载CSV数据</span>
+                    </div>
+                    <div class="csv-loading-subtext">请稍候，正在解析文件内容</div>
+                    <div class="csv-loading-progress">
+                        <div class="csv-loading-progress-bar">
+                            <div class="csv-loading-progress-fill"></div>
+                        </div>
+                        <div class="csv-loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错误提示 -->
+        <div class="csv-error" id="errorMessage" style="display: none;">
+            <div class="csv-error-container">
+                <div class="csv-error-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="csv-error-text" id="errorText"></div>
+                <div class="csv-error-details">请检查文件格式或重新选择文件</div>
+            </div>
+        </div>
+
+        <!-- CSV数据表格容器 -->
+        <div class="csv-table-container" id="tableContainer" style="display: none;">
+            <div class="csv-data-flow"></div>
+            <div class="csv-table-wrapper">
+                <table class="csv-table" id="csvTable">
+                    <thead class="csv-table-head" id="tableHead">
+                        <!-- 表头将由JavaScript动态生成 -->
+                    </thead>
+                    <tbody class="csv-table-body" id="tableBody">
+                        <!-- 表格内容将由JavaScript动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 分页控件 -->
+        <div class="csv-pagination" id="paginationContainer" style="display: flex;">
+            <!-- 工具栏组 - 移动到分页容器内 -->
+            <div class="csv-toolbar-group">
+                <label for="searchInput" class="csv-label">
+                    搜索:
+                </label>
+                <div class="csv-search-container">
+                    <span class="csv-search-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+                    <input type="text" id="searchInput" class="csv-search-input" placeholder="输入关键词搜索...">
+                </div>
+            </div>
+            <div class="csv-toolbar-group">
+                <label for="rowsPerPage" class="csv-label">
+                    <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span> 每页显示:
+                </label>
+                <select id="rowsPerPage" class="csv-select">
+                    <option value="50">50 行</option>
+                    <option value="100">100 行</option>
+                    <option value="500" selected>500 行</option>
+                    <option value="1000">1000 行</option>
+                    <option value="5000">5000 行</option>
+                    <option value="10000">10000 行</option>
+                    <option value="all">全部显示</option>
+                </select>
+            </div>
+
+            <div class="csv-pagination-info" style="display: none;">
+                显示第 <span id="startRow">1</span> - <span id="endRow">100</span> 行，
+                共 <span id="totalRowsCount">0</span> 行
+            </div>
+            <div class="csv-pagination-controls" style="display: none;">
+                <button class="csv-page-btn" id="firstPageBtn" title="首页"><svg viewBox="0 0 48 48" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v24M36 36L24 24l12-12"/></svg></button>
+                <button class="csv-page-btn" id="prevPageBtn" title="上一页"><svg viewBox="0 0 48 48" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M31 36L19 24l12-12"/></svg></button>
+                <span class="csv-page-info">
+                    第 <span id="currentPage">1</span> 页，共 <span id="totalPages">1</span> 页
+                </span>
+                <button class="csv-page-btn" id="nextPageBtn" title="下一页"><svg viewBox="0 0 48 48" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12l12 12-12 12"/></svg></button>
+                <button class="csv-page-btn" id="lastPageBtn" title="末页"><svg viewBox="0 0 48 48" width="12" height="12" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M36 12v24M12 12l12 12-12 12"/></svg></button>
+            </div>
+
+            <!-- 文件选择器切换按钮（嵌入分页栏右侧） -->
+            <button class="csv-file-selector-toggle-btn" id="toggleFileListBtn" title="文件列表">
+                <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                    <path d="M4 6h12M4 10h12M4 14h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span class="csv-file-selector-toggle-text">文件</span>
+            </button>
+        </div>
+
+        <!-- 右键菜单 -->
+        <div id="contextMenu" class="context-menu" style="display: none;">
+            <!-- 模块统计信息（仅在PID列显示） -->
+            <div id="moduleStatsSection" style="display: none;">
+                <div class="context-menu-group">
+                    <div class="context-menu-group-title" id="moduleStatsTitle"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18M3 15h18"/></svg> 模块统计</div>
+                    <div class="module-stats-container">
+                        <div class="module-stat-item">
+                            <span class="module-stat-label">DLL:</span>
+                            <span class="module-stat-value" id="dllCount">-</span>
+                        </div>
+                        <div class="module-stat-item">
+                            <span class="module-stat-label">SYS:</span>
+                            <span class="module-stat-value" id="sysCount">-</span>
+                        </div>
+                        <div class="module-stat-item">
+                            <span class="module-stat-label" id="otherLabel">其他:</span>
+                            <span class="module-stat-value" id="otherCount">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="context-menu-separator"></div>
+            </div>
+            <div class="context-menu-item" id="copyCell">
+                <span class="context-menu-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/></svg></span>
+                <span>复制单元格</span>
+            </div>
+            <div class="context-menu-separator"></div>
+            <div class="context-menu-item" id="aiAnalyze">
+                <span class="context-menu-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4"/><circle cx="7" cy="14" r="1.5"/><circle cx="17" cy="14" r="1.5"/></svg></span>
+                <span>AI分析此行</span>
+            </div>
+            <div class="context-menu-separator"></div>
+            <div class="context-menu-item" id="filterSameValue">
+                <span class="context-menu-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></span>
+                <span>过滤具有相同值的行</span>
+            </div>
+            <div class="context-menu-item" id="resetFilter">
+                <span class="context-menu-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></span>
+                <span>重置/恢复过滤器</span>
+            </div>
+            <div class="context-menu-separator"></div>
+            <div id="pluginMenuItems">
+                <!-- 插件菜单项将在这里动态生成 -->
+            </div>
+        </div>
+
+        <!-- AI分析模态框 -->
+        <div id="aiAnalysisModal" class="ai-analysis-modal" style="display: none;">
+            <div class="ai-modal-overlay"></div>
+            <div class="ai-modal-content">
+                <div class="ai-modal-header">
+                    <div class="ai-modal-title">
+                        <span class="ai-modal-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M12 8V4"/><circle cx="7" cy="14" r="1.5"/><circle cx="17" cy="14" r="1.5"/></svg></span>
+                        <span>AI 内存分析助手</span>
+                    </div>
+                    <button class="ai-modal-close" id="aiModalClose">✕</button>
+                </div>
+                <div class="ai-modal-body">
+                    <div class="ai-analysis-info">
+                        <div class="ai-info-item">
+                            <span class="ai-info-label">文件:</span>
+                            <span class="ai-info-value" id="aiAnalysisFile">-</span>
+                        </div>
+                        <div class="ai-info-item">
+                            <span class="ai-info-label">分析行:</span>
+                            <span class="ai-info-value" id="aiAnalysisRow">-</span>
+                        </div>
+                    </div>
+                    <div class="ai-messages-container" id="aiMessagesContainer">
+                        <!-- AI对话消息将在这里显示 -->
+                    </div>
+                </div>
+                <div class="ai-modal-footer">
+                    <div class="ai-input-container">
+                        <textarea class="ai-input" id="aiInput" placeholder="继续提问或输入新的分析需求..." rows="2"></textarea>
+                        <button class="ai-send-btn" id="aiSendBtn">
+                            <span>发送</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 行上下文查看模态框 -->
+        <div id="rowContextModal" class="plugin-modal row-context-modal" style="display: none;">
+            <div class="plugin-modal-content row-context-modal-content">
+                <div class="plugin-modal-header">
+                    <h3><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 行上下文查看</h3>
+                    <button class="plugin-modal-close" id="closeRowContextModal">&times;</button>
+                </div>
+                <div class="row-context-controls">
+                    <button class="row-context-btn" id="loadMoreAbove">
+                        <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span> 向上加载10行
+                    </button>
+                    <button class="row-context-btn" id="loadMoreBelow">
+                        <span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></span> 向下加载10行
+                    </button>
+                </div>
+                <div class="plugin-modal-body row-context-modal-body">
+                    <div class="csv-table-wrapper">
+                        <table class="csv-table" id="contextTable">
+                            <thead id="contextTableHead">
+                                <!-- 表头将由JavaScript动态生成 -->
+                            </thead>
+                            <tbody id="contextTableBody">
+                                <!-- 表格内容将由JavaScript动态生成 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

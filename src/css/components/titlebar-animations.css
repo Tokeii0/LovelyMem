@@ -1,0 +1,554 @@
+/* Lovelymem V2 - 标题栏 + 动画定义 + 镜像指示器 */
+/* 从 modernStyles.css 拆分 (原 L437-L988) */
+
+
+
+
+/* 现代化标题栏 */
+.modern-title-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  z-index: 1000;
+  -webkit-app-region: drag;
+  box-shadow: var(--shadow-sm);
+}
+
+.title-bar-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+  min-width: 0;
+  /* 允许flex项目缩小 */
+}
+
+/* 标题栏文本循环播放区域 */
+.title-bar-text-carousel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 20px;
+  min-width: 0;
+  overflow: hidden;
+  -webkit-app-region: drag;
+}
+
+.carousel-text {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.5;
+  transition: opacity 0.3s ease-in-out;
+  letter-spacing: 0.5px;
+  text-shadow:
+    0 0 8px rgba(102, 126, 234, 0.3),
+    0 0 12px rgba(102, 126, 234, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+}
+
+.title-bar-shortcuts {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  /* 右对齐 */
+  margin-right: 16px;
+  flex-shrink: 0;
+  /* 防止压缩 */
+  -webkit-app-region: no-drag;
+}
+
+/* 旧的标题栏搜索区域样式已移除 */
+
+.title-shortcut-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  backdrop-filter: blur(10px);
+  -webkit-app-region: no-drag;
+}
+
+.title-shortcut-btn:hover {
+  background: rgba(102, 126, 234, 0.2);
+  border-color: rgba(102, 126, 234, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.title-shortcut-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 4px rgba(102, 126, 234, 0.3);
+}
+
+.shortcut-icon {
+  font-size: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
+
+.shortcut-text {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+
+
+/* ===== 动画定义 ===== */
+
+/* 基础淡入动画 */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* 高级加载脉冲动画 - 优化版本 */
+@keyframes loadingPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1) saturate(1);
+  }
+
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.1) saturate(1.2);
+  }
+}
+
+/* 渐变色移动动画 */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* 流光效果 */
+@keyframes loadingShimmer {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* 粒子浮动效果 */
+@keyframes particleFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translateY(-3px) rotate(180deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(0px) rotate(360deg);
+    opacity: 0.7;
+  }
+}
+
+/* 增强的完成弹跳动画 */
+@keyframes completedBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  15% {
+    transform: scale(1.1) rotate(2deg);
+  }
+
+  30% {
+    transform: scale(0.95) rotate(-1deg);
+  }
+
+  45% {
+    transform: scale(1.05) rotate(1deg);
+  }
+
+  60% {
+    transform: scale(0.98) rotate(-0.5deg);
+  }
+
+  75% {
+    transform: scale(1.02) rotate(0.3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* 成功时的持续脉冲 */
+@keyframes successPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 6px 25px rgba(76, 175, 80, 0.25);
+  }
+
+  50% {
+    box-shadow: 0 8px 35px rgba(76, 175, 80, 0.4);
+  }
+}
+
+/* 庆祝旋转动画 */
+@keyframes celebrationSpin {
+  0% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* 增强的错误震动动画 */
+@keyframes errorShake {
+
+  0%,
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+
+  10% {
+    transform: translateX(-6px) rotate(-1deg);
+  }
+
+  20% {
+    transform: translateX(6px) rotate(1deg);
+  }
+
+  30% {
+    transform: translateX(-4px) rotate(-0.5deg);
+  }
+
+  40% {
+    transform: translateX(4px) rotate(0.5deg);
+  }
+
+  50% {
+    transform: translateX(-2px) rotate(-0.3deg);
+  }
+
+  60% {
+    transform: translateX(2px) rotate(0.3deg);
+  }
+
+  70% {
+    transform: translateX(-1px) rotate(-0.1deg);
+  }
+
+  80% {
+    transform: translateX(1px) rotate(0.1deg);
+  }
+}
+
+/* 错误时的脉冲效果 */
+@keyframes errorPulse {
+
+  0%,
+  100% {
+    box-shadow: 0 4px 20px rgba(244, 67, 54, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 6px 30px rgba(244, 67, 54, 0.4);
+  }
+}
+
+/* 错误斑马纹动画 */
+@keyframes errorPattern {
+  0% {
+    background-position-x: 0px;
+  }
+
+  100% {
+    background-position-x: 8px;
+  }
+}
+
+/* ===== 镜像信息内容样式 ===== */
+
+.image-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.image-icon {
+  font-size: 14px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+}
+
+
+
+/* 图标动画 */
+@keyframes iconSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  25% {
+    transform: rotate(90deg) scale(1.1);
+  }
+
+  50% {
+    transform: rotate(180deg) scale(1);
+  }
+
+  75% {
+    transform: rotate(270deg) scale(1.1);
+  }
+
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes iconPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes iconBounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+@keyframes iconGlow {
+
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px rgba(76, 175, 80, 0.8));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 20px rgba(76, 175, 80, 1));
+  }
+}
+
+@keyframes iconShake {
+
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  25% {
+    transform: rotate(-5deg);
+  }
+
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes iconFlicker {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.image-text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--primary-color);
+  white-space: nowrap;
+  transition: all 0.4s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  position: relative;
+  line-height: 1.2;
+}
+
+
+
+/* 文本动画 */
+@keyframes textBlink {
+  0% {
+    opacity: 0.8;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes textGlow {
+
+  0%,
+  100% {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  50% {
+    text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+  }
+}
+
+@keyframes textSuccess {
+  0% {
+    transform: scale(1);
+    color: #4caf50;
+  }
+
+  50% {
+    transform: scale(1.05);
+    color: #66bb6a;
+  }
+
+  100% {
+    transform: scale(1);
+    color: #4caf50;
+  }
+}
+
+@keyframes textSuccessGlow {
+
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+  }
+
+  50% {
+    text-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+  }
+}
+
+@keyframes textError {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-2px);
+  }
+
+  75% {
+    transform: translateX(2px);
+  }
+}
+
+@keyframes textErrorFlicker {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.image-size {
+  font-size: 9px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-left: 4px;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+}
+
+
+
+@keyframes progressBar {
+  0% {
+    width: 0%;
+  }
+
+  50% {
+    width: 100%;
+  }
+
+  100% {
+    width: 0%;
+  }
+}
+
+

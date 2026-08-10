@@ -1,0 +1,413 @@
+/* Lovelymem V2 - 垂直导航栏 + 拖拽排序 */
+/* 从 modernStyles.css 拆分 (原 L1-L436) */
+
+/* 现代化样式 - Lovelymem V2 */
+/*
+ * 注意：主题变量、基础样式和动画已移至 src/css/theme/ 目录
+ * - base.css: 基础样式、通用变量、动画定义
+ * - light.css: 浅色主题
+ * - dark.css: 深色主题
+ * - sakura.css: 樱花主题
+ *
+ * 本文件仅包含组件样式
+ */
+
+/* 垂直导航条样式 */
+.vertical-navbar {
+  width: 50px;
+  min-width: 50px;
+  height: 100%;
+  background: var(--bg-secondary);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  z-index: 1000;
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.05);
+  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+}
+
+/* ========== 导航栏展开状态 ========== */
+.vertical-navbar.expanded {
+  width: 160px;
+  min-width: 160px;
+}
+
+/* 二级菜单样式 */
+.vertical-navbar .nav-item .secondary-menu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background: var(--bg-secondary);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 4px 0 8px rgba(0, 0, 0, 0.05);
+  padding: 8px 0;
+  display: none;
+  /* 默认隐藏 */
+  flex-direction: column;
+  min-width: 120px;
+  z-index: 10001;
+  animation: slideOutRight 0.2s ease-out;
+}
+
+.vertical-navbar .nav-item:hover .secondary-menu {
+  display: flex;
+  /* 悬停显示 */
+}
+
+.secondary-menu-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.secondary-menu-item .menu-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.secondary-menu .menu-separator {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  margin: 4px 0;
+}
+
+.secondary-menu-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--primary-color);
+}
+
+@keyframes slideOutRight {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.vertical-navbar .nav-top,
+.vertical-navbar .nav-bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.vertical-navbar .nav-top {
+  flex: 1;
+  min-height: 0;
+  overflow: visible;
+}
+
+.vertical-navbar .nav-top::-webkit-scrollbar {
+  display: none;
+}
+
+.vertical-navbar .nav-bottom {
+  flex-shrink: 0;
+}
+
+/* 移除files导航项的特殊样式，使用默认样式 */
+
+.vertical-navbar .nav-item {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  position: relative;
+  gap: 0;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+/* 展开状态下的导航项 */
+.vertical-navbar.expanded .nav-item {
+  width: calc(100% - 16px);
+  justify-content: flex-start;
+  padding-left: 12px;
+  gap: 10px;
+}
+
+/* 图标容器 */
+.vertical-navbar .nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* 文字标签 - 默认隐藏 */
+.vertical-navbar .nav-label {
+  font-size: 13px;
+  display: none;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* 展开时显示文字标签 */
+.vertical-navbar.expanded .nav-label {
+  display: inline;
+}
+
+.vertical-navbar .nav-item:hover {
+  background: transparent;
+  color: var(--primary-color);
+}
+
+.vertical-navbar .nav-item.active {
+  background: transparent;
+  color: var(--primary-color);
+  box-shadow: none;
+}
+
+.vertical-navbar .nav-item::before {
+  content: '';
+  position: absolute;
+  left: -7px;
+  top: 50%;
+  transform: translateY(-50%) scaleY(0);
+  width: 3px;
+  height: 18px;
+  background-color: var(--primary-color);
+  border-radius: 0 3px 3px 0;
+  transition: transform 0.2s ease;
+}
+
+.vertical-navbar .nav-item.active::before {
+  transform: translateY(-50%) scaleY(1);
+}
+
+.vertical-navbar .nav-item svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* ===== 主导航栏图标分色（以作区分，图标走 currentColor 继承本色） ===== */
+.vertical-navbar .nav-item[data-nav="home"] { color: #6366f1; }            /* 主页 - 靛蓝 */
+.vertical-navbar .nav-item[data-nav="files"] { color: #f59e0b; }           /* 文件 - 琥珀 */
+.vertical-navbar .nav-item[data-nav="process-galaxy"] { color: #a855f7; }  /* 星图 - 紫 */
+.vertical-navbar .nav-item[data-nav="timeline-galaxy"] { color: #ec4899; } /* 星迹 - 粉 */
+.vertical-navbar .nav-item[data-nav="ai-chat"] { color: #06b6d4; }         /* AI助手 - 青 */
+.vertical-navbar .nav-item[data-nav="warnings"] { color: #ef4444; }        /* 告警 - 红 */
+.vertical-navbar .nav-item[data-nav="registry-viewer"] { color: #10b981; } /* 注册表 - 绿 */
+.vertical-navbar .nav-item[data-nav="event-viewer"] { color: #3b82f6; }    /* 事件查看器 - 蓝 */
+.vertical-navbar .nav-item[data-nav="string-search"] { color: #f97316; }   /* 字符串搜索 - 橙 */
+.vertical-navbar .nav-item[data-nav="more-tools"] { color: #64748b; }      /* 更多工具 - 石板灰 */
+.vertical-navbar .nav-item[data-nav="settings"] { color: #94a3b8; }        /* 设置 - 灰 */
+
+/* hover / active 仍走主色高亮，覆盖上面的默认分色（必须放在分色规则之后） */
+.vertical-navbar .nav-item:hover,
+.vertical-navbar .nav-item.active {
+  color: var(--primary-color);
+}
+
+/* ========== 展开/收起切换按钮 ========== */
+.vertical-navbar .nav-toggle {
+  width: 36px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  transition: all 0.2s ease;
+}
+
+.vertical-navbar .nav-toggle:hover {
+  color: var(--primary-color);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.vertical-navbar .nav-toggle svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 展开状态时箭头翻转 */
+.vertical-navbar.expanded .nav-toggle svg {
+  transform: rotate(180deg);
+}
+
+/* 展开状态时切换按钮占满宽度 */
+.vertical-navbar.expanded .nav-toggle {
+  width: calc(100% - 16px);
+}
+
+/* ========== NavBar 拖拽排序样式 ========== */
+
+/* 编辑模式下的导航栏 */
+.vertical-navbar.edit-mode {
+  background: var(--bg-secondary);
+}
+
+.vertical-navbar.edit-mode .nav-top {
+  background: rgba(var(--primary-rgb, 99, 102, 241), 0.05);
+  border-radius: 8px;
+  padding: 8px 4px;
+  margin: 0 2px;
+}
+
+/* iOS 风格抖动动画 */
+@keyframes wobble {
+  0%, 100% {
+    transform: rotate(-1.5deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+.vertical-navbar .nav-item.wobble {
+  animation: wobble 0.15s ease-in-out infinite;
+  cursor: grab;
+}
+
+.vertical-navbar .nav-item.wobble:active {
+  cursor: grabbing;
+}
+
+/* 拖拽中的项目样式 */
+.vertical-navbar .nav-item.dragging {
+  opacity: 0.95;
+  transform: scale(1.1) rotate(2deg);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25),
+              0 0 0 2px var(--primary-color);
+  border-radius: 10px;
+  background: var(--bg-primary);
+  z-index: 10000;
+  animation: none !important;
+}
+
+/* 占位符样式 */
+.nav-item-placeholder {
+  background: rgba(var(--primary-rgb, 99, 102, 241), 0.15);
+  border: 2px dashed var(--primary-color);
+  border-radius: 8px;
+  opacity: 0.6;
+  transition: all 0.2s ease;
+}
+
+/* 拖拽时其他项目的过渡动画 */
+.vertical-navbar.edit-mode .nav-item:not(.dragging) {
+  transition: transform 0.2s ease;
+}
+
+/* 编辑模式提示 */
+.vertical-navbar.edit-mode::after {
+  content: '拖拽排序中';
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+html[lang="en-US"] .vertical-navbar.edit-mode::after {
+  content: 'Reordering';
+}
+
+/* ========== End NavBar 拖拽排序样式 ========== */
+
+/* 调整侧边栏样式以适应新的导航条 */
+.modern-sidebar {
+  border-left: none;
+  /* 移除左边框，因为现在有导航条了 */
+}
+
+/* ========================================
+   组件样式开始
+   ======================================== */
+
+@keyframes brandGlow {
+  0% {
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 165, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+  }
+
+  100% {
+    text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 165, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.6), 0 0 50px rgba(255, 215, 0, 0.4);
+  }
+}
+
+/* 流光溢彩动画 - 优雅的渐变流动 */
+@keyframes brandFlow {
+  0% {
+    background-position: 0% 50%;
+    filter: brightness(1) saturate(1.1);
+  }
+
+  33% {
+    background-position: 100% 50%;
+    filter: brightness(1.05) saturate(1.2);
+  }
+
+  66% {
+    background-position: 200% 50%;
+    filter: brightness(1.1) saturate(1.3);
+  }
+
+  100% {
+    background-position: 300% 50%;
+    filter: brightness(1) saturate(1.1);
+  }
+}
+
+@keyframes areaHeaderGlow {
+  0% {
+    box-shadow: 0 2px 4px rgba(45, 55, 72, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 4px 12px rgba(45, 55, 72, 0.15), 0 0 0 1px rgba(139, 92, 246, 0.1);
+  }
+
+  100% {
+    box-shadow: 0 2px 4px rgba(45, 55, 72, 0.1);
+  }
+}
+
+/* ─── 二级菜单 BETA 标签 ────────────────────────── */
+
+.menu-beta-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.12);
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: auto;
+  line-height: 1.3;
+}

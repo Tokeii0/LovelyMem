@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Timeline - 统一取证时间线</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- D3.js -->
+    <script src="/assets/js/d3.v7.min.js"></script>
+    <!-- 组件样式 -->
+    <link rel="stylesheet" href="../src/modules/super-timeline/styles/super-timeline.css">
+    <script src="../src/modules/super-timeline/super-timeline.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="super-timeline-app">
+        <!-- 标题栏 -->
+        <div class="st-header">
+            <div class="st-title">
+                <span class="st-title-text">Super Timeline</span>
+                <span class="st-subtitle">统一取证时间线</span>
+            </div>
+            <div class="st-stats" id="stStats"></div>
+            <div class="st-controls">
+                <button class="st-control-btn st-minimize-btn" id="minimizeBtn" title="最小化">
+                    <span>&minus;</span>
+                </button>
+                <button class="st-control-btn st-maximize-btn" id="maximizeBtn" title="最大化">
+                    <span>&#x25A1;</span>
+                </button>
+                <button class="st-control-btn st-close-btn" id="closeBtn" title="关闭">
+                    <span>&times;</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 过滤栏 -->
+        <div class="st-filter-bar">
+            <div class="st-filter-group">
+                <label class="st-checkbox"><input type="checkbox" id="filterNtfs" checked><span class="st-source-dot" style="background:#f59e0b"></span>NTFS</label>
+                <label class="st-checkbox"><input type="checkbox" id="filterEvtx" checked><span class="st-source-dot" style="background:#3b82f6"></span>EVTX</label>
+                <label class="st-checkbox"><input type="checkbox" id="filterRegistry" checked><span class="st-source-dot" style="background:#8b5cf6"></span>Registry</label>
+                <label class="st-checkbox"><input type="checkbox" id="filterProcess" checked><span class="st-source-dot" style="background:#10b981"></span>Process</label>
+            </div>
+            <div class="st-filter-group">
+                <select id="filterSeverity" class="st-select">
+                    <option value="0">全部级别</option>
+                    <option value="1">Low+</option>
+                    <option value="2">Medium+</option>
+                    <option value="3">High+</option>
+                    <option value="4">Critical</option>
+                </select>
+            </div>
+            <div class="st-filter-group">
+                <input type="text" id="filterKeyword" class="st-input" placeholder="关键词搜索..." />
+            </div>
+            <div class="st-filter-group st-filter-jump">
+                <input type="date" id="jumpToDate" class="st-input" style="width: 130px;" title="跳转到日期" />
+                <button class="st-btn st-btn-sm" id="btnJumpTo" title="跳转">跳转</button>
+                <button class="st-btn st-btn-sm" id="btnJumpEarliest" title="跳转到最早">最早</button>
+                <button class="st-btn st-btn-sm" id="btnJumpLatest" title="跳转到最晚">最晚</button>
+            </div>
+            <div class="st-filter-group">
+                <button class="st-btn" id="btnToggleDashboard" title="仪表板">仪表板</button>
+                <button class="st-btn" id="btnExport" title="导出">导出</button>
+                <button class="st-btn st-btn-primary" id="btnRefresh" title="刷新数据">重新构建</button>
+            </div>
+        </div>
+
+        <!-- 仪表板概览 -->
+        <div class="st-dashboard" id="stDashboard" style="display: none;">
+            <div class="st-dash-cards" id="stDashCards"></div>
+            <div class="st-dash-charts" id="stDashCharts"></div>
+        </div>
+
+        <!-- 迷你时间条 (辅助，可 brush 选区) -->
+        <div class="st-overview" id="stOverview">
+            <div class="st-overview-header">
+                <span class="st-overview-label">时间范围</span>
+                <button class="st-btn st-btn-sm" id="btnToggleHeatmap">热力图</button>
+            </div>
+            <svg id="svgOverview"></svg>
+            <div class="st-heatmap-container" id="stHeatmap" style="display: none;">
+                <svg id="svgHeatmap"></svg>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="st-content">
+            <!-- 左侧: 事件列表 (主视图) -->
+            <div class="st-event-list" id="stEventList">
+                <div class="st-event-list-header">
+                    <span id="eventListTitle">事件列表</span>
+                    <span id="eventListCount"></span>
+                </div>
+                <div class="st-event-list-body" id="eventListBody">
+                    <div class="st-empty-hint">点击"重新构建"加载数据</div>
+                </div>
+                <div class="st-event-list-footer">
+                    <button class="st-btn st-btn-sm" id="btnPrevPage">上一页</button>
+                    <span id="pageInfo">第 1 页</span>
+                    <button class="st-btn st-btn-sm" id="btnNextPage">下一页</button>
+                </div>
+            </div>
+
+            <!-- 右侧: 异常列表 + 详情面板 -->
+            <div class="st-side-panel" id="stSidePanel">
+                <div class="st-anomaly-section">
+                    <div class="st-section-title">
+                        <span>异常检测</span>
+                        <span class="st-anomaly-summary" id="anomalySummary"></span>
+                    </div>
+                    <div class="st-anomaly-list" id="anomalyList">
+                        <div class="st-empty-hint">构建时间线后显示异常</div>
+                    </div>
+                </div>
+                <div class="st-detail-section" id="stDetailSection" style="display:none;">
+                    <div class="st-section-title">
+                        <span>事件详情</span>
+                        <button class="st-btn st-btn-sm st-copy-detail-btn" id="btnCopyDetail" title="复制详情">复制</button>
+                    </div>
+                    <div class="st-detail-content" id="detailContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 加载遮罩 -->
+        <div class="st-loading" id="stLoading" style="display:none;">
+            <div class="st-loading-content">
+                <div class="st-spinner"></div>
+                <div class="st-loading-text" id="loadingText">正在构建统一时间线...</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

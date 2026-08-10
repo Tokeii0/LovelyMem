@@ -1,0 +1,548 @@
+/**
+ * 内存文件浏览器样式
+ *
+ * 使用主题系统变量，不重复定义主题变量
+ * 参考: src/css/theme/README.md
+ */
+
+/* 主容器 */
+.memory-file-browser {
+  position: fixed;
+  top: 77px; /* 标题栏下方 */
+  left: 0;
+  right: 0;
+  bottom: 32px; /* 状态栏上方 */
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.memory-file-browser.visible {
+  display: flex;
+}
+
+/* 工具栏 */
+.memory-browser-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  min-height: 48px;
+}
+
+.memory-browser-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.memory-browser-title .icon {
+  font-size: 20px;
+}
+
+.memory-browser-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.memory-browser-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.memory-browser-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.memory-browser-btn.primary {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--text-white);
+}
+
+.memory-browser-btn.primary:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 内容区域 */
+.memory-browser-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* NTFS时间线模态对话框 */
+.ntfs-timeline-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.3s ease;
+}
+
+.ntfs-timeline-dialog {
+  background: var(--bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: scaleIn 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.ntfs-timeline-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  color: white;
+}
+
+.ntfs-timeline-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.ntfs-timeline-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius);
+  transition: background 0.2s ease;
+}
+
+.ntfs-timeline-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ntfs-timeline-body {
+  padding: 24px;
+}
+
+.ntfs-timeline-description {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.ntfs-timeline-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ntfs-timeline-option {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ntfs-timeline-option:hover {
+  border-color: var(--primary-color);
+  background: var(--bg-tertiary);
+}
+
+.ntfs-timeline-option-icon {
+  font-size: 24px;
+  margin-right: 16px;
+  min-width: 32px;
+}
+
+.ntfs-timeline-option-content {
+  flex: 1;
+}
+
+.ntfs-timeline-option-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.ntfs-timeline-option-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 文件表格样式 */
+.file-table-container {
+  padding: 16px;
+  height: 100%;
+  overflow: auto;
+}
+
+.file-table-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.file-table-header h3 {
+  margin: 0 0 4px 0;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.file-table-header p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.file-table-wrapper {
+  overflow: auto;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+}
+
+.file-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-primary);
+}
+
+.file-table thead {
+  background: var(--bg-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.file-table th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.file-table th.file-table-icon {
+  width: 40px;
+  text-align: center;
+}
+
+.file-table th.file-table-name {
+  min-width: 200px;
+}
+
+.file-table th.file-table-size {
+  width: 100px;
+  text-align: right;
+}
+
+.file-table th.file-table-type {
+  width: 120px;
+}
+
+.file-table th.file-table-modified {
+  width: 160px;
+}
+
+.file-table-row {
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.file-table-row:hover {
+  background: var(--bg-tertiary);
+}
+
+.file-table-row[data-is-dir="true"]:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.file-table td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+.file-table-icon {
+  text-align: center;
+  font-size: 16px;
+}
+
+.file-table-name {
+  color: var(--text-primary);
+}
+
+.file-table-row[data-is-dir="true"] .file-table-name {
+  font-weight: 500;
+}
+
+.file-name-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  max-width: 300px;
+}
+
+.file-table-size {
+  text-align: right;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.file-table-type {
+  color: var(--text-secondary);
+}
+
+.file-table-modified {
+  color: var(--text-secondary);
+  font-family: monospace;
+  font-size: 13px;
+}
+
+/* 文件树样式 */
+.file-tree-container {
+  padding: 16px;
+  height: 100%;
+  overflow: auto;
+}
+
+.file-tree-header {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.file-tree-header h3 {
+  margin: 0 0 4px 0;
+  color: var(--text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.file-tree-header p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.file-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.file-tree-node {
+  border-radius: var(--radius);
+  transition: background 0.2s ease;
+}
+
+.file-tree-node:hover {
+  background: var(--bg-tertiary);
+}
+
+.file-tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: var(--radius);
+}
+
+.file-tree-expand {
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  min-width: 16px;
+  text-align: center;
+  user-select: none;
+  transition: color 0.2s ease;
+}
+
+.file-tree-expand:hover {
+  color: var(--primary-color);
+}
+
+.file-tree-expand-placeholder {
+  min-width: 16px;
+}
+
+.file-tree-icon {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.file-tree-name {
+  flex: 1;
+  color: var(--text-primary);
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-tree-size {
+  color: var(--text-secondary);
+  font-size: 12px;
+  min-width: 60px;
+  text-align: right;
+}
+
+.file-tree-node[data-is-dir="true"] .file-tree-name {
+  font-weight: 500;
+}
+
+.file-tree-node[data-is-dir="false"]:hover {
+  background: var(--bg-tertiary);
+}
+
+.file-tree-node[data-is-dir="true"]:hover {
+  background: rgba(102, 126, 234, 0.1);
+}
+
+.file-tree-children {
+  margin-left: 16px;
+  border-left: 1px solid var(--border-light);
+  padding-left: 6px;
+}
+
+.file-tree-children .file-tree-node {
+  margin-left: 0;
+}
+
+/* 空状态 */
+.memory-browser-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.memory-browser-empty .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.memory-browser-empty .title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.memory-browser-empty .description {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .memory-browser-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .memory-browser-actions {
+    justify-content: center;
+  }
+
+  .ntfs-timeline-dialog {
+    width: 95%;
+    margin: 20px;
+  }
+
+  .ntfs-timeline-header {
+    padding: 16px 20px;
+  }
+
+  .ntfs-timeline-body {
+    padding: 20px;
+  }
+
+  .file-tree-container {
+    padding: 12px;
+  }
+
+  .file-tree-item {
+    padding: 12px 8px;
+  }
+
+  .file-tree-name {
+    font-size: 13px;
+  }
+
+  .file-tree-size {
+    font-size: 11px;
+    min-width: 50px;
+  }
+}

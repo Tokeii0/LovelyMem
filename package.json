@@ -1,0 +1,29 @@
+{
+  "name": "lovelymem-v2",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "update-monaco": "xcopy \"node_modules\\monaco-editor\\min\\vs\" \"src\\assets\\monaco\\vs\" /E /I /Y"
+  },
+  "dependencies": {
+    "@tauri-apps/plugin-dialog": "^2.6.0",
+    "@tauri-apps/plugin-fs": "^2.4.5",
+    "@tauri-apps/plugin-opener": "^2.5.3",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
+    "idb": "^8.0.3",
+    "lucide": "^1.7.0",
+    "monaco-editor": "^0.44.0"
+  },
+  "devDependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/cli": "^2.10.0",
+    "typescript": "~5.6.3",
+    "vite": "^6.4.1"
+  }
+}

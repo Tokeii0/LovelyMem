@@ -1,0 +1,77 @@
+/* Lovelymem V2 - 深色主题 */
+/* Dark Theme - 优雅深邃的配色方案 */
+
+[data-theme="dark"] {
+  /* ========================================
+     主色调
+     ======================================== */
+  --primary-color: #4f46e5;
+  --primary-rgb: 79, 70, 229;
+  --secondary-color: #7c3aed;
+  --accent-color: #0891b2;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --error-color: #ef4444;
+  --info-color: #3b82f6;
+
+  /* ========================================
+     背景颜色
+     ======================================== */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-dark: #475569;
+  --bg-glass: rgba(0, 0, 0, 0.3);
+
+  /* ========================================
+     文字颜色
+     ======================================== */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-light: #94a3b8;
+  --text-white: #ffffff;
+  --text-muted: #888888;
+
+  /* ========================================
+     边框颜色
+     ======================================== */
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-light: rgba(255, 255, 255, 0.05);
+  --border-dark: rgba(255, 255, 255, 0.2);
+}
+
+/* ========================================
+   深色主题 Body 样式
+   ======================================== */
+
+[data-theme="dark"] body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   系统主题偏好兼容（自动适配系统深色模式）
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --primary-color: #4f46e5;
+    --primary-rgb: 79, 70, 229;
+    --secondary-color: #7c3aed;
+    --accent-color: #0891b2;
+    
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    --bg-dark: #475569;
+    --bg-glass: rgba(0, 0, 0, 0.3);
+    
+    --text-primary: #f1f5f9;
+    --text-secondary: #cbd5e1;
+    --text-light: #94a3b8;
+    --text-white: #ffffff;
+    
+    --border-color: rgba(255, 255, 255, 0.1);
+  }
+}
+

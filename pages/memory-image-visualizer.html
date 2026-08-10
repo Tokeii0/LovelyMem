@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内存图像可视化 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 页面样式 -->
+    <link rel="stylesheet" href="../src/modules/memory-image-visualizer/styles/memory-image-visualizer.css">
+    <script src="../src/modules/memory-image-visualizer/memory-image-visualizer.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="mem-img-app">
+        <!-- Tauri 窗口标题栏 -->
+        <div class="miv-titlebar" data-tauri-drag-region>
+            <div class="miv-title" data-tauri-drag-region>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+                <span>内存图像可视化</span>
+            </div>
+            <div class="miv-window-controls">
+                <button class="miv-window-btn" id="minimizeBtn" title="最小化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="miv-window-btn" id="maximizeBtn" title="最大化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+                </button>
+                <button class="miv-window-btn close" id="closeBtn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 主体由 MemoryImageVisualizer.render() 注入到标题栏之后 -->
+    </div>
+</body>
+</html>

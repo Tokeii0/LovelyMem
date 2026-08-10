@@ -1,0 +1,79 @@
+/* Lovelymem V2 - 浅色主题 */
+/* Light Theme - 清新明亮的配色方案 */
+
+:root,
+[data-theme="light"] {
+  /* ========================================
+     主色调
+     ======================================== */
+  --primary-color: #4299e1;
+  --primary-rgb: 66, 153, 225;
+  --secondary-color: #63b3ed;
+  --accent-color: #81e6d9;
+  --success-color: #48bb78;
+  --warning-color: #ed8936;
+  --error-color: #f56565;
+  --info-color: #4299e1;
+
+  /* ========================================
+     背景颜色
+     ======================================== */
+  --bg-primary: #fafbfc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f4f6f8;
+  --bg-dark: #2d3748;
+  --bg-glass: rgba(255, 255, 255, 0.15);
+
+  /* ========================================
+     文字颜色
+     ======================================== */
+  --text-primary: #2d3748;
+  --text-secondary: #718096;
+  --text-light: #a0aec0;
+  --text-white: #ffffff;
+  --text-muted: #999999;
+
+  /* ========================================
+     边框颜色
+     ======================================== */
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-light: rgba(0, 0, 0, 0.05);
+  --border-dark: rgba(0, 0, 0, 0.2);
+
+  /* ========================================
+     浅色主题专有颜色
+     ======================================== */
+  --light-primary: #4299e1;
+  --light-secondary: #63b3ed;
+  --light-accent: #81e6d9;
+  --light-soft: #e6fffa;
+}
+
+/* ========================================
+   浅色主题 Body 样式
+   ======================================== */
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* ========================================
+   系统主题偏好兼容（自动适配系统浅色模式）
+   ======================================== */
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --bg-primary: #fafbfc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f4f6f8;
+    --bg-dark: #2d3748;
+    --bg-glass: rgba(255, 255, 255, 0.15);
+    
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    --text-light: #a0aec0;
+    --text-white: #ffffff;
+  }
+}
+

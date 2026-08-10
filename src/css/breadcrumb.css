@@ -1,0 +1,58 @@
+/* ============================================
+   Breadcrumb Navigation Styles
+   ============================================ */
+
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 16px;
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  user-select: none;
+  flex-shrink: 0;
+  min-height: 28px;
+}
+
+.breadcrumb-home-icon {
+  display: flex;
+  align-items: center;
+  color: var(--text-tertiary, #94a3b8);
+  margin-right: 2px;
+}
+
+.breadcrumb-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.breadcrumb-clickable {
+  cursor: pointer;
+  color: var(--text-secondary, #64748b);
+}
+
+.breadcrumb-clickable:hover {
+  color: var(--accent-color, #6366f1);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.breadcrumb-current {
+  color: var(--text-primary, #1e293b);
+  font-weight: 500;
+}
+
+.breadcrumb-separator {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-tertiary, #cbd5e1);
+  margin: 0 1px;
+  flex-shrink: 0;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] .breadcrumb-clickable:hover {
+  color: var(--accent-color, #818cf8);
+}

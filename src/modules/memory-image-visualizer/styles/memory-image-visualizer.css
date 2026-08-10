@@ -1,0 +1,197 @@
+/* 内存图像可视化 - 页面样式（套用主项目主题 CSS 变量） */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#mem-img-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---------- 标题栏 ---------- */
+.miv-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 6px 0 14px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  user-select: none;
+}
+.miv-title { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.miv-title svg { color: var(--primary-color); }
+.miv-window-controls { display: flex; gap: 2px; }
+.miv-window-btn {
+  width: 34px; height: 28px; border: none; background: transparent; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; border-radius: 6px;
+  color: var(--text-secondary); transition: background .15s, color .15s;
+}
+.miv-window-btn:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+.miv-window-btn.close:hover { background: var(--error-color); color: #fff; }
+
+/* ---------- 主体 ---------- */
+.miv-main { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+
+/* ---------- 工具栏 ---------- */
+.miv-toolbar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  padding: 8px 14px; border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary); flex-shrink: 0;
+}
+.miv-toolbar .miv-spacer { flex: 1; }
+
+.miv-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 8px; font-size: 13px; cursor: pointer;
+  border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary);
+  transition: background .15s, border-color .15s, opacity .15s;
+}
+.miv-btn:hover:not(:disabled) { border-color: var(--primary-color); }
+.miv-btn:disabled { opacity: .45; cursor: not-allowed; }
+.miv-btn svg { width: 16px; height: 16px; }
+.miv-btn.primary { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+.miv-btn.primary:hover:not(:disabled) { filter: brightness(1.05); }
+.miv-btn.active { background: var(--primary-color); color: #fff; border-color: var(--primary-color); }
+.miv-btn.danger { background: var(--error-color); color: #fff; border-color: var(--error-color); }
+
+/* ---------- 预览舞台 ---------- */
+.miv-stage {
+  flex: 1; min-height: 0; position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: auto; padding: 18px;
+  background:
+    linear-gradient(45deg, var(--bg-tertiary) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--bg-tertiary) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--bg-tertiary) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--bg-tertiary) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+  background-color: var(--bg-primary);
+}
+.miv-preview-wrap { position: relative; display: inline-block; }
+.miv-preview {
+  display: block; max-width: 100%; max-height: 100%;
+  image-rendering: pixelated; user-select: none;
+  border: 3px solid var(--bg-secondary); border-radius: 6px;
+  box-shadow: 0 6px 26px rgba(0,0,0,0.25); cursor: grab;
+}
+.miv-preview.dragging { cursor: grabbing; }
+
+/* 尺寸调节手柄 */
+.miv-resize { position: absolute; background: transparent; }
+.miv-resize-w { top: 0; right: -3px; width: 8px; height: 100%; cursor: ew-resize; }
+.miv-resize-h { bottom: -3px; left: 0; width: 100%; height: 8px; cursor: ns-resize; }
+.miv-resize-wh { bottom: -4px; right: -4px; width: 16px; height: 16px; cursor: nwse-resize; }
+.miv-resize:hover { background: rgba(var(--primary-rgb), 0.35); }
+
+/* 状态/空态 */
+.miv-stage-empty { text-align: center; color: var(--text-secondary); }
+.miv-stage-empty svg { width: 64px; height: 64px; opacity: .35; margin-bottom: 12px; }
+.miv-stage-empty p { margin: 4px 0; }
+
+/* 偏移/状态浮层 */
+.miv-overlay {
+  position: absolute; left: 18px; bottom: 18px; pointer-events: none;
+  display: flex; align-items: center; gap: 12px;
+  padding: 8px 12px; border-radius: 10px;
+  background: rgba(0,0,0,0.78); color: #fff; font-size: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.miv-overlay .k { color: #9ca3af; margin-right: 4px; }
+.miv-overlay .v { font-family: Consolas, monospace; color: #93c5fd; }
+.miv-overlay .badge { padding: 2px 8px; border-radius: 6px; font-size: 11px; }
+.miv-overlay .badge.run { background: rgba(72,187,120,.25); color: #86efac; }
+.miv-overlay .badge.pause { background: rgba(237,137,54,.25); color: #fbbf24; }
+
+/* ---------- 参数面板 ---------- */
+.miv-params {
+  flex-shrink: 0; border-top: 1px solid var(--border-color); background: var(--bg-secondary);
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 12px;
+}
+.miv-sliders { display: flex; flex-direction: column; gap: 9px; width: 100%; }
+.miv-slider-row { display: flex; flex-direction: column; gap: 3px; width: 100%; }
+.miv-slider-row label { font-size: 11px; color: var(--text-secondary); display: flex; justify-content: space-between; align-items: center; }
+.miv-slider-val { color: var(--primary-color); font-family: Consolas, monospace; font-weight: 700; font-size: 12px; }
+.miv-slider-row input[type="range"] { width: 100%; margin: 0; accent-color: var(--primary-color); cursor: pointer; height: 18px; }
+.miv-param-fields { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; }
+.miv-field { display: flex; flex-direction: column; gap: 4px; }
+.miv-field label { font-size: 11px; color: var(--text-secondary); }
+.miv-field input, .miv-field select {
+  height: 32px; padding: 0 8px; font-size: 13px; border-radius: 7px;
+  border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary);
+  outline: none; transition: border-color .15s;
+}
+.miv-field input:focus, .miv-field select:focus { border-color: var(--primary-color); }
+.miv-field input[type="number"] { width: 92px; }
+.miv-field.offset input { width: 150px; }
+
+.miv-warn {
+  width: 100%; margin: 2px 0 0; padding: 8px 12px; border-radius: 8px; font-size: 12px;
+  background: rgba(237,137,54,0.12); border: 1px solid rgba(237,137,54,0.4); color: var(--warning-color);
+}
+
+/* ---------- 弹出层（自动滚动设置 / 熵分析） ---------- */
+.miv-popover {
+  position: absolute; z-index: 50; top: 46px; right: 14px;
+  min-width: 280px; padding: 16px; border-radius: 12px;
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  box-shadow: 0 16px 44px rgba(0,0,0,0.26);
+}
+.miv-popover h4 { margin: 0 0 12px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.miv-popover .row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 12px; color: var(--text-secondary); }
+.miv-popover input[type="range"] { width: 100%; }
+.miv-popover input[type="number"] {
+  width: 72px; height: 30px; padding: 0 6px; border-radius: 6px;
+  border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary);
+}
+
+/* ---------- 熵分析结果模态 ---------- */
+.miv-modal-mask {
+  position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+  background: rgba(0,0,0,0.5); backdrop-filter: blur(2px); padding: 24px;
+}
+.miv-modal {
+  display: flex; flex-direction: column; width: 100%; max-width: 1100px; max-height: 86vh;
+  background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden;
+}
+.miv-modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: var(--primary-color); color: #fff;
+}
+.miv-modal-head h3 { margin: 0; font-size: 16px; display: flex; align-items: center; gap: 8px; }
+.miv-modal-head .sub { font-size: 12px; opacity: .9; margin-top: 4px; }
+.miv-modal-close { background: rgba(255,255,255,.18); border: none; color: #fff; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 16px; }
+.miv-modal-toolbar { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; padding: 12px 20px; border-bottom: 1px solid var(--border-color); background: var(--bg-secondary); font-size: 12px; }
+.miv-modal-body { flex: 1; overflow-y: auto; padding: 18px 20px; background: var(--bg-primary); }
+.miv-entropy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+.miv-entropy-card {
+  border: 2px solid var(--border-color); border-radius: 12px; overflow: hidden; cursor: pointer;
+  background: var(--bg-secondary); transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+.miv-entropy-card:hover { transform: translateY(-3px); border-color: var(--primary-color); box-shadow: 0 10px 26px rgba(0,0,0,0.2); }
+.miv-entropy-card .thumb { width: 100%; height: 150px; object-fit: cover; display: block; background: var(--bg-tertiary); image-rendering: pixelated; }
+.miv-entropy-card .thumb-empty { width: 100%; height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-light); background: var(--bg-tertiary); font-size: 12px; }
+.miv-entropy-card .meta { padding: 10px; }
+.miv-entropy-card .off { font-family: Consolas, monospace; font-size: 12px; font-weight: 700; background: var(--bg-tertiary); border-radius: 6px; padding: 3px 6px; display: inline-block; }
+.miv-entropy-card .row2 { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-secondary); }
+.miv-entropy-card .ent { color: var(--primary-color); font-weight: 700; font-family: Consolas, monospace; }
+.miv-modal-foot { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-top: 1px solid var(--border-color); background: var(--bg-secondary); font-size: 12px; }
+.miv-pager { display: flex; gap: 6px; }
+
+.miv-empty-state { text-align: center; color: var(--text-secondary); padding: 50px 0; }
+
+/* 加载态 */
+.miv-loading { display: inline-block; width: 18px; height: 18px; border: 3px solid var(--border-color); border-top-color: var(--primary-color); border-radius: 50%; animation: miv-spin .8s linear infinite; }
+@keyframes miv-spin { to { transform: rotate(360deg); } }

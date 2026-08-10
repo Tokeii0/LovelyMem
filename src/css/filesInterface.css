@@ -1,0 +1,787 @@
+/* Modern File Explorer Styles */
+
+:root {
+  /* 适配全局主题系统 */
+  --fe-bg: var(--bg-primary);
+  --fe-bg-alt: var(--bg-secondary);
+  --fe-header-bg: var(--bg-tertiary, var(--bg-secondary));
+  --fe-border: var(--border-color);
+  --fe-text: var(--text-primary);
+  --fe-text-muted: var(--text-secondary);
+  
+  /* 交互状态基于主色调自动计算 */
+  --fe-hover: color-mix(in srgb, var(--primary-color), transparent 90%);
+  --fe-selected: color-mix(in srgb, var(--primary-color), transparent 85%);
+  --fe-selected-border: var(--primary-color);
+  --fe-accent: var(--primary-color);
+}
+
+/* 暗色主题已通过全局变量自动适配，无需单独定义 */
+
+.file-explorer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--fe-bg);
+  color: var(--fe-text);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 13px;
+  user-select: none;
+}
+
+/* Toolbar */
+.explorer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: var(--fe-bg);
+  border-bottom: 1px solid var(--fe-border);
+  flex-shrink: 0;
+}
+
+.tool-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--fe-text);
+  transition: all 0.1s;
+}
+
+.tool-btn:hover:not(:disabled) {
+  background: var(--fe-bg-alt);
+  border-color: var(--fe-border);
+}
+
+.tool-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.nav-group {
+  display: flex;
+  gap: 2px;
+}
+
+/* Address Bar */
+.address-bar-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--fe-border);
+  border-radius: 4px;
+  padding: 2px 4px;
+  background: var(--fe-bg);
+  height: 30px;
+  gap: 6px;
+}
+
+.address-bar-container:focus-within {
+  border-color: var(--fe-accent);
+}
+
+.address-icon {
+  opacity: 0.7;
+  padding-left: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breadcrumbs {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.crumb {
+  padding: 2px 6px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  transition: background 0.1s;
+}
+
+.crumb:hover {
+  background: var(--fe-bg-alt);
+  border-color: var(--fe-border);
+}
+
+.crumb-separator {
+  color: var(--fe-text-muted);
+  margin: 0 2px;
+  font-size: 10px;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--fe-border);
+  border-radius: 4px;
+  height: 30px;
+  width: 200px;
+  background: var(--fe-bg);
+  position: relative;
+}
+
+.search-box:focus-within {
+  border-color: var(--fe-accent);
+}
+
+.search-box input {
+  border: none;
+  background: transparent;
+  width: 100%;
+  outline: none;
+  color: var(--fe-text);
+  font-size: 13px;
+  padding: 0 8px 0 8px;
+  height: 100%;
+}
+
+.search-string-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0 8px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fe-text-muted);
+  border-left: 1px solid var(--fe-border);
+  transition: all 0.15s;
+}
+
+.search-string-btn:hover {
+  background: var(--fe-hover);
+  color: var(--fe-accent);
+}
+
+.search-string-btn:active {
+  background: var(--fe-selected);
+}
+
+.search-icon {
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.5;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main Body */
+.explorer-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+}
+
+.file-view-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* File List Header */
+.file-list-header {
+  display: grid;
+  grid-template-columns: minmax(200px, 3fr) 150px 120px 100px;
+  padding: 0 10px;
+  height: 32px;
+  align-items: center;
+  border-bottom: 1px solid var(--fe-border);
+  background: var(--fe-header-bg);
+  font-weight: 500;
+  color: var(--fe-text-muted);
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-right: 1px solid transparent;
+}
+
+.col-header:hover {
+  background: var(--fe-bg-alt);
+}
+
+.col-header:active {
+  background: var(--fe-border);
+}
+
+.sort-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.sort-indicator svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+/* File List Body */
+.file-list-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Crucial for flex scrolling */
+}
+
+.file-row {
+  display: grid;
+  grid-template-columns: minmax(200px, 3fr) 150px 120px 100px;
+  padding: 4px 10px;
+  align-items: center;
+  cursor: default;
+  border: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.file-row:hover {
+  background: var(--fe-hover);
+}
+
+.file-row.selected {
+  background: var(--fe-selected);
+  border-color: var(--fe-selected-border);
+}
+
+.col-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-icon {
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.file-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.col-date, .col-type, .col-size {
+  color: var(--fe-text-muted);
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Status Bar */
+.explorer-statusbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 12px;
+  background: var(--fe-header-bg);
+  border-top: 1px solid var(--fe-border);
+  font-size: 12px;
+  color: var(--fe-text);
+}
+
+.status-left {
+  display: flex;
+  gap: 10px;
+}
+
+.status-separator {
+  color: var(--fe-border);
+}
+
+.status-btn {
+  background: transparent;
+  border: none;
+  color: var(--fe-accent);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+
+.status-btn:hover {
+  background: var(--fe-hover);
+}
+
+/* States */
+.loading-state, .empty-state, .error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--fe-text-muted);
+  gap: 10px;
+  padding: 20px;
+}
+
+.state-icon {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+/* Scrollbar */
+.file-list-body::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.file-list-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.file-list-body::-webkit-scrollbar-thumb {
+  background: var(--fe-border);
+  border-radius: 5px;
+  border: 2px solid var(--fe-bg);
+}
+
+.file-list-body::-webkit-scrollbar-thumb:hover {
+  background: var(--fe-text-muted);
+}
+
+/* Context Menu Styles */
+.file-context-menu {
+  background: var(--fe-bg);
+  border: 1px solid var(--fe-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  padding: 4px 0;
+  font-size: 13px;
+}
+
+.context-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+  gap: 10px;
+}
+
+.context-menu-item:hover:not(.disabled) {
+  background: var(--fe-hover);
+}
+
+.context-menu-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: var(--fe-border);
+  margin: 4px 0;
+}
+
+.menu-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.menu-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.menu-text {
+  flex: 1;
+  white-space: nowrap;
+}
+
+/* ==============================================================
+   文件快速预览面板
+   ============================================================== */
+
+.preview-splitter {
+  width: 4px;
+  flex-shrink: 0;
+  background: var(--fe-border);
+  cursor: col-resize;
+  transition: background 0.15s;
+}
+
+.preview-splitter:hover {
+  background: var(--fe-accent);
+}
+
+.file-preview-panel {
+  width: 480px;
+  min-width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--fe-bg);
+  border-left: 1px solid var(--fe-border);
+  overflow: hidden;
+}
+
+.file-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--fe-border);
+  background: var(--fe-header-bg);
+  flex-shrink: 0;
+  min-height: 36px;
+}
+
+.preview-title {
+  font-weight: 500;
+  color: var(--fe-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.preview-seg-group {
+  display: inline-flex;
+  border: 1px solid var(--fe-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.preview-seg {
+  padding: 3px 10px;
+  font-size: 12px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid var(--fe-border);
+  color: var(--fe-text-muted);
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+}
+
+.preview-seg:last-child {
+  border-right: none;
+}
+
+.preview-seg:hover {
+  background: var(--fe-hover);
+}
+
+.preview-seg.active {
+  background: var(--fe-accent);
+  color: #fff;
+}
+
+.preview-encoding {
+  padding: 3px 6px;
+  font-size: 12px;
+  background: var(--fe-bg);
+  color: var(--fe-text);
+  border: 1px solid var(--fe-border);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.preview-minlen {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--fe-text-muted);
+}
+
+.preview-minlen input {
+  width: 42px;
+  padding: 2px 4px;
+  font-size: 12px;
+  background: var(--fe-bg);
+  color: var(--fe-text);
+  border: 1px solid var(--fe-border);
+  border-radius: 3px;
+}
+
+.preview-info {
+  font-size: 11px;
+  color: var(--fe-text-muted);
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.preview-close {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  color: var(--fe-text-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.preview-close:hover {
+  background: var(--fe-hover);
+  color: var(--fe-text);
+}
+
+.file-preview-body {
+  flex: 1;
+  overflow: auto;
+  min-height: 0;
+  background: var(--fe-bg);
+  /* 允许在预览区选择和复制文字（覆盖 .file-explorer 的 user-select: none） */
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.file-preview-body * {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+/* 预览区自定义右键菜单 */
+.preview-context-menu {
+  position: fixed;
+  min-width: 140px;
+  padding: 4px 0;
+  background: var(--fe-bg);
+  border: 1px solid var(--fe-border);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  z-index: 10001;
+  font-size: 13px;
+  user-select: none;
+}
+
+.preview-context-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  color: var(--fe-text);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.preview-context-menu-item:hover {
+  background: var(--fe-hover);
+}
+
+.preview-context-menu-item.disabled {
+  color: var(--fe-text-muted);
+  cursor: default;
+}
+
+.preview-context-menu-item.disabled:hover {
+  background: transparent;
+}
+
+.preview-context-menu-sep {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--fe-border);
+}
+
+.preview-context-menu-shortcut {
+  margin-left: auto;
+  color: var(--fe-text-muted);
+  font-size: 11px;
+}
+
+.preview-empty,
+.preview-loading,
+.preview-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  color: var(--fe-text-muted);
+  font-size: 13px;
+  padding: 20px;
+  text-align: center;
+}
+
+.preview-empty-icon {
+  opacity: 0.4;
+}
+
+.preview-error {
+  color: #ef4444;
+}
+
+/* CSV 表格预览 */
+.preview-csv-wrap {
+  padding: 6px;
+  overflow: auto;
+}
+
+.preview-csv-table {
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: 'Consolas', 'Menlo', monospace;
+  width: max-content;
+  min-width: 100%;
+}
+
+.preview-csv-table th,
+.preview-csv-table td {
+  border: 1px solid var(--fe-border);
+  padding: 4px 8px;
+  text-align: left;
+  white-space: nowrap;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--fe-text);
+}
+
+.preview-csv-table thead th {
+  background: var(--fe-header-bg);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-weight: 500;
+}
+
+.preview-csv-table tbody tr:hover {
+  background: var(--fe-hover);
+}
+
+.preview-csv-table td.csv-row-num,
+.preview-csv-table th.csv-row-num {
+  color: var(--fe-text-muted);
+  background: var(--fe-bg-alt);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  width: 48px;
+}
+
+/* Hex dump */
+.preview-hex {
+  font-family: 'Consolas', 'Cascadia Mono', 'Menlo', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 8px 10px;
+  color: var(--fe-text);
+  white-space: pre;
+}
+
+.hex-line {
+  display: flex;
+  gap: 12px;
+}
+
+.hex-offset {
+  color: var(--fe-text-muted);
+  flex-shrink: 0;
+}
+
+.hex-bytes {
+  color: var(--fe-text);
+  flex-shrink: 0;
+  letter-spacing: 0;
+}
+
+.hex-ascii {
+  color: var(--fe-accent);
+  flex-shrink: 0;
+  padding-left: 8px;
+  border-left: 1px solid var(--fe-border);
+}
+
+/* Strings 模式 */
+.preview-strings {
+  font-family: 'Consolas', 'Cascadia Mono', 'Menlo', monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  padding: 8px 10px;
+  color: var(--fe-text);
+}
+
+.str-line {
+  display: flex;
+  gap: 12px;
+  padding: 1px 0;
+}
+
+.str-line:hover {
+  background: var(--fe-hover);
+}
+
+.str-offset {
+  color: var(--fe-text-muted);
+  flex-shrink: 0;
+  min-width: 72px;
+}
+
+.str-text {
+  color: var(--fe-text);
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* 滚动条 */
+.file-preview-body::-webkit-scrollbar,
+.preview-csv-wrap::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.file-preview-body::-webkit-scrollbar-track,
+.preview-csv-wrap::-webkit-scrollbar-track {
+  background: var(--fe-bg);
+}
+
+.file-preview-body::-webkit-scrollbar-thumb,
+.preview-csv-wrap::-webkit-scrollbar-thumb {
+  background: var(--fe-border);
+  border-radius: 5px;
+}
+
+.file-preview-body::-webkit-scrollbar-thumb:hover,
+.preview-csv-wrap::-webkit-scrollbar-thumb:hover {
+  background: var(--fe-text-muted);
+}

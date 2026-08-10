@@ -1,0 +1,528 @@
+/* Lovelymem V2 - 终端窗口样式 */
+/* 从 modernStyles.css 拆分 (原 L9947-L10472) */
+
+/* ===== 终端窗口样式 ===== */
+
+.terminal-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  height: 600px;
+  min-width: 600px;
+  min-height: 400px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: terminalFadeIn 0.3s ease-out;
+}
+
+@keyframes terminalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+  .terminal-window {
+    width: 90vw;
+    height: 80vh;
+    min-width: 300px;
+  }
+}
+
+@media (max-height: 700px) {
+  .terminal-window {
+    height: 90vh;
+    min-height: 300px;
+  }
+}
+
+.terminal-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  cursor: move;
+  user-select: none;
+}
+
+.terminal-window-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.terminal-icon {
+  font-size: 16px;
+}
+
+.terminal-window-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.terminal-window-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.terminal-input-section {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+/* 快速路径按钮 */
+.quick-path-buttons {
+  margin-bottom: 16px;
+}
+
+.path-buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.path-buttons-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.path-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.path-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.path-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.2);
+}
+
+.path-btn:active {
+  transform: translateY(0);
+}
+
+.path-icon {
+  font-size: 14px;
+}
+
+.path-label {
+  font-weight: 500;
+}
+
+.path-btn.custom-tool {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.1), rgba(99, 102, 241, 0.1));
+  border-color: rgba(147, 51, 234, 0.3);
+}
+
+.path-btn.custom-tool:hover {
+  background: linear-gradient(135deg, rgba(147, 51, 234, 0.2), rgba(99, 102, 241, 0.2));
+  border-color: #9333ea;
+}
+
+.no-settings,
+.no-paths {
+  padding: 12px;
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 12px;
+}
+
+@media (max-width: 768px) {
+  .path-buttons {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .path-btn {
+    min-width: 60px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+}
+
+.path-selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.path-selector-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.path-selector {
+  padding: 6px 8px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.path-selector:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.terminal-command-section {
+  margin-top: 16px;
+}
+
+.command-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.command-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+.command-input-container:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.command-prompt {
+  color: var(--accent-color);
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 13px;
+  user-select: none;
+}
+
+.command-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  outline: none;
+}
+
+.execute-btn {
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.execute-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.execute-btn:active {
+  transform: translateY(0);
+}
+
+.execute-btn:disabled {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.execute-btn:disabled:hover {
+  background: linear-gradient(135deg, #6b7280, #4b5563);
+  transform: none;
+  box-shadow: none;
+}
+
+
+
+.terminal-output-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.output-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.clear-output-btn,
+.interactive-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  font-size: 14px;
+}
+
+.clear-output-btn:hover,
+.interactive-toggle-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+
+
+/* 控制台样式 */
+.terminal-console {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  overflow: hidden;
+}
+
+.console-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.welcome-message {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.welcome-text {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--accent-color);
+}
+
+.welcome-hint {
+  font-size: 12px;
+  font-style: italic;
+  opacity: 0.8;
+}
+
+.console-line {
+  margin-bottom: 4px;
+  word-wrap: break-word;
+}
+
+.console-line.command {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.console-line.output {
+  color: var(--text-primary);
+}
+
+.console-line.error {
+  color: #ef4444;
+}
+
+.console-line.warning {
+  color: #f59e0b;
+}
+
+.console-line.success {
+  color: #10b981;
+}
+
+.console-line.info {
+  color: #6366f1;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.output-line {
+  display: block;
+}
+
+.console-input-line {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  gap: 8px;
+}
+
+.console-prompt {
+  color: var(--accent-color);
+  font-weight: bold;
+  user-select: none;
+  min-width: 30px;
+}
+
+.console-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  outline: none;
+}
+
+.console-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* 控制台滚动条样式 */
+.console-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.console-content::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+.console-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.console-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .terminal-console {
+    font-size: 12px;
+  }
+
+  .console-input-line {
+    padding: 8px 12px;
+  }
+
+  .console-prompt {
+    min-width: 25px;
+    font-size: 12px;
+  }
+
+  .console-input {
+    font-size: 12px;
+  }
+
+  .command-prompt {
+    font-size: 12px;
+  }
+
+  .command-input {
+    font-size: 12px;
+  }
+}
+
+/* 终端窗口调节大小手柄 */
+.terminal-window-resize-handle-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4px;
+  height: 100%;
+  cursor: ew-resize;
+  background: transparent;
+}
+
+.terminal-window-resize-handle-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  cursor: ns-resize;
+  background: transparent;
+}
+
+.terminal-window-resize-handle-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  cursor: nw-resize;
+  background: transparent;
+}
+
+.terminal-window-resize-handle-right:hover,
+.terminal-window-resize-handle-bottom:hover,
+.terminal-window-resize-handle-corner:hover {
+  background: var(--accent-color);
+  opacity: 0.5;
+}

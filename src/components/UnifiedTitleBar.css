@@ -1,0 +1,269 @@
+/**
+ * 统一标题栏样式
+ * Unified Title Bar Styles
+ * 
+ * 为所有窗口提供统一的标题栏外观和行为
+ * 使用主题系统变量，支持 light、dark、sakura 主题
+ */
+
+/* ==================== 标题栏容器 ==================== */
+.unified-titlebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 45px;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  z-index: 1000;
+  -webkit-app-region: drag;
+  box-shadow: var(--shadow-sm);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* ==================== 左侧内容区 ==================== */
+.unified-titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  -webkit-app-region: drag;
+}
+
+.unified-titlebar-icon {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.unified-titlebar-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.unified-titlebar-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ==================== 中间内容区（可选） ==================== */
+.unified-titlebar-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* ==================== 右侧控制区 ==================== */
+.unified-titlebar-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  -webkit-app-region: no-drag;
+}
+
+/* ==================== 标题栏按钮 ==================== */
+.unified-titlebar-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  -webkit-app-region: no-drag;
+}
+
+.unified-titlebar-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.unified-titlebar-btn:active {
+  transform: translateY(0);
+}
+
+/* ==================== 窗口控制按钮 ==================== */
+.unified-window-controls {
+  display: flex;
+  gap: 4px;
+  margin-left: 8px;
+}
+
+.unified-window-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  -webkit-app-region: no-drag;
+}
+
+.unified-window-btn svg {
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+}
+
+.unified-window-btn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.unified-window-btn.minimize-btn:hover {
+  background: rgba(102, 126, 234, 0.1);
+  color: var(--primary-color);
+}
+
+.unified-window-btn.maximize-btn:hover {
+  background: rgba(52, 211, 153, 0.1);
+  color: var(--success-color);
+}
+
+.unified-window-btn.close-btn:hover {
+  background: var(--error-color);
+  color: var(--text-white);
+}
+
+.unified-window-btn:active {
+  transform: scale(0.95);
+}
+
+/* ==================== 标题栏徽章/标签 ==================== */
+.unified-titlebar-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+.unified-titlebar-badge.primary {
+  background: var(--primary-color);
+  color: var(--text-white);
+}
+
+.unified-titlebar-badge.success {
+  background: var(--success-color);
+  color: var(--text-white);
+}
+
+.unified-titlebar-badge.warning {
+  background: var(--warning-color);
+  color: var(--text-white);
+}
+
+.unified-titlebar-badge.error {
+  background: var(--error-color);
+  color: var(--text-white);
+}
+
+/* ==================== 主题特定样式 ==================== */
+[data-theme="dark"] .unified-titlebar {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-dark) 100%);
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="sakura"] .unified-titlebar {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(255, 183, 197, 0.1) 100%);
+}
+
+/* ==================== 响应式调整 ==================== */
+@media (max-width: 768px) {
+  .unified-titlebar {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .unified-titlebar-title {
+    font-size: 13px;
+  }
+
+  .unified-titlebar-subtitle {
+    display: none;
+  }
+
+  .unified-titlebar-btn,
+  .unified-window-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+/* ==================== 平台特定调整 ==================== */
+/* macOS 原生标题栏模式 */
+.platform-macos.native-titlebar .unified-titlebar {
+  display: none !important;
+}
+
+/* Windows/Linux 自定义标题栏模式 */
+.platform-windows .unified-titlebar,
+.platform-linux .unified-titlebar {
+  display: flex;
+}
+
+/* ==================== 动画效果 ==================== */
+@keyframes titlebar-slide-down {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.unified-titlebar {
+  animation: titlebar-slide-down 0.3s ease-out;
+}
+
+/* ==================== 辅助类 ==================== */
+.unified-titlebar-separator {
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  margin: 0 8px;
+}
+
+.unified-titlebar-spacer {
+  flex: 1;
+}
+

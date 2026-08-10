@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "rules": [
+    {
+      "id": "builtin-timeline-cred-keywords",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "high",
+      "title": "时间线中出现口令/凭据关键词",
+      "summary": "timeline_ntfs.csv 中出现 password / secret / token 等敏感关键词，可能涉及明文凭据或敏感文档。",
+      "details": "命中行通常是文件名或路径包含敏感词，建议结合上下文确认是否为凭据明文、配置文件或敏感文档。",
+      "category": "敏感关键词",
+      "quick_filter": "password",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)(password|passwd|secret|credential|api[_-]?key|token)" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-timeline-cred-files",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "high",
+      "title": "时间线中出现凭据/密钥文件",
+      "summary": "timeline_ntfs.csv 中出现 id_rsa / .kdbx / .pfx / ntds.dit / lsass dump 等凭据或密钥类文件。",
+      "details": "这类文件往往是凭据窃取或横向移动的目标，建议核实其来源、访问时间与所在路径。",
+      "category": "敏感关键词",
+      "quick_filter": "id_rsa",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)(id_rsa|\\.kdbx?|\\.pfx|\\.pem|\\.ppk|unattend\\.xml|sysprep\\.xml|ntds\\.dit|lsass.*\\.dmp|\\.ovpn|\\.rdp)" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-anomaly-exec-in-temp",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "high",
+      "title": "临时/可写目录下的可执行文件",
+      "summary": "在 Temp / AppData\\Local\\Temp / Downloads / 回收站 / ProgramData 等目录下出现可执行体（exe/dll/脚本）。",
+      "details": "常见的恶意落地点。建议关注文件名、落地时间与同时间窗内的其他活动。",
+      "category": "异常文件",
+      "quick_filter": "Temp",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\\\(Temp|Windows\\\\Temp|AppData\\\\Local\\\\Temp|Downloads|\\$Recycle\\.Bin|Users\\\\Public|ProgramData|Windows\\\\Tasks)\\\\[^\\\\]*\\.(exe|dll|scr|com|pif|bat|cmd|ps1|vbs|js|jse|wsf|hta)\\b" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-anomaly-double-ext",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "high",
+      "title": "双扩展名伪装文件",
+      "summary": "文件名形如 invoice.pdf.exe / photo.jpg.scr，利用双扩展名伪装成文档或图片。",
+      "details": "强信号的钓鱼/伪装样本特征，建议优先排查。",
+      "category": "异常文件",
+      "quick_filter": ".exe",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\.(jpg|jpeg|png|gif|pdf|docx?|xlsx?|pptx?|txt|rtf)\\.(exe|scr|com|pif|bat|cmd|vbs|js|jse|hta|lnk)\\b" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-anomaly-startup",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "high",
+      "title": "启动目录下的可疑文件",
+      "summary": "用户/公共启动目录（Start Menu\\Programs\\Startup）下出现 exe/dll/脚本/快捷方式，疑似自启动持久化。",
+      "details": "启动目录落地是常见的持久化手法，建议核实该文件用途与来源。",
+      "category": "异常文件",
+      "quick_filter": "Startup",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\\\Start Menu\\\\Programs\\\\Startup\\\\.+\\.(exe|dll|lnk|vbs|js|bat|cmd|ps1|scr)\\b" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-anomaly-sysdir-exec",
+      "enabled": true,
+      "file": "timeline_ntfs.csv",
+      "severity": "medium",
+      "title": "系统非常规目录下的可执行体",
+      "summary": "在 Windows\\Fonts / Help / addins / Cursors / Media 等通常不含可执行文件的系统目录下出现 exe/dll。",
+      "details": "攻击者常借助这些'看似正常'的系统目录隐藏载荷，建议核实文件签名与来源。",
+      "category": "异常文件",
+      "quick_filter": "Fonts",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\\\Windows\\\\(Fonts|Help|addins|Cursors|Media|debug|repair)\\\\[^\\\\]*\\.(exe|dll)\\b" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-proc-hacktool-name",
+      "enabled": true,
+      "file": "process.csv",
+      "severity": "critical",
+      "title": "可疑黑客工具进程名",
+      "summary": "进程名匹配 mimikatz / psexec / cobaltstrike / secretsdump 等已知攻击工具特征。",
+      "details": "高置信度的攻击工具落地信号，建议立即结合命令行、父进程与时间线深入研判。",
+      "category": "可疑进程",
+      "quick_filter": "mimikatz",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)(mimikatz|psexec|wmiexec|smbexec|atexec|dcomexec|procdump|cobaltstrike|beacon|meterpreter|\\bncat\\b|nc\\.exe|powercat|rubeus|sharphound|bloodhound|lazagne|secretsdump|gsecdump|wce\\.exe|fgdump|pwdump)" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-proc-susp-cmdline",
+      "enabled": true,
+      "file": "process.csv",
+      "severity": "high",
+      "title": "可疑命令行参数",
+      "summary": "命令行包含 -enc / -nop / -w hidden / DownloadString / FromBase64String / certutil -urlcache 等常见恶意特征。",
+      "details": "常见于无文件攻击、下载执行与编码混淆，建议解码并还原完整命令行。",
+      "category": "可疑进程",
+      "quick_filter": "-enc",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)(-enc(odedcommand)?\\s|-nop\\b|-noni\\b|-w\\s*hidden|-windowstyle\\s*hidden|downloadstring|downloadfile|frombase64string|\\biex\\b|invoke-expression|invoke-webrequest|\\bcertutil\\b.*(-urlcache|-decode)|bitsadmin\\s*/transfer|regsvr32\\s*/i:|mshta\\s+(http|javascript:))" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-proc-lolbin-abuse",
+      "enabled": true,
+      "file": "process.csv",
+      "severity": "high",
+      "title": "LOLBin 可疑调用",
+      "summary": "rundll32 / regsvr32 / mshta / wscript 等系统自带程序携带 http、\\temp\\、.hta、javascript: 等可疑参数。",
+      "details": "利用系统自带二进制（LOLBins）执行远程或临时载荷，建议核实调用上下文。",
+      "category": "可疑进程",
+      "quick_filter": "rundll32",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\b(rundll32|regsvr32|mshta|wscript|cscript|installutil|msbuild|regasm|regsvcs|cmstp)\\b.*(http|\\\\temp\\\\|\\\\appdata\\\\|\\.hta|javascript:|scrobj)" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-net-susp-ports",
+      "enabled": true,
+      "file": "netscan.csv",
+      "severity": "medium",
+      "title": "可疑外连端口（常见 C2/远控）",
+      "summary": "网络连接出现 4444 / 1337 / 31337 / 9001 / 8443 等常见 C2、Metasploit、Tor 端口。",
+      "details": "端口本身不等于恶意，建议结合外连地址、进程与连接状态综合判断。",
+      "category": "可疑网络",
+      "quick_filter": ":4444",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i):(4444|1337|31337|5555|6666|6667|9001|8443|12345|54321|1080|9050)\\b" }
+        ]
+      }
+    },
+    {
+      "id": "builtin-persist-registry-run",
+      "enabled": true,
+      "file": "autoruns.csv",
+      "severity": "high",
+      "title": "常见持久化注册表路径",
+      "summary": "出现 CurrentVersion\\Run、Winlogon、Image File Execution Options、AppInit_DLLs 等典型自启动/劫持位置。",
+      "details": "若无 autoruns.csv 则该规则不触发。命中后建议核实对应键值指向的程序。",
+      "category": "持久化",
+      "quick_filter": "CurrentVersion",
+      "kind": {
+        "type": "CsvAnyMatch",
+        "matches": [
+          { "column": "*", "regex": "(?i)\\\\(CurrentVersion\\\\Run(Once|Services|ServicesOnce)?|Winlogon\\\\(Shell|Userinit|Notify)|Image File Execution Options|AppInit_DLLs|AppCertDlls|Policies\\\\Explorer\\\\Run|Active Setup\\\\Installed Components)\\b" }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,4246 @@
+/* CSV浏览器主样式文件 - 同步主窗口样式 */
+/* 主题变量已移至 src/css/theme/ 目录 */
+
+/* 全局重置和基础样式 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+    border: none;
+    outline: none;
+    /* 避免初始白屏，显示背景色 */
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* 关键帧动画 - 同步主窗口 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}
+
+/* 新的选中动画，避免使用 scale 防止触发滚动条 */
+@keyframes selectedPulse {
+    0%, 100% {
+        opacity: 1;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2),
+                    0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        opacity: 0.9;
+        box-shadow: 0 0 0 6px rgba(102, 126, 234, 0.4),
+                    0 6px 16px rgba(102, 126, 234, 0.5);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes brandGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(102, 126, 234, 0.6);
+    }
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes loadingPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes particleFloat {
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+    }
+    25% {
+        transform: translateY(-10px) rotate(90deg);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-5px) rotate(180deg);
+        opacity: 0.8;
+    }
+    75% {
+        transform: translateY(-15px) rotate(270deg);
+        opacity: 0.9;
+    }
+}
+
+/* 新的加载动画关键帧 */
+@keyframes spinClockwise {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spinCounterClockwise {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes centerPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
+}
+
+@keyframes breathingGlow {
+    0%, 100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes textSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes iconBounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-8px);
+    }
+    60% {
+        transform: translateY(-4px);
+    }
+}
+
+@keyframes textShimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes progressFlow {
+    0% {
+        width: 0%;
+        background-position: -200% 0;
+    }
+    50% {
+        width: 70%;
+        background-position: 0% 0;
+    }
+    100% {
+        width: 100%;
+        background-position: 200% 0;
+    }
+}
+
+@keyframes dotBounce {
+    0%, 80%, 100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+@keyframes enhancedParticleFloat {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg) scale(1);
+        opacity: 0.4;
+    }
+    25% {
+        transform: translateY(-30px) translateX(10px) rotate(90deg) scale(1.1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-20px) translateX(-5px) rotate(180deg) scale(0.9);
+        opacity: 0.6;
+    }
+    75% {
+        transform: translateY(-25px) translateX(15px) rotate(270deg) scale(1.2);
+        opacity: 0.9;
+    }
+}
+
+@keyframes dataFlow {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* 呼吸动画效果 */
+@keyframes breathe {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
+        transform: scale(1.02);
+    }
+}
+
+/* 樱花主题呼吸动画 */
+@keyframes breatheSakura {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(255, 107, 157, 0);
+        transform: scale(1.02);
+    }
+}
+
+/* 主容器样式 - 去掉边距，参考主界面 */
+#csv-viewer-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--bg-primary);
+    margin: 0;
+    overflow: hidden;
+    animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* 为固定定位的统一标题栏留出空间 */
+    padding-top: 45px;
+}
+
+/* 标题栏样式 - 完全参考主界面modern-title-bar */
+.csv-viewer-header {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 45px;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    -webkit-app-region: drag;
+    box-shadow: var(--shadow-light);
+    color: var(--text-primary);
+    user-select: none;
+    gap: 16px;
+}
+
+.csv-viewer-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    animation: slideInLeft 0.5s ease-out;
+    flex: 1;
+    min-width: 0;
+}
+
+.csv-header-tools {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    -webkit-app-region: no-drag;
+    animation: slideInRight 0.5s ease-out;
+}
+
+.csv-header-tools .csv-toolbar-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    height: 28px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    backdrop-filter: blur(10px);
+    transition: all 0.2s ease;
+}
+
+.csv-header-tools .csv-toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.csv-header-tools .csv-btn-icon {
+    font-size: 14px;
+}
+
+.csv-header-tools .csv-btn-text {
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.csv-viewer-title .csv-file-info {
+    margin-left: 20px;
+    font-size: 13px;
+    font-weight: 400;
+    opacity: 0.8;
+    color: var(--text-secondary);
+    background: rgba(0, 0, 0, 0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.csv-viewer-icon {
+    font-size: 22px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* 命令执行加载动画样式 */
+.csv-command-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary-color);
+    font-weight: 600;
+    animation: commandLoadingPulse 2s ease-in-out infinite;
+    padding: 4px 8px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    transition: all 0.3s ease;
+}
+
+.csv-command-loading:hover {
+    background: rgba(102, 126, 234, 0.15);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.csv-command-loading-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--primary-color);
+    border-right: 2px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    animation: csv-spin 1s linear infinite;
+    flex-shrink: 0;
+}
+
+.csv-command-loading-text {
+    font-size: 14px;
+    color: var(--primary-color);
+    animation: commandTextPulse 1.5s ease-in-out infinite;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+/* 命令加载动画关键帧 */
+@keyframes commandLoadingPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.9;
+        transform: scale(1.01);
+    }
+}
+
+@keyframes commandTextPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+@keyframes csv-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 深色主题支持 */
+[data-theme="dark"] .csv-command-loading {
+    background: rgba(102, 126, 234, 0.15);
+    border-color: rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .csv-command-loading:hover {
+    background: rgba(102, 126, 234, 0.2);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+}
+
+/* 樱花主题支持 */
+[data-theme="sakura"] .csv-command-loading {
+    background: rgba(255, 107, 157, 0.1);
+    border-color: rgba(255, 107, 157, 0.2);
+    color: #ff6b9d;
+}
+
+[data-theme="sakura"] .csv-command-loading-spinner {
+    border-top-color: #ff6b9d;
+    border-right-color: rgba(255, 107, 157, 0.3);
+}
+
+[data-theme="sakura"] .csv-command-loading-text {
+    color: #ff6b9d;
+}
+
+[data-theme="sakura"] .csv-command-loading:hover {
+    background: rgba(255, 107, 157, 0.15);
+    box-shadow: 0 2px 8px rgba(255, 107, 157, 0.2);
+}
+
+.csv-viewer-controls {
+    display: flex;
+    gap: 6px;
+    -webkit-app-region: no-drag;
+    animation: slideInRight 0.5s ease-out;
+}
+
+.csv-control-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast) ease;
+    font-size: 14px;
+    -webkit-app-region: no-drag;
+}
+
+.csv-control-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: scale(1.05);
+}
+
+.csv-control-btn:active {
+    transform: scale(0.95);
+}
+
+.csv-minimize-btn:hover {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ff6b00;
+}
+
+.csv-maximize-btn:hover {
+    background: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.csv-close-btn:hover {
+    background: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+}
+
+
+
+
+
+
+
+.csv-search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index: 10000;
+    flex: 1;
+}
+
+.csv-search-input {
+    padding: 10px 16px 10px 40px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 14px;
+    min-width: 240px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all var(--transition-normal) ease;
+    box-shadow: var(--shadow-light);
+}
+
+.csv-search-input:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+    transform: translateY(-1px);
+}
+
+.csv-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 16px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.csv-select {
+    padding: 10px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 14px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    min-width: 100px;
+    cursor: pointer;
+    transition: all var(--transition-normal) ease;
+    box-shadow: var(--shadow-light);
+}
+
+.csv-select:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+.csv-select:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+}
+
+.csv-file-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    padding: 8px 16px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    animation: fadeIn 0.5s ease-out 0.4s both;
+}
+
+/* 加载状态样式 - 现代化高级动画 */
+.csv-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    text-align: center;
+    flex: 1;
+    background: var(--bg-primary);
+    position: relative;
+    overflow: hidden;
+    min-height: 400px;
+}
+
+.csv-loading::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%,
+        rgba(102, 126, 234, 0.08) 0%,
+        transparent 70%);
+    animation: breathingGlow 3s ease-in-out infinite;
+}
+
+.csv-loading-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+}
+
+/* 多层旋转加载器 */
+.csv-loading-spinner-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.csv-loading-spinner-outer {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border: 3px solid transparent;
+    border-top: 3px solid var(--primary-color);
+    border-right: 3px solid rgba(102, 126, 234, 0.3);
+    border-radius: 50%;
+    animation: spinClockwise 2s linear infinite;
+}
+
+.csv-loading-spinner-middle {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    border: 3px solid transparent;
+    border-bottom: 3px solid var(--secondary-color);
+    border-left: 3px solid rgba(255, 107, 157, 0.4);
+    border-radius: 50%;
+    animation: spinCounterClockwise 1.5s linear infinite;
+}
+
+.csv-loading-spinner-inner {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spinClockwise 1s linear infinite;
+}
+
+.csv-loading-center-dot {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    animation: centerPulse 2s ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
+}
+
+/* 文字容器 */
+.csv-loading-text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.csv-loading-text {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--text-primary);
+    animation: textSlideIn 0.8s ease-out 0.3s both;
+}
+
+.csv-loading-icon {
+    font-size: 24px;
+    animation: iconBounce 2s ease-in-out infinite;
+}
+
+.csv-loading-title {
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: textShimmer 3s ease-in-out infinite;
+}
+
+.csv-loading-subtext {
+    font-size: 14px;
+    color: var(--text-secondary);
+    animation: textSlideIn 0.8s ease-out 0.5s both;
+    opacity: 0.8;
+}
+
+/* 进度指示器 */
+.csv-loading-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 200px;
+    animation: fadeIn 0.8s ease-out 0.7s both;
+}
+
+.csv-loading-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(102, 126, 234, 0.2);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.csv-loading-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg,
+        var(--primary-color) 0%,
+        var(--secondary-color) 50%,
+        var(--primary-color) 100%);
+    background-size: 200% 100%;
+    border-radius: 2px;
+    animation: progressFlow 2s ease-in-out infinite;
+    width: 0%;
+}
+
+.csv-loading-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.csv-loading-dots span {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    animation: dotBounce 1.4s ease-in-out infinite;
+}
+
+.csv-loading-dots span:nth-child(1) { animation-delay: 0s; }
+.csv-loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.csv-loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+/* 背景粒子效果 */
+.csv-loading-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.csv-loading-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: enhancedParticleFloat 4s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+}
+
+.csv-loading-particle:nth-child(1) { top: 15%; left: 10%; animation-delay: 0s; }
+.csv-loading-particle:nth-child(2) { top: 25%; left: 85%; animation-delay: 0.5s; }
+.csv-loading-particle:nth-child(3) { top: 45%; left: 15%; animation-delay: 1s; }
+.csv-loading-particle:nth-child(4) { top: 65%; left: 80%; animation-delay: 1.5s; }
+.csv-loading-particle:nth-child(5) { top: 75%; left: 20%; animation-delay: 2s; }
+.csv-loading-particle:nth-child(6) { top: 35%; left: 70%; animation-delay: 2.5s; }
+.csv-loading-particle:nth-child(7) { top: 55%; left: 40%; animation-delay: 3s; }
+.csv-loading-particle:nth-child(8) { top: 85%; left: 60%; animation-delay: 3.5s; }
+
+/* 错误提示样式 - 增强版 */
+.csv-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    text-align: center;
+    flex: 1;
+    background: var(--bg-primary);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.csv-error-container {
+    max-width: 400px;
+    padding: 32px;
+    background: rgba(220, 53, 69, 0.1);
+    border: 2px solid rgba(220, 53, 69, 0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.csv-error-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    color: var(--error-color);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.csv-error-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--error-color);
+    margin-bottom: 8px;
+}
+
+.csv-error-details {
+    font-size: 14px;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* 表格容器样式 - 现代化 */
+.csv-table-container {
+    flex: 1;
+    overflow: hidden;
+    margin: 8px 12px 12px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    animation: fadeIn 0.5s ease-out 0.3s both;
+    position: relative;
+    box-shadow: var(--shadow-light);
+}
+
+.csv-table-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+    z-index: 2;
+}
+
+.csv-table-wrapper {
+    height: 100%;
+    overflow: auto;
+    scroll-behavior: smooth;
+    border-radius: 8px;
+    /* 优化滚动性能 */
+    will-change: scroll-position;
+    /* 确保滚动条始终可见和可交互 */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--bg-tertiary);
+    /* 防止内容被滚动条遮挡，但不影响布局 */
+    box-sizing: border-box;
+    /* 防止子元素的动画效果影响滚动条 */
+    contain: layout style;
+    /* 确保滚动条稳定性 */
+    overflow-anchor: none;
+}
+
+/* 表格样式 - 现代化设计 */
+.csv-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    background: var(--bg-primary);
+}
+
+.csv-table-head {
+    background: var(--bg-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.csv-table th {
+    text-align: left;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all var(--transition-normal) ease;
+    position: relative;
+    background: var(--bg-secondary);
+}
+
+.csv-table th:last-child {
+    border-right: none;
+}
+
+.csv-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+
+.csv-table th:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+}
+
+.csv-table th.sortable:hover {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+.csv-table th.sortable:hover::after {
+    opacity: 1;
+    color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+}
+
+.csv-table th.sortable::after {
+    content: '↕';
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: all var(--transition-fast) ease;
+}
+
+.csv-table th.sort-asc,
+.csv-table th.sort-desc {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.csv-table th.sort-asc::after {
+    content: '↑';
+    opacity: 1;
+    color: var(--primary-color);
+    font-weight: 600;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.csv-table th.sort-desc::after {
+    content: '↓';
+    opacity: 1;
+    color: var(--primary-color);
+    font-weight: 600;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.csv-table td {
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
+    color: var(--text-primary);
+    transition: all var(--transition-fast) ease;
+    cursor: pointer;
+    position: relative;
+    user-select: none;
+    /* 确保单元格不会阻止滚动条交互 */
+    pointer-events: auto;
+}
+
+.csv-table td:last-child {
+    border-right: none;
+}
+
+.csv-table tbody tr {
+    transition: all var(--transition-fast) ease;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.csv-table tbody tr:hover {
+    background: rgba(102, 126, 234, 0.05);
+    /* 移除 transform: scale() 避免触发横向滚动条 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* 移除左边框避免改变行宽度 */
+}
+
+.csv-table tbody tr:nth-child(even) {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.csv-table tbody tr:nth-child(even):hover {
+    background: rgba(102, 126, 234, 0.08);
+}
+
+.csv-table tbody tr.selected {
+    background: rgba(102, 126, 234, 0.15);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.csv-table td.highlighted {
+    background: rgba(255, 193, 7, 0.3);
+    font-weight: 600;
+    color: #856404;
+}
+
+/* 单元格选中效果 - 呼吸动画 */
+.csv-table td.selected {
+    background: rgba(102, 126, 234, 0.15) !important;
+    color: var(--primary-color) !important;
+    font-weight: 600 !important;
+    border: 2px solid var(--primary-color) !important;
+    border-radius: 6px !important;
+    position: relative !important;
+    animation: breathe 2s ease-in-out infinite !important;
+    z-index: 10 !important;
+}
+
+/* 右键选中效果 - 更强烈的视觉反馈，避免触发滚动条 */
+.csv-table td.context-selected {
+    background: rgba(102, 126, 234, 0.35) !important;
+    color: var(--primary-color) !important;
+    font-weight: 700 !important;
+    border: 3px solid var(--primary-color) !important;
+    border-radius: 8px !important;
+    position: relative !important;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2),
+                0 4px 12px rgba(102, 126, 234, 0.3) !important;
+    /* 移除 transform: scale() 避免触发横向滚动条 */
+    animation: selectedPulse 0.6s ease-in-out !important;
+    z-index: 15 !important;
+}
+
+/* 搜索高亮样式 */
+.csv-search-highlight {
+    background: rgba(255, 235, 59, 0.8);
+    color: #f57f17;
+    font-weight: 600;
+    padding: 1px 2px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(255, 193, 7, 0.3);
+}
+
+/* 搜索提示框 */
+.csv-search-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: var(--shadow-medium);
+    z-index: 9999;
+    max-height: 200px;
+    overflow-y: auto;
+    display: none;
+}
+
+.csv-search-suggestion-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 13px;
+}
+
+.csv-search-suggestion-item:hover {
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.csv-search-suggestion-item:last-child {
+    border-bottom: none;
+}
+
+/* 分页样式 - 现代化，现在包含工具栏组 */
+.csv-pagination {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 12px 20px;
+    margin: 0 12px 12px 12px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    animation: slideInRight 0.5s ease-out 0.4s both;
+    min-height: 56px;
+    gap: 16px;
+    box-shadow: var(--shadow-light);
+    flex-wrap: wrap;
+}
+
+.csv-pagination-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.csv-pagination-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* 工具栏组基础样式（用于分页容器） */
+.csv-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+/* 标签样式（用于分页容器） */
+.csv-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* 分页容器内的工具栏组样式 */
+.csv-pagination .csv-toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    animation: slideInLeft 0.5s ease-out;
+}
+
+.csv-page-btn {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all var(--transition-normal) ease;
+    min-width: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.csv-page-btn:hover:not(:disabled) {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.csv-page-btn:active {
+    transform: scale(0.95);
+}
+
+.csv-page-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.csv-page-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.csv-page-info {
+    padding: 8px 16px;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-weight: 600;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* 空状态样式 */
+.csv-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px;
+    text-align: center;
+    flex: 1;
+    background: var(--bg-primary);
+}
+
+.csv-empty-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+    color: var(--text-secondary);
+    opacity: 0.6;
+}
+
+.csv-empty-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.csv-empty-subtext {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* 滚动条样式 - 优化版本 */
+.csv-table-wrapper::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+    background: transparent;
+}
+
+.csv-table-wrapper::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    margin: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.csv-table-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 6px;
+    border: 2px solid var(--bg-primary);
+    transition: all var(--transition-normal) ease;
+    min-height: 30px;
+    min-width: 30px;
+}
+
+.csv-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+    border-color: var(--border-color);
+    /* 移除 transform: scale() 避免滚动条区域变化 */
+    opacity: 0.9;
+}
+
+.csv-table-wrapper::-webkit-scrollbar-thumb:active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    /* 移除 transform: scale() 避免滚动条区域变化 */
+    opacity: 1;
+}
+
+.csv-table-wrapper::-webkit-scrollbar-corner {
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+}
+
+/* 确保滚动条在所有浏览器中都能正常工作 */
+.csv-table-wrapper {
+    /* Firefox 滚动条样式 */
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) var(--bg-tertiary);
+}
+
+/* 修复可能的滚动条交互问题 */
+.csv-table-wrapper::-webkit-scrollbar-thumb {
+    /* 确保滚动条拖拽区域足够大 */
+    background-clip: padding-box;
+    /* 防止滚动条被其他元素遮挡 */
+    z-index: 999;
+}
+
+/* 表格内容优化，确保横向滚动和单元格完整显示 */
+.csv-table {
+    /* 使用自动布局，让列宽根据内容调整 */
+    table-layout: auto;
+    /* 设置最小宽度，确保有横向滚动 */
+    min-width: 100%;
+    width: max-content;
+    /* 确保表格不会阻止滚动条事件 */
+    pointer-events: auto;
+}
+
+/* 单元格样式优化，确保内容完整显示 */
+.csv-table td,
+.csv-table th {
+    /* 设置合适的最小宽度，确保内容显示完整 */
+    min-width: 120px;
+    max-width: 300px;
+    /* 允许内容自动换行 */
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    /* 移除 overflow: hidden 和 text-overflow: ellipsis 以允许完整显示 */
+    /* 确保单元格事件不会阻止滚动条交互 */
+    pointer-events: auto;
+    /* 添加适当的内边距 */
+    padding: 8px 12px;
+    /* 垂直对齐 */
+    vertical-align: top;
+    /* 设置合理的行高 */
+    line-height: 1.4;
+}
+
+/* 表头特殊样式 */
+.csv-table th {
+    /* 表头可以稍微宽一些 */
+    min-width: 140px;
+    font-weight: 600;
+    background: var(--bg-secondary);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* 长内容单元格的特殊处理 - 使用工具提示而不是改变布局 */
+.csv-table td.show-full-content,
+.csv-table th.show-full-content {
+    /* 只在特殊情况下显示完整内容，避免影响正常布局 */
+    overflow: visible;
+    white-space: normal;
+    word-wrap: break-word;
+    position: relative;
+    z-index: 100;
+    background: var(--bg-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    max-width: none !important;
+}
+
+
+
+/* 行详细信息模态窗口动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+}
+
+/* 行详细信息模态窗口样式 */
+.row-details-overlay {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.row-details-modal {
+    position: relative;
+}
+
+.row-details-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.row-details-content::-webkit-scrollbar-track {
+    background: var(--bg-tertiary, #f1f5f9);
+    border-radius: 4px;
+}
+
+.row-details-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color, #667eea);
+    border-radius: 4px;
+}
+
+.row-details-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color, #764ba2);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .row-details-modal {
+        width: 95% !important;
+        max-width: none !important;
+        margin: 20px;
+    }
+
+    .row-details-header {
+        padding: 16px 20px !important;
+    }
+
+    .row-details-header h3 {
+        font-size: 16px !important;
+    }
+
+    .row-details-content {
+        padding: 20px !important;
+        max-height: calc(80vh - 100px) !important;
+    }
+
+    .row-details-field {
+        padding: 12px !important;
+    }
+
+    .row-details-field-label {
+        font-size: 13px !important;
+    }
+
+    .row-details-field-value {
+        font-size: 13px !important;
+    }
+
+    .csv-search-input {
+        min-width: 180px;
+    }
+
+    .csv-pagination {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    /* 分页容器内的工具栏组在移动端的样式 */
+    .csv-pagination .csv-toolbar-group {
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    /* 文件选择器按钮在移动端样式 */
+    .csv-file-selector-toggle-btn {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .csv-table th,
+    .csv-table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+
+    #csv-viewer-app {
+        margin: 4px;
+        border-radius: 8px;
+    }
+}
+
+/* 工具提示样式 */
+[title] {
+    position: relative;
+    cursor: help;
+}
+
+/* 数据流动效果 */
+.csv-data-flow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        var(--primary-color) 50%, 
+        transparent 100%);
+    animation: dataFlow 2s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity var(--transition-normal) ease;
+}
+
+.csv-table-container.loading .csv-data-flow {
+    opacity: 1;
+}
+
+/* 主题适配 */
+[data-theme="dark"] .csv-viewer-header {
+    background: linear-gradient(135deg, #2d2d2d 0%, #404040 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+[data-theme="dark"] .csv-control-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .csv-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] .csv-table tbody tr:nth-child(even):hover {
+    background: rgba(102, 126, 234, 0.15);
+}
+
+/* 暗色主题加载动画优化 */
+[data-theme="dark"] .csv-loading-spinner-outer {
+    border-top-color: var(--primary-color);
+    border-right-color: rgba(102, 126, 234, 0.4);
+}
+
+[data-theme="dark"] .csv-loading-spinner-middle {
+    border-bottom-color: var(--secondary-color);
+    border-left-color: rgba(255, 107, 157, 0.5);
+}
+
+[data-theme="dark"] .csv-loading-spinner-inner {
+    border-top-color: var(--primary-color);
+}
+
+[data-theme="dark"] .csv-loading-center-dot {
+    box-shadow: 0 0 25px rgba(102, 126, 234, 0.7);
+}
+
+[data-theme="dark"] .csv-loading-particle {
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.5);
+}
+
+[data-theme="dark"] .csv-loading-progress-bar {
+    background: rgba(102, 126, 234, 0.3);
+}
+
+[data-theme="dark"] .csv-table td.selected {
+    background: rgba(102, 126, 234, 0.25) !important;
+}
+
+[data-theme="dark"] .csv-table td.context-selected {
+    background: rgba(102, 126, 234, 0.45) !important;
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.3), 
+                0 4px 12px rgba(102, 126, 234, 0.4) !important;
+}
+
+[data-theme="sakura"] .csv-viewer-header {
+    background: linear-gradient(135deg, #ffeef2 0%, #ffe0e6 100%);
+    border-bottom: 1px solid rgba(255, 107, 157, 0.2);
+    color: #c44569;
+}
+
+[data-theme="sakura"] .csv-control-btn:hover {
+    background: rgba(255, 107, 157, 0.1);
+}
+
+[data-theme="sakura"] .csv-table tbody tr:hover {
+    background: rgba(255, 107, 157, 0.05);
+}
+
+[data-theme="sakura"] .csv-table tbody tr.selected {
+    background: rgba(255, 107, 157, 0.15);
+}
+
+[data-theme="sakura"] .csv-table td.selected {
+    background: rgba(255, 107, 157, 0.2) !important;
+    color: #c44569 !important;
+    border-color: #ff6b9d !important;
+    animation: breatheSakura 2s ease-in-out infinite !important;
+}
+
+[data-theme="sakura"] .csv-table td.context-selected {
+    background: rgba(255, 107, 157, 0.4) !important;
+    color: #c44569 !important;
+    border-color: #ff6b9d !important;
+    box-shadow: 0 0 0 4px rgba(255, 107, 157, 0.3),
+                0 4px 12px rgba(255, 107, 157, 0.4) !important;
+}
+
+/* 樱花主题加载动画 */
+[data-theme="sakura"] .csv-loading-spinner-outer {
+    border-top-color: #ff6b9d;
+    border-right-color: rgba(255, 107, 157, 0.4);
+}
+
+[data-theme="sakura"] .csv-loading-spinner-middle {
+    border-bottom-color: #c44569;
+    border-left-color: rgba(196, 69, 105, 0.5);
+}
+
+[data-theme="sakura"] .csv-loading-spinner-inner {
+    border-top-color: #ff6b9d;
+}
+
+[data-theme="sakura"] .csv-loading-center-dot {
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    box-shadow: 0 0 25px rgba(255, 107, 157, 0.6);
+}
+
+[data-theme="sakura"] .csv-loading-particle {
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    box-shadow: 0 0 15px rgba(255, 107, 157, 0.5);
+}
+
+[data-theme="sakura"] .csv-loading-progress-fill {
+    background: linear-gradient(90deg,
+        #ff6b9d 0%,
+        #c44569 50%,
+        #ff6b9d 100%);
+}
+
+[data-theme="sakura"] .csv-loading-title {
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 性能优化 */
+.csv-table {
+    will-change: scroll-position;
+}
+
+.csv-table tbody tr {
+    will-change: background-color, transform;
+}
+
+/* 工具提示样式 */
+.csv-tooltip {
+    font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+    white-space: pre-wrap;
+    text-align: left;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.csv-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--border-color);
+}
+
+.csv-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid var(--bg-primary);
+}
+
+/* 工具提示在不同主题下的样式 */
+[data-theme="dark"] .csv-tooltip {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .csv-tooltip::before {
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme="dark"] .csv-tooltip::after {
+    border-bottom-color: var(--bg-primary);
+}
+
+[data-theme="sakura"] .csv-tooltip {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: rgba(255, 107, 157, 0.3);
+    box-shadow: 0 4px 12px rgba(255, 107, 157, 0.2);
+}
+
+[data-theme="sakura"] .csv-tooltip::before {
+    border-bottom-color: rgba(255, 107, 157, 0.3);
+}
+
+[data-theme="sakura"] .csv-tooltip::after {
+    border-bottom-color: var(--bg-primary);
+}
+
+/* 单元格悬停时的光标样式 */
+.csv-table td.has-tooltip {
+    cursor: help !important;
+}
+
+.csv-table td.has-tooltip:hover {
+    position: relative;
+}
+
+/* 工具提示加载状态 */
+.csv-tooltip.loading {
+    opacity: 0.7;
+}
+
+.csv-tooltip.loading::before {
+    content: '⏳ ';
+    margin-right: 4px;
+}
+
+/* 插件功能样式 */
+.csv-toolbar-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.csv-toolbar-btn:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.csv-btn-icon {
+    font-size: 1rem;
+}
+
+.csv-btn-text {
+    font-weight: 500;
+}
+
+/* 插件弹窗样式 - 全新设计 */
+.plugin-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.plugin-modal-content {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    width: 95%;
+    max-width: 1400px;
+    max-height: 95vh;
+    overflow: hidden;
+    animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid var(--border-color);
+}
+
+.plugin-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.plugin-modal-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+}
+
+.plugin-modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.plugin-modal-close {
+    background: rgba(220, 53, 69, 0.1);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: var(--error-color);
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all var(--transition-normal);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.plugin-modal-close:hover {
+    background: var(--error-color);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.plugin-modal-body {
+    padding: 2rem;
+    max-height: 75vh;
+    overflow-y: auto;
+    background: var(--bg-primary);
+}
+
+/* 插件工具栏 - 重新设计 */
+.plugin-toolbar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(102, 126, 234, 0.05) 100%);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.plugin-toolbar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-gradient);
+}
+
+.plugin-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    min-height: 48px;
+}
+
+.plugin-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.plugin-btn:hover::before {
+    left: 100%;
+}
+
+.plugin-btn:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+}
+
+.plugin-btn-primary {
+    background: var(--primary-gradient);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.plugin-btn-primary:hover {
+    background: linear-gradient(135deg, #5a6fdb 0%, #6b4993 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
+/* 插件列表 - 卡片式设计 */
+.plugin-list {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+}
+
+.plugin-item {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.plugin-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    transform: scaleX(0);
+    transition: transform var(--transition-normal);
+}
+
+.plugin-item:hover::before {
+    transform: scaleX(1);
+}
+
+.plugin-item:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.15);
+}
+
+.plugin-item-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.plugin-item-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    border-radius: 12px;
+    color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.plugin-item-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.plugin-item-name {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.plugin-item-description {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.plugin-item-command {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background: var(--bg-tertiary);
+    padding: 1rem;
+    border-radius: 8px;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 100px;
+    line-height: 1.4;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.plugin-item-command::before {
+    content: 'Command';
+    position: absolute;
+    top: -8px;
+    left: 12px;
+    background: var(--bg-tertiary);
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.plugin-item-command::-webkit-scrollbar {
+    height: 6px;
+}
+
+.plugin-item-command::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: 3px;
+}
+
+.plugin-item-command::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.plugin-item-command::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+.plugin-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.plugin-item-meta {
+    display: flex;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.plugin-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(102, 126, 234, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.plugin-item-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.plugin-action-btn {
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all var(--transition-normal);
+    min-width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.plugin-action-btn:hover {
+    background: var(--bg-secondary);
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+.plugin-action-btn.danger {
+    border-color: rgba(220, 53, 69, 0.3);
+    color: var(--error-color);
+}
+
+.plugin-action-btn.danger:hover {
+    background: var(--error-color);
+    color: white;
+    border-color: var(--error-color);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* 插件表单 - 现代化设计 */
+.plugin-form {
+    display: grid;
+    gap: 1.5rem;
+    max-width: none;
+}
+
+.plugin-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: relative;
+}
+
+.plugin-form-group label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.plugin-form-group label::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    background: var(--primary-gradient);
+    border-radius: 2px;
+}
+
+.plugin-form-group input,
+.plugin-form-group textarea,
+.plugin-form-group select {
+    padding: 1rem 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all var(--transition-normal);
+    font-family: inherit;
+    resize: vertical;
+    min-height: 48px;
+}
+
+.plugin-form-group select {
+    /* 下拉框特定样式 */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2rem;
+    padding-right: 3rem;
+    cursor: pointer;
+}
+
+.plugin-form-group input:focus,
+.plugin-form-group textarea:focus,
+.plugin-form-group select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+    transform: translateY(-1px);
+}
+
+.plugin-form-group select:hover {
+    border-color: var(--primary-color);
+    background-color: var(--bg-secondary);
+}
+
+.plugin-form-group select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    padding: 0.75rem;
+    border: none;
+}
+
+.plugin-form-group textarea {
+    min-height: 120px;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    line-height: 1.5;
+}
+
+.plugin-help {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+}
+
+.plugin-help-text {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    padding: 0.75rem;
+    background: rgba(102, 126, 234, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.plugin-help details {
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.plugin-help summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plugin-help summary::before {
+    content: '📖';
+    font-size: 1.1rem;
+}
+
+.plugin-help summary:hover {
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--secondary-color);
+}
+
+.plugin-variables {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.plugin-var-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-tertiary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.plugin-var-category strong {
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+}
+
+.plugin-var-category span {
+    display: inline-block;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.75rem;
+    background: var(--bg-primary);
+    color: var(--primary-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.plugin-var-category span:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* 多命令帮助内容样式 */
+.plugin-help-content {
+    padding: 1.5rem;
+    background: var(--bg-primary);
+    line-height: 1.6;
+}
+
+.plugin-help-content p {
+    margin: 0 0 1rem 0;
+    color: var(--text-primary);
+}
+
+.plugin-help-content ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+    padding: 0;
+}
+
+.plugin-help-content li {
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.plugin-help-content strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.plugin-help-content pre {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem 0;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+    font-size: 0.8rem;
+    color: var(--text-primary);
+    overflow-x: auto;
+    white-space: pre-wrap;
+    line-height: 1.4;
+}
+
+.plugin-checkbox-label {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+    margin: 0;
+}
+
+.plugin-checkbox-label:hover {
+    background: rgba(102, 126, 234, 0.05);
+    border-color: var(--primary-color);
+}
+
+.plugin-checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.plugin-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.plugin-form-actions .plugin-btn {
+    min-width: 100px;
+    justify-content: center;
+}
+
+/* 右键菜单 */
+.context-menu {
+    position: fixed;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    z-index: 1001;
+    min-width: 180px;
+    padding: 0.25rem 0;
+    animation: scaleIn 0.2s ease-out;
+    overflow: visible; /* 允许命令分类的二级菜单向右/左弹出不被裁剪 */
+}
+
+/* ── 命令分类二级菜单（与内嵌 CSV 查看器保持一致） ── */
+.context-menu .context-menu-submenu { position: relative; }
+.context-menu .context-menu-submenu-trigger .context-menu-name { flex: 1; }
+.context-menu .context-menu-count { font-size: 11px; opacity: 0.5; padding: 0 2px; }
+.context-menu .context-menu-submenu-arrow { font-size: 11px; opacity: 0.6; }
+.context-menu .context-menu-submenu-panel {
+    position: absolute; left: 100%; top: -5px;
+    min-width: 220px; max-height: 60vh; overflow-y: auto;
+    background: var(--bg-primary); border: 1px solid var(--border-color);
+    border-radius: 8px; box-shadow: var(--shadow-medium);
+    padding: 0.25rem 0; display: none; z-index: 1002;
+}
+.context-menu .context-menu-submenu:hover > .context-menu-submenu-panel { display: block; }
+.context-menu .context-menu-submenu-trigger:hover { background: var(--bg-hover, rgba(0,0,0,0.05)); }
+.context-menu.submenu-left .context-menu-submenu-panel { left: auto; right: 100%; }
+.context-menu .context-menu-submenu.submenu-up .context-menu-submenu-panel { top: auto; bottom: -5px; }
+
+/* ── 文本文件内嵌预览模态框（与内嵌 CSV 查看器一致） ── */
+.csv-text-preview-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    display: flex; align-items: center; justify-content: center; z-index: 10001;
+}
+.csv-text-preview-modal {
+    width: 860px; max-width: 92vw; height: 74vh; max-height: 74vh;
+    display: flex; flex-direction: column; background: var(--bg-primary);
+    border: 1px solid var(--border-color); border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.35); overflow: hidden;
+}
+.csv-text-preview-header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.csv-text-preview-title {
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.csv-text-preview-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.csv-text-preview-btn {
+    padding: 5px 12px; border: 1px solid var(--border-color); border-radius: 6px;
+    background: var(--primary-color, #3b82f6); color: #fff; cursor: pointer; font-size: 12px;
+}
+.csv-text-preview-btn.csv-text-preview-close {
+    background: var(--bg-secondary, #f0f0f0); color: var(--text-primary);
+}
+.csv-text-preview-btn:hover { filter: brightness(1.08); }
+.csv-text-preview-warn {
+    padding: 6px 16px; font-size: 12px; color: #e67e22;
+    border-bottom: 1px solid var(--border-color); flex-shrink: 0;
+}
+.csv-text-preview-body {
+    flex: 1; margin: 0; padding: 14px 16px; overflow: auto;
+    font-family: "Consolas", "Courier New", monospace; font-size: 12px; line-height: 1.5;
+    white-space: pre-wrap; word-break: break-all; color: var(--text-primary);
+}
+
+.context-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+}
+
+.context-menu-item:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.context-menu-icon {
+    font-size: 0.9rem;
+    width: 0.9rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.context-menu-separator {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.25rem 0;
+}
+
+/* 右键菜单分组样式 */
+.context-menu-group {
+    margin: 0.25rem 0;
+}
+
+.context-menu-group + .context-menu-group {
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.25rem;
+}
+
+.context-menu-group-title {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.4rem 0.85rem 0.3rem 0.85rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: var(--bg-secondary);
+    user-select: none;
+}
+
+.context-menu-group .context-menu-item {
+    padding-left: 1.5rem;
+}
+
+/* 模块统计展示 - 与右键菜单风格一致 */
+.module-stats-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0;
+    padding: 0.5rem 0.85rem;
+    background: var(--context-menu-bg, var(--bg-secondary));
+    border-radius: 6px;
+    margin: 0.25rem 0;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.module-stats-container:hover {
+    background: var(--bg-hover, rgba(102, 126, 234, 0.1));
+    transform: translateY(-1px);
+}
+
+.module-stats-container:active {
+    transform: translateY(0);
+}
+
+.module-stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--context-menu-text-secondary, var(--text-secondary));
+    position: relative;
+}
+
+.module-stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 1rem;
+    background: var(--border-color);
+}
+
+.module-stat-item:first-child {
+    padding-left: 0;
+}
+
+.module-stat-item:last-child {
+    padding-right: 0;
+}
+
+.module-stat-label {
+    font-weight: 600;
+    color: var(--context-menu-text-secondary, var(--text-secondary));
+    font-size: 0.75rem;
+}
+
+.module-stat-value {
+    font-weight: 700;
+    color: var(--context-menu-accent, var(--primary-color));
+    min-width: 1.5rem;
+    text-align: left;
+}
+
+/* 空状态 - 优化设计 */
+.plugin-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--text-secondary);
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(102, 126, 234, 0.05) 100%);
+    border-radius: 16px;
+    border: 2px dashed var(--border-color);
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.plugin-empty-state::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
+    opacity: 0.5;
+}
+
+.plugin-empty-state .plugin-empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.7;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.plugin-empty-state .plugin-empty-text {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.plugin-empty-state .plugin-empty-subtext {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+/* 插件管理器增强功能 */
+.plugin-search-container {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.plugin-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all var(--transition-normal);
+}
+
+.plugin-search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+/* 视图控制区域 */
+.plugin-view-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin: 1rem 0;
+    flex-wrap: wrap;
+}
+
+/* 视图切换 */
+.plugin-view-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plugin-view-label {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.plugin-view-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.plugin-view-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.plugin-view-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.plugin-view-btn.active:hover {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* 排序工具栏 */
+.plugin-sort-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.plugin-sort-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.plugin-sort-icon {
+    font-size: 1.1rem;
+}
+
+.plugin-sort-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    flex: 1;
+}
+
+.plugin-sort-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    position: relative;
+}
+
+.plugin-sort-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+}
+
+.plugin-sort-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    font-weight: 600;
+}
+
+.plugin-sort-btn.active:hover {
+    background: var(--secondary-color);
+    border-color: var(--secondary-color);
+    transform: translateY(-1px);
+}
+
+.sort-indicator {
+    font-size: 0.9rem;
+    font-weight: bold;
+    opacity: 0.7;
+}
+
+.plugin-sort-btn.active .sort-indicator {
+    opacity: 1;
+}
+
+/* 插件表格视图 */
+.plugin-table-container {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.plugin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.plugin-table th {
+    background: var(--bg-secondary);
+    border-bottom: 2px solid var(--border-color);
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-primary);
+    position: relative;
+}
+
+.plugin-table th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: all var(--transition-fast);
+}
+
+.plugin-table th.sortable:hover {
+    background: var(--bg-tertiary);
+    color: var(--primary-color);
+}
+
+.plugin-table th.sortable.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.table-header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: space-between;
+}
+
+.table-header-icon {
+    font-size: 1rem;
+}
+
+.table-sort-indicator {
+    font-size: 0.8rem;
+    font-weight: bold;
+    opacity: 0.5;
+    min-width: 12px;
+    text-align: center;
+}
+
+.plugin-table th.sortable.active .table-sort-indicator {
+    opacity: 1;
+}
+
+.plugin-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+}
+
+.plugin-table tr:hover {
+    background: var(--bg-secondary);
+}
+
+.plugin-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* 表格中的插件信息 */
+.table-plugin-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.table-plugin-icon {
+    display: inline-block;
+    margin-right: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.table-plugin-description {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.4;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.table-plugin-date {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+
+.table-plugin-usage-score {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.table-plugin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.table-action-btn {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-decoration: none;
+}
+
+.table-action-btn:hover {
+    background: var(--bg-tertiary);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.table-action-btn.danger:hover {
+    background: #fee;
+    border-color: #f56565;
+    color: #f56565;
+}
+
+.plugin-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.plugin-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.plugin-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(102, 126, 234, 0.05) 100%);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.plugin-stat-number {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* 响应式设计 */
+@media (max-width: 1200px) {
+    .plugin-list {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .plugin-modal-content {
+        width: 98%;
+        max-height: 98vh;
+        margin: 1vh;
+        border-radius: 12px;
+    }
+
+    .plugin-modal-header,
+    .plugin-modal-body {
+        padding: 0.75rem 1rem;
+    }
+
+    .plugin-modal-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .plugin-toolbar {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .plugin-view-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .plugin-sort-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .plugin-sort-options {
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .plugin-sort-btn {
+        font-size: 0.75rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .plugin-view-toggle {
+        justify-content: center;
+    }
+
+    .plugin-table-container {
+        overflow-x: auto;
+    }
+
+    .plugin-table {
+        min-width: 600px;
+        font-size: 0.8rem;
+    }
+
+    .plugin-table th,
+    .plugin-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .table-plugin-description {
+        max-width: 150px;
+    }
+
+    .table-plugin-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .table-action-btn {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+    }
+
+    .plugin-list {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .plugin-item {
+        padding: 1rem;
+    }
+
+    .plugin-item-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        text-align: left;
+    }
+
+    .plugin-item-icon {
+        align-self: center;
+    }
+
+    .plugin-item-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+
+    .plugin-item-meta {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .plugin-item-actions {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .plugin-action-btn {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .plugin-form-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .plugin-form-actions .plugin-btn {
+        width: 100%;
+    }
+
+    .plugin-variables {
+        max-height: 200px;
+    }
+
+    .plugin-var-category span {
+        font-size: 0.7rem;
+        padding: 0.4rem 0.6rem;
+    }
+}
+
+/* 插件管理器动画效果 */
+@keyframes pluginItemSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.plugin-item {
+    animation: pluginItemSlideIn 0.3s ease-out;
+}
+
+.plugin-item:nth-child(1) { animation-delay: 0.1s; }
+.plugin-item:nth-child(2) { animation-delay: 0.2s; }
+.plugin-item:nth-child(3) { animation-delay: 0.3s; }
+.plugin-item:nth-child(4) { animation-delay: 0.4s; }
+.plugin-item:nth-child(5) { animation-delay: 0.5s; }
+.plugin-item:nth-child(n+6) { animation-delay: 0.6s; }
+
+/* 搜索高亮 */
+.plugin-search-highlight {
+    background: rgba(255, 235, 59, 0.3);
+    color: #f57f17;
+    font-weight: 600;
+    padding: 1px 2px;
+    border-radius: 2px;
+}
+
+/* 插件标签 */
+.plugin-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.plugin-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: rgba(102, 126, 234, 0.1);
+    color: var(--primary-color);
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+/* 加载状态 */
+.plugin-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+}
+
+.plugin-loading-spinner {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-color);
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: csv-spin 1s linear infinite;
+    margin-right: 0.75rem;
+}
+
+/* 云端配置下载样式 */
+.merge-mode-descriptions {
+    margin-top: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.merge-mode-item {
+    margin-bottom: 0.75rem;
+    padding: 0.5rem;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    border-left: 3px solid var(--primary-color);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.merge-mode-item:last-child {
+    margin-bottom: 0;
+}
+
+.merge-mode-item strong {
+    color: var(--primary-color);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.plugin-progress {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.plugin-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--bg-primary);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.plugin-progress-fill {
+    height: 100%;
+    background: var(--primary-gradient);
+    width: 0%;
+    transition: width 0.3s ease;
+    animation: progress-pulse 2s infinite;
+}
+
+@keyframes progress-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.plugin-progress-text {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.plugin-result {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.plugin-result.success {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: rgba(40, 167, 69, 0.3);
+    color: var(--success-color, #28a745);
+}
+
+.plugin-result.error {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: rgba(220, 53, 69, 0.3);
+    color: var(--error-color);
+}
+
+.plugin-result.info {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: rgba(102, 126, 234, 0.3);
+    color: var(--primary-color);
+}
+
+.plugin-result-title {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plugin-result-content {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.plugin-result-stats {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+/* 暗色主题支持 */
+[data-theme="dark"] .plugin-modal {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+[data-theme="dark"] .plugin-form-group select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+[data-theme="dark"] .plugin-form-group select option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .context-menu-item:hover {
+    background: var(--bg-tertiary);
+}
+
+[data-theme="dark"] .context-menu-group-title {
+    background: var(--bg-tertiary);
+    color: var(--text-tertiary);
+}
+
+[data-theme="dark"] .plugin-item {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .plugin-item:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+}
+
+[data-theme="dark"] .plugin-toolbar {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(102, 126, 234, 0.1) 100%);
+}
+
+[data-theme="dark"] .plugin-empty-state {
+    background: linear-gradient(135deg, var(--bg-tertiary) 0%, rgba(102, 126, 234, 0.1) 100%);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 樱花主题支持 */
+[data-theme="sakura"] .plugin-item-icon {
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+}
+
+[data-theme="sakura"] .plugin-btn-primary {
+    background: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+    border-color: #ff6b9d;
+}
+
+[data-theme="sakura"] .plugin-btn-primary:hover {
+    background: linear-gradient(135deg, #ff5a8a 0%, #b73e5e 100%);
+}
+
+[data-theme="sakura"] .plugin-stat-number {
+    color: #ff6b9d;
+}
+
+[data-theme="sakura"] .plugin-meta-item {
+    background: rgba(255, 107, 157, 0.1);
+    border-color: rgba(255, 107, 157, 0.2);
+}
+
+/* 动态输入参数标签配置样式 */
+.plugin-input-labels-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.plugin-input-label-row {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.plugin-input-label-row label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.plugin-input-label-row label::before {
+    display: none; /* 隐藏标签前的装饰线 */
+}
+
+.plugin-input-label-row input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    min-height: auto;
+    border: 1px solid var(--border-color);
+}
+
+.plugin-input-label-row input:focus {
+    transform: none; /* 移除焦点时的上移效果 */
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+}
+
+/* 动态输入模态框样式 */
+.dynamic-input-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    backdrop-filter: blur(4px);
+}
+
+.dynamic-input-modal .plugin-modal-content {
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: var(--bg-primary);
+    border-radius: 16px;
+    box-shadow: var(--shadow-heavy);
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+.dynamic-input-description {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.dynamic-input-description p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.dynamic-input-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.dynamic-input-field {
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    transition: all var(--transition-fast) ease;
+}
+
+.dynamic-input-field:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    transform: translateY(-1px);
+}
+
+.dynamic-input-field::placeholder {
+    color: var(--text-muted);
+    opacity: 0.7;
+}
+
+/* 动态输入模态框动画 */
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 暗色主题支持 */
+[data-theme="dark"] .plugin-input-labels-container {
+    background: var(--bg-tertiary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .dynamic-input-description {
+    background: var(--bg-tertiary);
+    border-left-color: var(--primary-color);
+}
+
+/* ==================== AI分析模态框样式 ==================== */
+.ai-analysis-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+}
+
+.ai-modal-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    height: 80vh;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    animation: modalSlideIn 0.3s ease;
+    overflow: hidden;
+}
+
+.ai-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-tertiary);
+}
+
+.ai-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.ai-modal-icon {
+    font-size: 24px;
+}
+
+.ai-modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ai-modal-close:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+}
+
+.ai-modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.ai-analysis-info {
+    padding: 16px 24px;
+    background: var(--bg-tertiary);
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.ai-info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.ai-info-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.ai-info-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    background: var(--bg-secondary);
+    padding: 4px 12px;
+    border-radius: 6px;
+}
+
+.ai-messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.ai-messages-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.ai-messages-container::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+}
+
+.ai-messages-container::-webkit-scrollbar-thumb {
+    background: var(--text-muted);
+    border-radius: 4px;
+}
+
+.ai-messages-container::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+.ai-message {
+    display: flex;
+    gap: 12px;
+    animation: fadeIn 0.3s ease;
+}
+
+.ai-message.user {
+    flex-direction: row-reverse;
+}
+
+.ai-message-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.ai-message.user .ai-message-avatar {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.ai-message.assistant .ai-message-avatar {
+    background: var(--bg-tertiary);
+}
+
+.ai-message-content {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    line-height: 1.6;
+    word-wrap: break-word;
+}
+
+.ai-message.user .ai-message-content {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.ai-message.assistant .ai-message-content {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+}
+
+.ai-message-content pre {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 8px 0;
+}
+
+.ai-message-content code {
+    font-family: 'Consolas', 'Monaco', monospace;
+    font-size: 13px;
+}
+
+.ai-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+}
+
+.ai-input-container {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.ai-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-family: inherit;
+    resize: none;
+    transition: all 0.2s;
+    max-height: 120px;
+}
+
+.ai-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.ai-send-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.ai-send-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.ai-send-btn:active {
+    transform: translateY(0);
+}
+
+.ai-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.ai-loading {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==================== 行上下文查看样式 ==================== */
+.row-context-modal {
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+}
+
+.row-context-modal[style*="display: flex"],
+.row-context-modal[style*="display:flex"] {
+    display: flex !important;
+}
+
+.row-context-modal-content {
+    max-width: 90%;
+    max-height: 90vh;
+    width: 1200px;
+    animation: scaleIn 0.3s ease;
+    margin: 0 auto;
+}
+
+.row-context-modal-body {
+    max-height: calc(90vh - 180px); /* 减去标题栏和按钮区域的高度 */
+    overflow-y: auto;
+}
+
+.row-context-controls {
+    display: flex;
+    gap: 12px;
+    padding: 12px 20px;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.row-context-btn {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.row-context-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.row-context-btn:active {
+    transform: translateY(0);
+}
+
+.row-context-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#contextTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+#contextTable th {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 12px 8px;
+    text-align: left;
+    border-bottom: 2px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+#contextTable td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border-color);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#contextTable tbody tr {
+    transition: background-color 0.2s;
+}
+
+#contextTable tbody tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.context-current-row {
+    background-color: var(--accent-color, #3b82f6) !important;
+    color: white !important;
+    font-weight: bold;
+}
+
+.context-current-row td {
+    color: white !important;
+    border-bottom-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.context-current-row:hover {
+    background-color: var(--accent-color, #3b82f6) !important;
+    opacity: 0.95;
+}
+
+/* ========================================
+   文件选择器侧边栏样式
+   ======================================== */
+
+.csv-file-selector {
+    position: fixed;
+    right: 0;
+    top: 45px; /* 标题栏高度 */
+    bottom: 0;
+    width: 300px;
+    background: var(--bg-primary);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
+    box-shadow: -2px 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.csv-file-selector.open {
+    transform: translateX(0);
+}
+
+.csv-file-selector-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-primary));
+    border-bottom: 1px solid var(--border-color);
+}
+
+.csv-file-selector-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text-primary);
+}
+
+.csv-file-selector-icon {
+    font-size: 18px;
+}
+
+.csv-file-selector-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.csv-file-selector-close:hover {
+    background: var(--hover-bg);
+    color: var(--text-primary);
+}
+
+.csv-file-selector-search {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.csv-file-search-input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.csv-file-search-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.csv-file-selector-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+}
+
+.csv-file-selector-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    color: var(--text-secondary);
+    font-size: 13px;
+    gap: 12px;
+}
+
+.csv-file-selector-spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.csv-file-item {
+    position: relative;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg-primary);
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.csv-file-item:hover {
+    background: var(--hover-bg);
+    border-color: var(--border-color);
+    transform: translateX(-2px);
+}
+
+.csv-file-item.active {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    border-color: var(--primary-color);
+    font-weight: 600;
+}
+
+.csv-file-item.active::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+}
+
+.csv-file-name {
+    font-size: 13px;
+    color: var(--text-primary);
+    word-break: break-all;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.csv-file-name::before {
+    content: '📄';
+    font-size: 14px;
+}
+
+.csv-file-info {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+}
+
+.csv-file-size,
+.csv-file-time {
+    display: inline-block;
+}
+
+.csv-file-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.csv-file-empty-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* 主内容区域需要为侧边栏腾出空间 */
+#csv-viewer-app {
+    transition: padding-right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#csv-viewer-app.file-selector-open {
+    padding-right: 300px;
+}
+
+/* 嵌入分页栏的切换按钮 */
+.csv-file-selector-toggle-btn {
+    margin-left: auto;
+    padding: 10px 18px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    height: 40px;
+}
+
+.csv-file-selector-toggle-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
+    background: linear-gradient(135deg, 
+        color-mix(in srgb, var(--primary-color) 90%, white), 
+        color-mix(in srgb, var(--secondary-color) 90%, white));
+}
+
+.csv-file-selector-toggle-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
+}
+
+.csv-file-selector-toggle-btn.active {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    box-shadow: 0 3px 10px rgba(118, 75, 162, 0.5);
+}
+
+.csv-file-selector-toggle-text {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* 按钮图标旋转动画 */
+.csv-file-selector-toggle-btn svg {
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.csv-file-selector-toggle-btn.active svg {
+    transform: rotate(90deg);
+}
+
+/* 文件选择器弹出动画增强 */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.csv-file-selector.open {
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 滚动条样式 */
+.csv-file-selector-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.csv-file-selector-body::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+
+.csv-file-selector-body::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.csv-file-selector-body::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* 重新加载按钮 */
+.csv-file-reload-btn {
+    margin-top: 12px;
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.csv-file-reload-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}

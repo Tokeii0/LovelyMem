@@ -1,0 +1,336 @@
+.terminal-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    background-color: var(--terminal-bg, #1e1e1e);
+    color: var(--terminal-text, #cccccc);
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 14px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: var(--terminal-header-bg, #252526);
+    border-bottom: 1px solid var(--terminal-border, #333);
+    user-select: none;
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.terminal-title {
+    font-weight: bold;
+    color: var(--terminal-title, #e0e0e0);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.terminal-image-status {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: normal;
+    padding: 2px 8px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+#terminal-image-indicator {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#terminal-image-text {
+    font-size: 12px;
+}
+
+.icon-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.terminal-controls {
+    display: flex;
+    gap: 8px;
+}
+
+.terminal-control-btn {
+    background: none;
+    border: none;
+    color: var(--terminal-btn, #888);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.terminal-control-btn:hover {
+    background-color: var(--terminal-btn-hover-bg, #3e3e42);
+    color: var(--terminal-btn-hover, #fff);
+}
+
+.terminal-control-btn svg {
+    display: block;
+}
+
+.terminal-body {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    overflow: hidden; /* xterm handles scrolling */
+    padding: 4px 0 0 4px; /* Slight padding for aesthetics */
+    background-color: var(--terminal-bg, #1e1e1e);
+    position: relative;
+}
+
+.terminal-particle-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* xterm.js customization overrides if needed */
+.xterm-viewport {
+    overflow-y: auto;
+}
+
+/* Autocomplete Popup */
+.terminal-autocomplete-box {
+    position: absolute;
+    background-color: var(--terminal-header-bg, #252526);
+    border: 1px solid var(--terminal-border, #454545);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    min-width: 200px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+}
+
+.suggestion-hint {
+    padding: 8px 10px;
+    background-color: var(--terminal-hint-bg, #2d2d30);
+    color: var(--terminal-title, #e0e0e0);
+    font-size: 12px;
+    border-bottom: 1px solid var(--terminal-border, #454545);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.suggestion-hint strong {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.suggestion-group-header {
+    padding: 4px 10px 3px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--terminal-btn, #888);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: var(--terminal-hint-bg, #2d2d30);
+    border-bottom: 1px solid var(--terminal-border, #454545);
+    user-select: none;
+}
+
+.suggestion-item {
+    padding: 6px 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+    border-bottom: 1px solid var(--terminal-border, #333);
+    transition: background-color 0.1s;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover, .suggestion-item.selected {
+    background-color: var(--terminal-selection, #094771);
+    color: var(--terminal-btn-hover, #fff);
+}
+
+.suggestion-icon {
+    flex-shrink: 0;
+    width: 20px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.suggestion-icon svg {
+    width: 14px;
+    height: 14px;
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+
+.suggestion-item.selected .suggestion-icon svg,
+.suggestion-item:hover .suggestion-icon svg {
+    color: #e0e0e0;
+}
+
+.suggestion-text-wrap {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.suggestion-label-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.suggestion-label {
+    font-weight: bold;
+    color: var(--terminal-label, #dcdcaa);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-type-badge {
+    flex-shrink: 0;
+    font-size: 10px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 500;
+    line-height: 14px;
+}
+
+.suggestion-type-command {
+    background-color: rgba(86, 156, 214, 0.2);
+    color: #569cd6;
+}
+
+.suggestion-type-profile {
+    background-color: rgba(78, 201, 176, 0.2);
+    color: #4ec9b0;
+}
+
+.suggestion-type-flag {
+    background-color: rgba(206, 145, 120, 0.2);
+    color: #ce9178;
+}
+
+.suggestion-type-history {
+    background-color: rgba(220, 220, 170, 0.2);
+    color: #dcdcaa;
+}
+
+.suggestion-type-tool {
+    background-color: rgba(197, 134, 192, 0.2);
+    color: #c586c0;
+}
+
+.suggestion-desc {
+    font-size: 11px;
+    color: var(--terminal-btn, #888);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggestion-item:hover .suggestion-desc, .suggestion-item.selected .suggestion-desc {
+    color: #ccc;
+}
+
+/* Help Tooltip */
+.terminal-help-tooltip {
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    background-color: var(--terminal-header-bg, #252526);
+    border: 1px solid var(--terminal-border, #454545);
+    border-radius: 6px;
+    padding: 0;
+    max-width: 380px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+    z-index: 1001;
+    animation: slideInRight 0.2s ease-out;
+    color: var(--terminal-text, #cccccc);
+    font-family: 'Segoe UI', 'Consolas', sans-serif;
+    font-size: 13px;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.help-tooltip-header {
+    background-color: var(--terminal-hint-bg, #2d2d30);
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--terminal-title, #e0e0e0);
+    border-bottom: 1px solid var(--terminal-btn-hover-bg, #3e3e42);
+    border-radius: 6px 6px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.help-tooltip-content {
+    padding: 12px 16px;
+    line-height: 1.5;
+}
+
+.help-tooltip-content p {
+    margin: 6px 0;
+}
+
+.help-tooltip-content strong {
+    color: #4CAF50;
+    font-weight: 600;
+}
+
+.help-tooltip-content code {
+    background-color: var(--terminal-bg, #1e1e1e);
+    padding: 2px 6px;
+    border: 1px solid var(--terminal-btn-hover-bg, #3e3e42);
+    border-radius: 3px;
+    font-family: 'Consolas', monospace;
+    color: var(--terminal-label, #dcdcaa);
+    font-size: 12px;
+}
+
+.help-tooltip-content .help-example {
+    margin: 4px 0 4px 12px;
+    color: #9cdcfe;
+    font-size: 12px;
+    font-family: 'Consolas', monospace;
+}
+
+.help-tooltip-content hr {
+    border: none;
+    border-top: 1px solid var(--terminal-btn-hover-bg, #3e3e42);
+    margin: 10px 0;
+}

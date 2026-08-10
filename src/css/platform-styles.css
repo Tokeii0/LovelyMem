@@ -1,0 +1,132 @@
+/**
+ * 平台特定样式
+ * 为不同操作系统平台提供特定的样式调整
+ */
+
+/* 基础平台类 */
+.platform-macos {
+  /* macOS 特定样式 */
+}
+
+.platform-windows {
+  /* Windows 特定样式 */
+}
+
+.platform-linux {
+  /* Linux 特定样式 */
+}
+
+/* 原生标题栏样式 */
+.native-titlebar .modern-title-bar {
+  display: none !important; /* 隐藏自定义标题栏 */
+}
+
+/* 注意：主容器的上边距与高度统一由 --titlebar-h / --statusbar-h 派生
+   （见 main-layout.css），此处不再重复设置 margin-top / height，
+   避免"边距用一个值、高度用另一个值"导致顶部或底部出现空白条。
+   原生标题栏场景由 body.native-titlebar 把 --titlebar-h 置 0 即可。 */
+
+.native-titlebar-layout {
+  padding-top: 0 !important;
+}
+
+/* macOS 特定调整 */
+.platform-macos.native-titlebar {
+  /* macOS 原生标题栏下的特殊调整 */
+}
+
+.platform-macos.native-titlebar .app-layout {
+  /* 调整应用布局以适应 macOS 原生标题栏 */
+  padding-top: 0;
+}
+
+.platform-macos.native-titlebar .modern-sidebar {
+  /* 调整侧边栏位置 */
+  top: 0;
+}
+
+.platform-macos.native-titlebar .main-workspace {
+  /* 调整主工作区 */
+  padding-top: 0;
+}
+
+/* Windows 和 Linux 保持自定义标题栏 */
+.platform-windows.custom-titlebar .modern-title-bar,
+.platform-linux.custom-titlebar .modern-title-bar {
+  display: flex; /* 确保自定义标题栏显示 */
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  .native-titlebar .main-container {
+    margin-top: 0 !important;
+  }
+  
+  .custom-titlebar .main-container {
+    margin-top: 40px; /* 在小屏幕上稍微减少标题栏高度 */
+  }
+}
+
+/* 主题特定的平台调整 */
+[data-theme="dark"].platform-macos.native-titlebar {
+  /* 深色主题下的 macOS 调整 */
+}
+
+[data-theme="light"].platform-macos.native-titlebar {
+  /* 浅色主题下的 macOS 调整 */
+}
+
+[data-theme="sakura"].platform-macos.native-titlebar {
+  /* 樱花主题下的 macOS 调整 */
+}
+
+/* 确保在 macOS 上窗口控制按钮不显示 */
+.platform-macos.native-titlebar .window-controls {
+  display: none !important;
+}
+
+/* 确保在 macOS 上标题栏操作按钮不显示 */
+.platform-macos.native-titlebar .title-bar-actions {
+  display: none !important;
+}
+
+/* 在 macOS 上，可以考虑在其他地方显示主题切换按钮 */
+.platform-macos.native-titlebar .theme-toggle-alternative {
+  /* 可以在侧边栏或其他位置添加主题切换按钮 */
+  display: block;
+}
+
+/* 其他平台隐藏替代主题切换按钮 */
+.platform-windows .theme-toggle-alternative,
+.platform-linux .theme-toggle-alternative {
+  display: none;
+}
+
+/* 平台特定的动画调整 */
+.platform-macos .app-layout {
+  transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); /* macOS 风格的缓动 */
+}
+
+.platform-windows .app-layout {
+  transition: all 0.2s ease; /* Windows 风格的缓动 */
+}
+
+.platform-linux .app-layout {
+  transition: all 0.25s ease-out; /* Linux 风格的缓动 */
+}
+
+/* 确保布局在平台切换时正确 */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.native-titlebar-layout {
+  /* 原生标题栏布局的特殊调整 */
+}
+
+.custom-titlebar-layout {
+  /* 自定义标题栏布局的特殊调整 */
+}

@@ -1,0 +1,358 @@
+/* Lovelymem V2 - 应用布局 + 主容器 + 侧边栏 + 侧边栏切换 */
+/* 从 modernStyles.css 拆分 (原 L2747-L3089) */
+
+
+/* 布局尺寸变量：标题栏与状态栏都是 position:fixed 浮层，
+   主容器要用外边距避开它们。关键约束是「外边距」与「高度」必须取自同一变量，
+   否则二者不一致就会在顶部/底部留下空白条。
+   - --titlebar-h: 自定义标题栏高度；macOS 用原生标题栏时由 body.native-titlebar 置 0，
+     也可由 platformDetection.ts 在运行时覆盖（只需改这一个值，高度会自动跟随）。
+   - --statusbar-h: 底部状态栏预留空间。 */
+:root {
+  --titlebar-h: 45px;
+  --statusbar-h: 32px;
+}
+
+/* macOS 使用原生标题栏，无自定义标题栏浮层 */
+body.native-titlebar {
+  --titlebar-h: 0px;
+}
+
+/* 应用布局 */
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-primary);
+}
+
+/* 主容器 */
+.main-container {
+  display: flex;
+  flex: 1;
+  /* 避开固定定位的标题栏 / 状态栏 */
+  margin-top: var(--titlebar-h);
+  margin-bottom: var(--statusbar-h);
+  /* 高度与上面的外边距同源，保证永远严丝合缝、不留空白 */
+  height: calc(100vh - var(--titlebar-h) - var(--statusbar-h));
+  min-height: calc(100vh - var(--titlebar-h) - var(--statusbar-h));
+  max-height: calc(100vh - var(--titlebar-h) - var(--statusbar-h));
+  overflow: visible;
+  /* 允许侧边栏切换按钮显示 */
+}
+
+/* 脚本管理区域 */
+#script-management-area {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  pointer-events: none;
+  /* 允许点击穿透到下层元素 */
+}
+
+#script-management-area>* {
+  pointer-events: auto;
+  /* 恢复脚本管理容器的点击事件 */
+}
+
+/* 现代化侧边栏 */
+.modern-sidebar {
+  width: 250px;
+  min-width: 250px;
+  /* 防止侧边栏被压缩 */
+  height: 100%;
+  /* 确保占据全部高度 */
+  background: var(--bg-secondary);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  animation: slideInLeft 0.5s ease-out;
+  flex-shrink: 0;
+  /* 防止在flex容器中收缩 */
+  transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    min-width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: visible;
+  /* 允许切换按钮显示在侧边栏外部 */
+  transform-origin: left center;
+  /* 设置缩放中心点为左侧中心 */
+}
+
+/* 滚轴式收缩动画 - 纯水平方向 */
+.modern-sidebar.collapsing {
+  animation: rollAxisCollapse 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.modern-sidebar.expanding {
+  animation: rollAxisExpand 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+@keyframes rollAxisCollapse {
+  0% {
+    width: 300px;
+    min-width: 300px;
+  }
+
+  100% {
+    width: 130px;
+    min-width: 130px;
+  }
+}
+
+@keyframes rollAxisExpand {
+  0% {
+    width: 130px;
+    min-width: 130px;
+  }
+
+  100% {
+    width: 300px;
+    min-width: 300px;
+  }
+}
+
+/* Mini模式的侧边栏 */
+.modern-sidebar.mini {
+  width: 130px;
+  min-width: 130px;
+  transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    min-width 0.6s cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+}
+
+/* 优化后的侧边栏切换按钮 */
+.sidebar-toggle {
+  position: absolute;
+  top: 20px;
+  right: -22px;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 9999;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  color: #ffffff;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible;
+  /* 默认背景 */
+  background: linear-gradient(135deg, #60a5fa, #38bdf8);
+  box-shadow: 0 4px 15px rgba(96, 165, 250, 0.3);
+}
+
+/* 悬停效果 */
+.sidebar-toggle:hover {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 8px 25px rgba(96, 165, 250, 0.5);
+}
+
+/* 点击效果 */
+.sidebar-toggle:active {
+  transform: scale(0.95);
+}
+
+/* 图标样式 */
+.sidebar-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.5s ease;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.1));
+}
+
+.sidebar-toggle:hover svg {
+  transform: translateX(2px);
+}
+
+/* Mini模式适配 */
+.modern-sidebar.mini .sidebar-toggle svg {
+  transform: rotate(180deg);
+}
+
+.modern-sidebar.mini .sidebar-toggle:hover svg {
+  transform: rotate(180deg) translateX(-2px);
+}
+
+/* 点击时的粒子爆炸动画 */
+.sidebar-toggle.clicked {
+  animation: particle-burst 0.6s ease-out;
+}
+
+@keyframes particle-burst {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.1);
+  }
+
+  100% {
+    box-shadow: 0 0 0 30px rgba(255, 255, 255, 0);
+  }
+}
+
+/* 粒子效果样式 */
+.sidebar-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+  border-radius: 50%;
+  animation: particle-twinkle 0.8s ease-out forwards;
+}
+
+@keyframes particle-twinkle {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 1;
+    box-shadow: 0 0 6px currentColor;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.2) rotate(180deg);
+    opacity: 0.8;
+    box-shadow: 0 0 12px currentColor;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(0) rotate(360deg);
+    opacity: 0;
+    box-shadow: 0 0 3px currentColor;
+  }
+}
+
+/* 涟漪效果样式 */
+.sidebar-ripple {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  border-radius: 50%;
+  animation: ripple-expand 0.6s ease-out forwards;
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+}
+
+/* 增强按钮的可爱表情效果 */
+.sidebar-toggle::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.sidebar-toggle:hover::after {
+  opacity: 1;
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+
+  0%,
+  90%,
+  100% {
+    opacity: 1;
+  }
+
+  95% {
+    opacity: 0.3;
+  }
+}
+
+/* 为按钮添加可爱的心跳效果 */
+.sidebar-toggle.heartbeat {
+  animation: heartbeat 0.8s ease-in-out;
+}
+
+@keyframes heartbeat {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  75% {
+    transform: scale(1.15);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* 移除了反弹效果，保持纯净的滚轴动画 */
+
+.sidebar-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* 侧边栏操作按钮区域 */
+.sidebar-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sidebar-action-btn {
+  padding: 8px 12px;
+  border: 1px solid rgba(74, 85, 104, 0.2);
+  border-radius: var(--radius);
+  background: transparent;
+  font-size: 11px;
+  font-weight: 500;
+  color: #4a5568;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
+}
+
+.sidebar-action-btn:hover {
+  background: linear-gradient(135deg, #e8f5e8, #f0f8ff, #fff0f5);
+  color: #2d3748;
+  border-color: rgba(45, 55, 72, 0.2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.sidebar-action-btn span {
+  font-size: 12px;
+}
+
+/* 镜像状态区域 */

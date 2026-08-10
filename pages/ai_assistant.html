@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 助手 - Lovelymem V2</title>
+    <!-- 主题系统 CSS -->
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <!-- 统一标题栏 CSS -->
+    <link rel="stylesheet" href="../src/components/UnifiedTitleBar.css">
+    <!-- AI 聊天界面 CSS -->
+    <link rel="stylesheet" href="../src/modules/ui/components/AIChat.css">
+    <script src="../src/modules/ai-assistant-v2/ui/ai-assistant-window.ts" type="module" defer></script>
+    <!-- 水印脚本 -->
+    <!-- 子窗口主题同步 -->
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+    <style>
+        html, body { height: 100%; margin: 0; }
+        body {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+        /* 独立窗口内让标题栏参与正常流式布局，避免 fixed 定位遮挡聊天内容 */
+        .unified-titlebar {
+            position: relative;
+            animation: none;
+        }
+        #ai-window-content {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <!-- 统一标题栏 -->
+    <div class="unified-titlebar">
+        <div class="unified-titlebar-left">
+            <span class="unified-titlebar-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M2 14h2M20 14h2M15 13v2M9 13v2"/></svg></span>
+            <span class="unified-titlebar-title">AI 助手</span>
+            <span class="unified-titlebar-subtitle">内存取证智能分析</span>
+        </div>
+        <div class="unified-titlebar-right">
+            <div class="unified-window-controls">
+                <button class="unified-window-btn ai-win-dock-btn" title="吸附到屏幕右侧">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="14" y1="4" x2="14" y2="20"/></svg>
+                </button>
+                <button class="unified-window-btn minimize-btn ai-win-min-btn" title="最小化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path d="M2 6h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button class="unified-window-btn maximize-btn ai-win-max-btn" title="最大化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <rect x="2" y="2" width="8" height="8" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                    </svg>
+                </button>
+                <button class="unified-window-btn close-btn ai-win-close-btn" title="关闭">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI 聊天内容区域（由 AIChatRenderer 渲染填充） -->
+    <div id="ai-window-content"></div>
+</body>
+</html>

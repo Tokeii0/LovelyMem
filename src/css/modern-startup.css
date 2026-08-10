@@ -1,0 +1,301 @@
+/* Modern Minimalist / Frosted Glass Startup Theme */
+:root {
+  --s-bg: #0f1117;
+  --s-surface: rgba(255, 255, 255, 0.06);
+  --s-glass: rgba(255, 255, 255, 0.08);
+  --s-glass-border: rgba(255, 255, 255, 0.12);
+  --s-primary: #6366f1;
+  --s-primary-soft: rgba(99, 102, 241, 0.15);
+  --s-secondary: #8b5cf6;
+  --s-accent: #22c55e;
+  --s-text: #f1f5f9;
+  --s-text-muted: #94a3b8;
+  --s-progress-fill: linear-gradient(90deg, #6366f1, #8b5cf6);
+  --s-shadow: rgba(0, 0, 0, 0.3);
+  --s-blur: 20px;
+  --s-blob1: rgba(99, 102, 241, 0.15);
+  --s-blob2: rgba(139, 92, 246, 0.12);
+  --s-blob3: rgba(34, 197, 94, 0.08);
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+
+/* Light Theme */
+[data-theme="light"] {
+  --s-bg: #f8fafc;
+  --s-surface: rgba(255, 255, 255, 0.7);
+  --s-glass: rgba(255, 255, 255, 0.6);
+  --s-glass-border: rgba(0, 0, 0, 0.08);
+  --s-primary: #4f46e5;
+  --s-primary-soft: rgba(79, 70, 229, 0.1);
+  --s-secondary: #7c3aed;
+  --s-accent: #16a34a;
+  --s-text: #1e293b;
+  --s-text-muted: #64748b;
+  --s-progress-fill: linear-gradient(90deg, #4f46e5, #7c3aed);
+  --s-shadow: rgba(0, 0, 0, 0.06);
+  --s-blob1: rgba(79, 70, 229, 0.12);
+  --s-blob2: rgba(124, 58, 237, 0.1);
+  --s-blob3: rgba(22, 163, 74, 0.06);
+}
+
+/* Sakura Theme */
+[data-theme="sakura"] {
+  --s-bg: #fdf2f4;
+  --s-surface: rgba(255, 240, 245, 0.7);
+  --s-glass: rgba(255, 228, 235, 0.5);
+  --s-glass-border: rgba(232, 69, 124, 0.15);
+  --s-primary: #e8457c;
+  --s-primary-soft: rgba(232, 69, 124, 0.1);
+  --s-secondary: #f06292;
+  --s-accent: #e8457c;
+  --s-text: #4a2030;
+  --s-text-muted: #7a4054;
+  --s-progress-fill: linear-gradient(90deg, #e8457c, #f06292);
+  --s-shadow: rgba(74, 32, 48, 0.06);
+  --s-blob1: rgba(232, 69, 124, 0.12);
+  --s-blob2: rgba(240, 98, 146, 0.1);
+  --s-blob3: rgba(244, 143, 177, 0.08);
+}
+
+/* Dark Theme (explicit) */
+[data-theme="dark"] {
+  --s-bg: #0f1117;
+  --s-surface: rgba(255, 255, 255, 0.06);
+  --s-glass: rgba(255, 255, 255, 0.08);
+  --s-glass-border: rgba(255, 255, 255, 0.12);
+  --s-primary: #6366f1;
+  --s-primary-soft: rgba(99, 102, 241, 0.15);
+  --s-secondary: #8b5cf6;
+  --s-accent: #22c55e;
+  --s-text: #f1f5f9;
+  --s-text-muted: #94a3b8;
+  --s-progress-fill: linear-gradient(90deg, #6366f1, #8b5cf6);
+  --s-shadow: rgba(0, 0, 0, 0.3);
+  --s-blob1: rgba(99, 102, 241, 0.15);
+  --s-blob2: rgba(139, 92, 246, 0.12);
+  --s-blob3: rgba(34, 197, 94, 0.08);
+}
+
+/* ======= Main Container ======= */
+.modern-startup-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--s-bg);
+  color: var(--s-text);
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-sans);
+  overflow: hidden;
+}
+
+/* ======= Animated Gradient Mesh Background ======= */
+.startup-bg-mesh {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  will-change: transform;
+}
+
+.mesh-blob.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--s-blob1);
+  top: -10%;
+  left: -5%;
+  animation: meshFloat1 22s ease-in-out infinite;
+}
+
+.mesh-blob.blob-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--s-blob2);
+  top: 50%;
+  right: -10%;
+  animation: meshFloat2 26s ease-in-out infinite;
+}
+
+.mesh-blob.blob-3 {
+  width: 350px;
+  height: 350px;
+  background: var(--s-blob3);
+  bottom: -5%;
+  left: 30%;
+  animation: meshFloat3 20s ease-in-out infinite;
+}
+
+@keyframes meshFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, 40px) scale(1.1); }
+  66% { transform: translate(-30px, 70px) scale(0.95); }
+}
+
+@keyframes meshFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, -30px) scale(1.05); }
+  66% { transform: translate(40px, -60px) scale(0.9); }
+}
+
+@keyframes meshFloat3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(40px, -40px) scale(1.08); }
+  66% { transform: translate(-60px, 20px) scale(0.92); }
+}
+
+/* ======= Center Content ======= */
+.startup-center {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ======= Logo Container ======= */
+.logo-container {
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: var(--s-glass);
+  backdrop-filter: blur(var(--s-blur));
+  -webkit-backdrop-filter: blur(var(--s-blur));
+  border: 1px solid var(--s-glass-border);
+  box-shadow: 0 8px 32px var(--s-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  margin-bottom: 1.5rem;
+}
+
+.startup-logo {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px var(--s-shadow));
+  animation: breathe 6s ease-in-out infinite;
+}
+
+@keyframes logoEnter {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+/* ======= Title ======= */
+.app-title {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--s-text);
+  letter-spacing: 0.5px;
+  margin: 0;
+  animation: fadeInUp 0.6s ease-out 0.15s both;
+}
+
+.app-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--s-text-muted);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-top: 6px;
+  animation: fadeInUp 0.6s ease-out 0.3s both;
+}
+
+/* ======= Progress Bar ======= */
+.progress-section {
+  margin-top: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  animation: fadeIn 0.6s ease-out 0.5s both;
+}
+
+.progress-track {
+  width: 240px;
+  height: 3px;
+  background: var(--s-surface);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--s-progress-fill);
+  border-radius: 2px;
+  transition: width 0.4s ease-out;
+}
+
+/* ======= Status Text ======= */
+.status-text {
+  font-size: 0.75rem;
+  color: var(--s-text-muted);
+  min-height: 1.2em;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  letter-spacing: 0.2px;
+}
+
+/* ======= Version ======= */
+.version-text {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--s-text-muted);
+  opacity: 0.5;
+  z-index: 10;
+  animation: fadeIn 0.6s ease-out 0.8s both;
+}
+
+/* ======= Animations ======= */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutUp {
+  from { opacity: 1; transform: scale(1); filter: blur(0); }
+  to { opacity: 0; transform: scale(1.05); filter: blur(8px); }
+}
+
+/* ======= Mobile ======= */
+@media (max-width: 768px) {
+  .logo-container {
+    width: 96px;
+    height: 96px;
+  }
+  .app-title {
+    font-size: 1.2rem;
+  }
+  .progress-track {
+    width: 200px;
+  }
+}

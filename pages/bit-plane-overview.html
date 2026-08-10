@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>位平面全览 - Stegsolve分析器</title>
+    <link rel="stylesheet" href="../src/modules/stegsolve-analyzer/styles/bit-plane-overview.css">
+    <!-- 水印脚本 -->
+</head>
+<body>
+    <div class="overview-container">
+        <!-- 自定义标题栏 -->
+        <div class="modern-title-bar">
+            <div class="title-bar-left">
+                <span class="window-title">位平面全览 - Stegsolve分析器</span>
+            </div>
+            <div class="title-bar-center">
+                <!-- 空白区域 -->
+            </div>
+            <div class="title-bar-right">
+                <button class="title-bar-btn" id="minimizeBtn" title="最小化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <rect x="0" y="5" width="12" height="2" fill="currentColor"/>
+                    </svg>
+                </button>
+                <button class="title-bar-btn" id="maximizeBtn" title="最大化">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <rect x="1" y="1" width="10" height="10" stroke="currentColor" stroke-width="1" fill="none"/>
+                    </svg>
+                </button>
+                <button class="title-bar-btn close-btn" id="closeBtn" title="关闭">
+                    <svg width="12" height="12" viewBox="0 0 12 12">
+                        <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="overview-content">
+            <!-- 工具栏 -->
+            <div class="overview-toolbar">
+                <div class="toolbar-left">
+                    <span class="image-info" id="overviewImageInfo">未加载图像</span>
+                </div>
+                <div class="toolbar-right">
+                    <div class="transform-controls">
+                        <select class="transform-select" id="transformSelect">
+                            <option value="none">原始</option>
+                            <option value="invert">反色</option>
+                            <option value="xor">XOR</option>
+                            <option value="add">加法</option>
+                            <option value="sub">减法</option>
+                            <option value="mul">乘法</option>
+                            <option value="and">AND</option>
+                            <option value="or">OR</option>
+                        </select>
+                        <button class="toolbar-btn" id="applyTransformBtn">应用变换</button>
+                    </div>
+                    <button class="toolbar-btn" id="saveAllBtn">保存全部</button>
+                    <button class="toolbar-btn" id="refreshBtn">刷新</button>
+                </div>
+            </div>
+
+            <!-- 位平面网格 -->
+            <div class="bit-plane-grid" id="bitPlaneGrid">
+                <!-- 红色通道 -->
+                <div class="channel-section">
+                    <h3 class="channel-title red-channel">红色通道 (R)</h3>
+                    <div class="bit-plane-row">
+                        <div class="bit-plane-item" data-channel="red" data-bit="0">
+                            <div class="bit-plane-label">R0 (LSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="1">
+                            <div class="bit-plane-label">R1</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="2">
+                            <div class="bit-plane-label">R2</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="3">
+                            <div class="bit-plane-label">R3</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="4">
+                            <div class="bit-plane-label">R4</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="5">
+                            <div class="bit-plane-label">R5</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="6">
+                            <div class="bit-plane-label">R6</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="red" data-bit="7">
+                            <div class="bit-plane-label">R7 (MSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 绿色通道 -->
+                <div class="channel-section">
+                    <h3 class="channel-title green-channel">绿色通道 (G)</h3>
+                    <div class="bit-plane-row">
+                        <div class="bit-plane-item" data-channel="green" data-bit="0">
+                            <div class="bit-plane-label">G0 (LSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="1">
+                            <div class="bit-plane-label">G1</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="2">
+                            <div class="bit-plane-label">G2</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="3">
+                            <div class="bit-plane-label">G3</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="4">
+                            <div class="bit-plane-label">G4</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="5">
+                            <div class="bit-plane-label">G5</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="6">
+                            <div class="bit-plane-label">G6</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="green" data-bit="7">
+                            <div class="bit-plane-label">G7 (MSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 蓝色通道 -->
+                <div class="channel-section">
+                    <h3 class="channel-title blue-channel">蓝色通道 (B)</h3>
+                    <div class="bit-plane-row">
+                        <div class="bit-plane-item" data-channel="blue" data-bit="0">
+                            <div class="bit-plane-label">B0 (LSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="1">
+                            <div class="bit-plane-label">B1</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="2">
+                            <div class="bit-plane-label">B2</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="3">
+                            <div class="bit-plane-label">B3</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="4">
+                            <div class="bit-plane-label">B4</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="5">
+                            <div class="bit-plane-label">B5</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="6">
+                            <div class="bit-plane-label">B6</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="blue" data-bit="7">
+                            <div class="bit-plane-label">B7 (MSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alpha通道 -->
+                <div class="channel-section">
+                    <h3 class="channel-title alpha-channel">Alpha通道 (A)</h3>
+                    <div class="bit-plane-row">
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="0">
+                            <div class="bit-plane-label">A0 (LSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="1">
+                            <div class="bit-plane-label">A1</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="2">
+                            <div class="bit-plane-label">A2</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="3">
+                            <div class="bit-plane-label">A3</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="4">
+                            <div class="bit-plane-label">A4</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="5">
+                            <div class="bit-plane-label">A5</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="6">
+                            <div class="bit-plane-label">A6</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                        <div class="bit-plane-item" data-channel="alpha" data-bit="7">
+                            <div class="bit-plane-label">A7 (MSB)</div>
+                            <canvas class="bit-plane-canvas" width="200" height="150"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 加载状态 -->
+            <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">正在生成位平面...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../src/modules/stegsolve-analyzer/bit-plane-overview.ts" type="module"></script>
+</body>
+</html>

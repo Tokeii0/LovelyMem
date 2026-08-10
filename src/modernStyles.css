@@ -1,0 +1,37 @@
+/* 现代化样式 - Lovelymem V2 */
+/*
+ * 注意：主题变量、基础样式和动画已移至 src/css/theme/ 目录
+ * - base.css: 基础样式、通用变量、动画定义
+ * - light.css: 浅色主题
+ * - dark.css: 深色主题
+ * - sakura.css: 樱花主题
+ *
+ * 本文件为组件样式入口，通过 @import 引用各组件样式文件
+ * 组件样式文件位于 src/css/components/ 目录
+ */
+
+/* ========================================
+   组件样式 @import 入口
+   ======================================== */
+
+@import url('./css/components/navbar.css');
+@import url('./css/components/titlebar-animations.css');
+@import url('./css/components/titlebar-actions.css');
+@import url('./css/components/command-console.css');
+@import url('./css/components/main-layout.css');
+@import url('./css/components/sidebar-image.css');
+@import url('./css/components/area-sections.css');
+@import url('./css/components/settings-dialog.css');
+@import url('./css/components/toast.css');
+@import url('./css/components/custom-tools-filewin.css');
+@import url('./css/components/terminal-window.css');
+@import url('./css/components/process-status.css');
+@import url('./css/components/file-panel.css');
+@import url('./css/components/file-dialogs.css');
+@import url('./css/components/plugin-table.css');
+@import url('./css/components/icon-selector.css');
+@import url('./css/components/search-ai-providers.css');
+@import url('./css/components/loading-animation.css');
+@import url('./css/components/theme-switcher.css');
+@import url('./css/components/welcome-page.css');
+@import url('./css/components/custom-dialog.css');

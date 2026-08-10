@@ -1,0 +1,1001 @@
+/**
+ * NTFS 文件树查看器样式
+ * 支持深色/浅色主题自适应
+ */
+
+/* ---- 视图切换栏 ---- */
+.ntfs-view-toggle-bar {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+  flex-shrink: 0;
+}
+
+.ntfs-view-toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.ntfs-view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 12px;
+  border: none;
+  background: var(--input-bg, #ffffff);
+  color: var(--text-secondary, #64748b);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ntfs-view-toggle-btn + .ntfs-view-toggle-btn {
+  border-left: 1px solid var(--border-color, #e2e8f0);
+}
+
+.ntfs-view-toggle-btn:hover {
+  background: var(--hover-bg, #f1f5f9);
+}
+
+.ntfs-view-toggle-btn.active {
+  background: var(--accent-primary, #3b82f6);
+  color: #ffffff;
+}
+
+.ntfs-view-toggle-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+[data-theme="dark"] .ntfs-view-toggle-bar,
+.dark .ntfs-view-toggle-bar {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+[data-theme="dark"] .ntfs-view-toggle-btn,
+.dark .ntfs-view-toggle-btn {
+  background: rgba(30, 41, 59, 0.6);
+  color: #94a3b8;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-view-toggle-btn + .ntfs-view-toggle-btn,
+.dark .ntfs-view-toggle-btn + .ntfs-view-toggle-btn {
+  border-left-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-view-toggle-group,
+.dark .ntfs-view-toggle-group {
+  border-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-view-toggle-btn:hover,
+.dark .ntfs-view-toggle-btn:hover {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+/* ---- Vol3 取证小贴士按钮 ---- */
+.vol3-tips-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  background: var(--input-bg, #ffffff);
+  color: var(--vol3-accent, #10b981);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.vol3-tips-btn:hover {
+  background: rgba(16, 185, 129, 0.08);
+  border-color: var(--vol3-accent, #10b981);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.12);
+}
+
+[data-theme="dark"] .vol3-tips-btn,
+.dark .vol3-tips-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: #334155;
+}
+
+[data-theme="dark"] .vol3-tips-btn:hover,
+.dark .vol3-tips-btn:hover {
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* ---- 容器 ---- */
+.ntfs-tree-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---- 加载状态 ---- */
+.ntfs-tree-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.ntfs-tree-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border-color, #e2e8f0);
+  border-top-color: var(--accent-color, #667eea);
+  border-radius: 50%;
+  animation: ntfs-tree-spin 0.8s linear infinite;
+}
+
+@keyframes ntfs-tree-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ntfs-tree-loading-text {
+  color: var(--text-secondary, #94a3b8);
+  font-size: 13px;
+}
+
+/* ---- 错误状态 ---- */
+.ntfs-tree-error {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: var(--error-bg, #fef2f2);
+  border: 1px solid var(--error-border, #fecaca);
+  border-radius: 8px;
+  margin: 12px;
+  color: var(--error-color, #dc2626);
+  font-size: 13px;
+}
+
+.ntfs-tree-error-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--error-color, #dc2626);
+}
+
+/* ---- 空状态 ---- */
+.ntfs-tree-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 14px;
+}
+
+/* ---- 统计信息栏 ---- */
+.ntfs-tree-stats-bar {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--stats-bg, #f8fafc);
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  flex-shrink: 0;
+}
+
+.ntfs-tree-stats-items {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.ntfs-tree-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+}
+
+.ntfs-tree-stat-icon svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.6;
+}
+
+.ntfs-tree-stat-label {
+  opacity: 0.8;
+}
+
+.ntfs-tree-stat-value {
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.ntfs-tree-stat-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--border-color, #e2e8f0);
+}
+
+.ntfs-tree-stat-orphan .ntfs-tree-stat-value {
+  color: #dc2626;
+}
+
+/* ---- 工具栏 ---- */
+.ntfs-tree-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.ntfs-tree-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--input-bg, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 6px;
+  padding: 4px 10px;
+  flex: 1;
+  min-width: 180px;
+  max-width: 360px;
+  transition: border-color 0.2s;
+}
+
+.ntfs-tree-search:focus-within {
+  border-color: var(--accent-color, #667eea);
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
+}
+
+.ntfs-tree-search-icon svg {
+  width: 14px;
+  height: 14px;
+  color: var(--text-secondary, #94a3b8);
+  flex-shrink: 0;
+}
+
+.ntfs-tree-search-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 12px;
+  color: var(--text-primary, #1e293b);
+  width: 100%;
+  padding: 2px 0;
+}
+
+.ntfs-tree-search-input::placeholder {
+  color: var(--text-secondary, #94a3b8);
+}
+
+.ntfs-tree-filters {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+/* ---- 扩展名筛选 ---- */
+.ntfs-tree-ext-filters {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--border-color, #e2e8f0);
+}
+
+.ntfs-tree-ext-btn {
+  padding: 2px 7px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ntfs-tree-ext-btn:hover {
+  background: var(--hover-bg, #f1f5f9);
+  color: var(--text-primary, #1e293b);
+}
+
+.ntfs-tree-ext-btn.active {
+  background: #6366f1;
+  color: #ffffff;
+  border-color: #6366f1;
+}
+
+[data-theme="dark"] .ntfs-tree-ext-filters,
+.dark .ntfs-tree-ext-filters {
+  border-left-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-tree-ext-btn,
+.dark .ntfs-tree-ext-btn {
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .ntfs-tree-ext-btn:hover,
+.dark .ntfs-tree-ext-btn:hover {
+  background: rgba(51, 65, 85, 0.6);
+  color: #e2e8f0;
+}
+
+.ntfs-tree-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  background: var(--input-bg, #ffffff);
+  color: var(--text-secondary, #64748b);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.ntfs-tree-filter-btn svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ntfs-tree-filter-btn:hover {
+  background: var(--hover-bg, #f1f5f9);
+}
+
+.ntfs-tree-filter-btn.active {
+  background: var(--accent-color, #667eea);
+  color: #ffffff;
+  border-color: var(--accent-color, #667eea);
+}
+
+.ntfs-filter-cre.active {
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.ntfs-filter-mod.active {
+  background: #d97706;
+  border-color: #d97706;
+}
+
+.ntfs-filter-rd.active {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.ntfs-filter-orphan.active {
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+/* ---- 文件树容器 ---- */
+.ntfs-tree-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  padding: 4px 0;
+}
+
+/* ---- 树节点 ---- */
+.ntfs-tree-node-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin: 0 4px;
+  transition: background 0.1s;
+  white-space: nowrap;
+  min-height: 28px;
+}
+
+.ntfs-tree-node-row:hover {
+  background: var(--hover-bg, #f1f5f9);
+}
+
+/* 箭头 */
+.ntfs-tree-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: var(--text-secondary, #94a3b8);
+  transition: transform 0.15s;
+}
+
+.ntfs-tree-arrow svg {
+  width: 12px;
+  height: 12px;
+}
+
+.ntfs-tree-arrow-placeholder {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* 图标 */
+.ntfs-tree-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ntfs-tree-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ntfs-tree-icon-dir svg {
+  color: #d97706;
+}
+
+.ntfs-tree-icon-file svg {
+  color: var(--text-secondary, #64748b);
+}
+
+/* 文件名 */
+.ntfs-tree-name {
+  font-size: 13px;
+  color: var(--text-primary, #1e293b);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ntfs-tree-node-dir > .ntfs-tree-node-row .ntfs-tree-name {
+  font-weight: 500;
+}
+
+/* 孤立标记 */
+.ntfs-tree-orphan-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 10px;
+  border-radius: 3px;
+  border: 1px solid #fecaca;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.ntfs-tree-node-orphan > .ntfs-tree-node-row {
+  background: rgba(220, 38, 38, 0.03);
+}
+
+.ntfs-tree-node-orphan > .ntfs-tree-node-row:hover {
+  background: rgba(220, 38, 38, 0.07);
+}
+
+.ntfs-tree-node-orphan > .ntfs-tree-node-row .ntfs-tree-name {
+  color: #b91c1c;
+}
+
+/* Action 徽标 */
+.ntfs-tree-badges {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: 6px;
+  flex-shrink: 0;
+}
+
+.ntfs-tree-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 5px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+
+.ntfs-badge-cre {
+  background: #dcfce7;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.ntfs-badge-mod {
+  background: #fef3c7;
+  color: #d97706;
+  border: 1px solid #fde68a;
+}
+
+.ntfs-badge-rd {
+  background: #dbeafe;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+}
+
+/* 统计栏中的 badge */
+.ntfs-tree-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 5px;
+  height: 18px;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+}
+
+.ntfs-tree-stat-cre .ntfs-tree-stat-value {
+  color: #16a34a;
+}
+
+.ntfs-tree-stat-mod .ntfs-tree-stat-value {
+  color: #d97706;
+}
+
+.ntfs-tree-stat-rd .ntfs-tree-stat-value {
+  color: #2563eb;
+}
+
+/* 文件大小 */
+.ntfs-tree-size {
+  font-size: 11px;
+  color: var(--text-secondary, #94a3b8);
+  margin-left: 8px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  flex-shrink: 0;
+}
+
+/* 搜索高亮 */
+.ntfs-tree-highlight {
+  background: #fef08a;
+  color: #854d0e;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* 子节点容器 */
+.ntfs-tree-children {
+  border-left: 1px solid var(--border-color, #e2e8f0);
+  margin-left: 20px;
+}
+
+/* ---- 深色主题适配 ---- */
+[data-theme="dark"] .ntfs-tree-stats-bar,
+.dark .ntfs-tree-stats-bar {
+  background: rgba(30, 41, 59, 0.5);
+}
+
+[data-theme="dark"] .ntfs-tree-stat-value,
+.dark .ntfs-tree-stat-value {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-tree-node-row:hover,
+.dark .ntfs-tree-node-row:hover {
+  background: rgba(51, 65, 85, 0.5);
+}
+
+[data-theme="dark"] .ntfs-tree-name,
+.dark .ntfs-tree-name {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-tree-search,
+.dark .ntfs-tree-search {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-tree-search-input,
+.dark .ntfs-tree-search-input {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-tree-filter-btn,
+.dark .ntfs-tree-filter-btn {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .ntfs-tree-filter-btn:hover,
+.dark .ntfs-tree-filter-btn:hover {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+[data-theme="dark"] .ntfs-badge-cre,
+.dark .ntfs-badge-cre {
+  background: rgba(22, 163, 74, 0.15);
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+[data-theme="dark"] .ntfs-badge-mod,
+.dark .ntfs-badge-mod {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+[data-theme="dark"] .ntfs-badge-rd,
+.dark .ntfs-badge-rd {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.3);
+}
+
+[data-theme="dark"] .ntfs-tree-orphan-tag,
+.dark .ntfs-tree-orphan-tag {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+[data-theme="dark"] .ntfs-tree-node-orphan > .ntfs-tree-node-row,
+.dark .ntfs-tree-node-orphan > .ntfs-tree-node-row {
+  background: rgba(220, 38, 38, 0.05);
+}
+
+[data-theme="dark"] .ntfs-tree-node-orphan > .ntfs-tree-node-row .ntfs-tree-name,
+.dark .ntfs-tree-node-orphan > .ntfs-tree-node-row .ntfs-tree-name {
+  color: #f87171;
+}
+
+[data-theme="dark"] .ntfs-tree-highlight,
+.dark .ntfs-tree-highlight {
+  background: #854d0e;
+  color: #fef08a;
+}
+
+[data-theme="dark"] .ntfs-tree-children,
+.dark .ntfs-tree-children {
+  border-left-color: #334155;
+}
+
+[data-theme="dark"] .ntfs-tree-error,
+.dark .ntfs-tree-error {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* ---- 右键菜单 ---- */
+.ntfs-tree-context-menu {
+  position: fixed;
+  z-index: 99999;
+  min-width: 160px;
+  background: var(--bg-primary, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  animation: ntfsCtxFadeIn 0.12s ease;
+}
+
+@keyframes ntfsCtxFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.ntfs-tree-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-primary, #1e293b);
+  transition: background 0.1s;
+}
+
+.ntfs-tree-ctx-item:hover {
+  background: var(--hover-bg, #f1f5f9);
+}
+
+.ntfs-tree-ctx-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--text-secondary, #64748b);
+}
+
+.ntfs-tree-ctx-label {
+  flex: 1;
+}
+
+[data-theme="dark"] .ntfs-tree-context-menu,
+.dark .ntfs-tree-context-menu {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .ntfs-tree-ctx-item,
+.dark .ntfs-tree-ctx-item {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-tree-ctx-item:hover,
+.dark .ntfs-tree-ctx-item:hover {
+  background: rgba(51, 65, 85, 0.6);
+}
+
+/* ---- 模态框 ---- */
+.ntfs-tree-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: ntfsModalFadeIn 0.15s ease;
+}
+
+@keyframes ntfsModalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ntfs-tree-modal {
+  background: var(--bg-primary, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  width: 480px;
+  max-width: 90vw;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: ntfsModalSlideIn 0.2s ease;
+}
+
+.ntfs-tree-modal-wide {
+  width: 720px;
+}
+
+@keyframes ntfsModalSlideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.ntfs-tree-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.ntfs-tree-modal-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+}
+
+.ntfs-tree-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary, #94a3b8);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ntfs-tree-modal-close:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.ntfs-tree-modal-body {
+  padding: 16px 18px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.ntfs-tree-modal-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  background: var(--bg-secondary, #f8fafc);
+}
+
+/* ---- 属性表格 ---- */
+.ntfs-prop-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.ntfs-prop-table th,
+.ntfs-prop-table td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  text-align: left;
+  color: var(--text-primary, #1e293b);
+}
+
+.ntfs-prop-table th {
+  font-weight: 600;
+  font-size: 12px;
+  color: var(--text-secondary, #64748b);
+  background: var(--bg-secondary, #f8fafc);
+}
+
+.ntfs-prop-key {
+  font-weight: 500;
+  color: var(--text-secondary, #64748b);
+  width: 140px;
+  white-space: nowrap;
+}
+
+.ntfs-prop-val {
+  word-break: break-all;
+}
+
+.ntfs-prop-path {
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 12px;
+  background: var(--bg-secondary, #f1f5f9);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.ntfs-prop-orphan-tag {
+  display: inline-block;
+  padding: 1px 6px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 11px;
+  border-radius: 3px;
+  border: 1px solid #fecaca;
+  font-weight: 500;
+}
+
+.ntfs-prop-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary, #1e293b);
+  padding: 8px 0 6px;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+  margin-top: 4px;
+}
+
+/* ---- 文件内容查看器 ---- */
+.ntfs-content-mode-btn {
+  padding: 4px 10px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary, #64748b);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ntfs-content-mode-btn.active {
+  background: var(--accent-primary, #3b82f6);
+  color: #ffffff;
+  border-color: var(--accent-primary, #3b82f6);
+}
+
+.ntfs-content-encoding {
+  padding: 4px 8px;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  background: var(--input-bg, #ffffff);
+  color: var(--text-primary, #1e293b);
+  font-size: 12px;
+  outline: none;
+}
+
+.ntfs-content-size {
+  font-size: 12px;
+  color: var(--text-secondary, #94a3b8);
+  margin-left: auto;
+}
+
+.ntfs-content-body {
+  padding: 0 !important;
+}
+
+.ntfs-content-pre {
+  margin: 0;
+  padding: 14px 18px;
+  font-family: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--text-primary, #1e293b);
+  white-space: pre;
+  tab-size: 4;
+  word-break: break-all;
+  min-height: 200px;
+  max-height: 60vh;
+  overflow: auto;
+}
+
+/* ---- 模态框深色主题 ---- */
+[data-theme="dark"] .ntfs-tree-modal,
+.dark .ntfs-tree-modal {
+  background: #1e293b;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .ntfs-tree-modal-title,
+.dark .ntfs-tree-modal-title {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-tree-modal-toolbar,
+.dark .ntfs-tree-modal-toolbar {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+[data-theme="dark"] .ntfs-prop-table th,
+.dark .ntfs-prop-table th {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+[data-theme="dark"] .ntfs-prop-table td,
+.dark .ntfs-prop-table td {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-prop-path,
+.dark .ntfs-prop-path {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+[data-theme="dark"] .ntfs-content-pre,
+.dark .ntfs-content-pre {
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-content-mode-btn,
+.dark .ntfs-content-mode-btn {
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .ntfs-content-encoding,
+.dark .ntfs-content-encoding {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: #334155;
+  color: #e2e8f0;
+}
+
+[data-theme="dark"] .ntfs-prop-orphan-tag,
+.dark .ntfs-prop-orphan-tag {
+  background: rgba(220, 38, 38, 0.15);
+  border-color: rgba(220, 38, 38, 0.3);
+}

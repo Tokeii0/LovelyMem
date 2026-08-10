@@ -1,0 +1,113 @@
+/*
+ * 字符串搜索 - 独立窗口外壳样式（仅窗口标题栏 + 整体布局）
+ *
+ * 注意：面板本体（.ss-container 及其内部）的所有样式由 StringSearchPanel 组件
+ * 通过模板内嵌 <style>${STRING_SEARCH_STYLES}</style> 自带，与内嵌版本完全一致。
+ * 本文件只负责独立窗口特有的「窗口标题栏」与让面板填满标题栏下方区域，
+ * 不要再往这里拷贝面板样式，否则又会出现独立窗口与内嵌版样式漂移的问题。
+ */
+
+/* ========== Window Chrome ========== */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#string-search-app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Window Title Bar */
+.ss-window-titlebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 32px;
+    padding: 0 8px 0 12px;
+    background: #f1f5f9;
+    border-bottom: 1px solid #e2e8f0;
+    flex-shrink: 0;
+    -webkit-app-region: drag;
+    user-select: none;
+}
+[data-theme="dark"] .ss-window-titlebar {
+    background: #0f172a;
+    border-color: #1e293b;
+}
+[data-theme="sakura"] .ss-window-titlebar {
+    background: #fdf2f8;
+    border-color: #fce7f3;
+}
+.ss-window-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #64748b;
+}
+[data-theme="dark"] .ss-window-title {
+    color: #94a3b8;
+}
+[data-theme="sakura"] .ss-window-title {
+    color: #9d174d;
+}
+.ss-window-title svg {
+    color: #6366f1;
+}
+[data-theme="sakura"] .ss-window-title svg {
+    color: #ec4899;
+}
+.ss-window-controls {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    -webkit-app-region: no-drag;
+}
+.ss-window-btn {
+    width: 28px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    color: #64748b;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 12px;
+}
+.ss-window-btn:hover {
+    background: #e2e8f0;
+    color: #334155;
+}
+[data-theme="dark"] .ss-window-btn:hover {
+    background: #334155;
+    color: #e2e8f0;
+}
+[data-theme="sakura"] .ss-window-btn:hover {
+    background: #fce7f3;
+    color: #9d174d;
+}
+.ss-window-btn.close:hover {
+    background: #ef4444;
+    color: white;
+}
+
+/* Make container fill remaining space below titlebar */
+.ss-container {
+    flex: 1;
+    min-height: 0;
+}

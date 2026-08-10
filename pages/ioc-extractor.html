@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOC 提取 - Lovelymem V2</title>
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../src/modules/ioc-extractor/styles/ioc-extractor.css">
+    <script src="../src/modules/ioc-extractor/ioc-extractor.ts" type="module" defer></script>
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="ioc-extractor-app">
+        <div class="ie-window-titlebar" data-tauri-drag-region>
+            <div class="ie-window-title" data-tauri-drag-region>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>IOC 提取</span>
+            </div>
+            <div class="ie-window-controls">
+                <button class="ie-window-btn" id="minimizeBtn" title="最小化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="ie-window-btn" id="maximizeBtn" title="最大化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+                </button>
+                <button class="ie-window-btn close" id="closeBtn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+        <!-- 主体由 ioc-extractor.ts 注入 -->
+    </div>
+</body>
+</html>

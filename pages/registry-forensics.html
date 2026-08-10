@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>注册表取证 - Lovelymem V2</title>
+    <link rel="stylesheet" href="../src/css/theme/base.css">
+    <link rel="stylesheet" href="../src/css/theme/light.css" id="theme-stylesheet">
+    <link rel="stylesheet" href="../src/modules/registry-forensics/styles/registry-forensics.css">
+    <script src="../src/modules/registry-forensics/registry-forensics.ts" type="module" defer></script>
+    <script src="../src/utils/themeBridge.ts" type="module" defer></script>
+</head>
+<body>
+    <div id="reg-forensics-app">
+        <div class="rf-window-titlebar" data-tauri-drag-region>
+            <div class="rf-window-title" data-tauri-drag-region>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4z"/><path d="M4 12h16v4H4z"/><path d="M4 20h10"/></svg>
+                <span>注册表取证</span>
+            </div>
+            <div class="rf-window-controls">
+                <button class="rf-window-btn" id="minimizeBtn" title="最小化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                </button>
+                <button class="rf-window-btn" id="maximizeBtn" title="最大化">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="1"/></svg>
+                </button>
+                <button class="rf-window-btn close" id="closeBtn" title="关闭">
+                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                </button>
+            </div>
+        </div>
+        <!-- 主体由 registry-forensics.ts 注入 -->
+    </div>
+</body>
+</html>

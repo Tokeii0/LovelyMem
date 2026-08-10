@@ -1,0 +1,775 @@
+/* Lovelymem V2 - 欢迎页面样式（双栏仪表盘版） */
+
+/* ========================================
+   容器
+   ======================================== */
+
+.welcome-page-container.main-workspace {
+  /* 项目主题未定义 --text-tertiary，回退到各主题均有的 --text-light 弱化文字色 */
+  --text-tertiary: var(--text-light, #94a3b8);
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: clamp(16px, 2.2vw, 30px) clamp(16px, 2.4vw, 34px) 84px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.welcome-layout {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: stretch;
+  gap: clamp(14px, 1.5vw, 22px);
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.welcome-main-col {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.welcome-side-col {
+  flex: 0 0 320px;
+  width: 320px;
+}
+
+/* ========================================
+   Hero 卡片
+   ======================================== */
+
+.welcome-hero-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(16px, 2vw, 28px);
+  padding: clamp(22px, 2.4vw, 34px) clamp(24px, 2.6vw, 40px);
+  border-radius: 20px;
+  border: 1px solid rgba(var(--primary-rgb), 0.22);
+  background:
+    radial-gradient(150% 170% at 100% 0%, rgba(var(--primary-rgb), 0.30), transparent 60%),
+    linear-gradient(135deg, rgba(var(--primary-rgb), 0.18), rgba(var(--primary-rgb), 0.05));
+  box-shadow: 0 12px 32px rgba(var(--primary-rgb), 0.12);
+  overflow: hidden;
+}
+
+.welcome-hero-text {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.welcome-hero-brand {
+  margin: 0;
+  font-size: clamp(22px, 1.3vw + 14px, 30px);
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  line-height: 1.1;
+}
+
+.welcome-page-container .brand-version-text {
+  color: var(--primary-color);
+}
+
+.welcome-hero-platform {
+  margin: 8px 0 0;
+  font-size: clamp(19px, 1.1vw + 12px, 26px);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.welcome-hero-tagline {
+  margin: 8px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  color: var(--text-secondary);
+}
+
+.welcome-feature-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.welcome-feature-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 54px;
+}
+
+.welcome-feature-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: var(--primary-color);
+}
+
+.welcome-feature-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.welcome-feature-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.welcome-hero-art {
+  position: relative;
+  flex: 0 1 300px;
+  min-width: 150px;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome-hero-art::before {
+  content: '';
+  position: absolute;
+  width: min(250px, 88%);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--primary-rgb), 0.30), transparent 64%);
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.welcome-hero-illustration {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 240px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 26px rgba(var(--primary-rgb), 0.32));
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ========================================
+   加载操作区
+   ======================================== */
+
+.welcome-action-row {
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+}
+
+.welcome-load-card {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.06);
+}
+
+.welcome-load-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.welcome-load-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 13px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s ease, filter 0.25s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.welcome-load-btn .btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+}
+
+.welcome-load-btn .btn-icon svg {
+  width: 22px;
+  height: 22px;
+}
+
+.welcome-load-btn .btn-text {
+  flex: 0 1 auto;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.welcome-load-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.20);
+}
+
+.welcome-load-btn:active {
+  transform: translateY(0);
+}
+
+.welcome-load-btn--windows {
+  background: linear-gradient(135deg, #1a8fe0, #0061b0);
+}
+
+.welcome-load-btn--linux {
+  background: linear-gradient(135deg, #f4a85a, #e0762f);
+}
+
+.welcome-load-formats {
+  margin: 0;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+
+/* 拖拽 / 浏览卡片 */
+.welcome-drop-card {
+  flex: 0 0 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 18px;
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  background: rgba(var(--primary-rgb), 0.06);
+  border: 2px dashed rgba(var(--primary-rgb), 0.42);
+  transition: all 0.25s ease;
+}
+
+.welcome-drop-card:hover {
+  background: rgba(var(--primary-rgb), 0.11);
+  border-color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.welcome-drop-card .drop-card-icon {
+  color: var(--primary-color);
+  opacity: 0.85;
+}
+
+.welcome-drop-card .drop-card-icon svg {
+  width: 38px;
+  height: 38px;
+}
+
+.welcome-drop-card .drop-card-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.welcome-drop-card .drop-card-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text-tertiary);
+}
+
+/* ========================================
+   最近打开
+   ======================================== */
+
+.welcome-recent-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: calc(100vh - 150px);
+  padding: 18px;
+  border-radius: 18px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.06);
+}
+
+.welcome-recent-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.welcome-recent-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.welcome-recent-title svg {
+  color: var(--primary-color);
+}
+
+.welcome-recent-clear {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-tertiary);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.welcome-recent-clear:hover {
+  color: var(--primary-color);
+  background: rgba(var(--primary-rgb), 0.08);
+}
+
+.welcome-recent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.welcome-recent-extra {
+  display: none;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.welcome-recent-expand-cb:checked ~ .welcome-recent-list .welcome-recent-extra {
+  display: flex;
+}
+
+.welcome-recent-expand-cb:checked ~ .welcome-recent-more {
+  display: none;
+}
+
+.welcome-recent-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.welcome-recent-item:hover {
+  border-color: rgba(var(--primary-rgb), 0.35);
+  transform: translateX(2px);
+}
+
+.welcome-recent-item .recent-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  color: var(--primary-color);
+  background: rgba(var(--primary-rgb), 0.12);
+}
+
+.welcome-recent-item .recent-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.welcome-recent-item .recent-item-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.welcome-recent-item .recent-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+
+.welcome-recent-item .recent-item-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.welcome-recent-item:hover .recent-item-remove {
+  opacity: 1;
+}
+
+.welcome-recent-item .recent-item-remove:hover {
+  color: #fff;
+  background: var(--danger-color, #ef4444);
+}
+
+.welcome-recent-more {
+  display: block;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-color);
+  cursor: pointer;
+  user-select: none;
+}
+
+.welcome-recent-more .more-arrow {
+  font-weight: 700;
+}
+
+.welcome-recent-more:hover {
+  opacity: 0.8;
+}
+
+.welcome-recent-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+}
+
+.welcome-recent-empty .recent-empty-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  color: var(--primary-color);
+  background: rgba(var(--primary-rgb), 0.10);
+  opacity: 0.8;
+}
+
+.welcome-recent-empty p {
+  margin: 0;
+  font-size: 13px;
+}
+
+/* ========================================
+   不加载内存直接进入（右下角）
+   ======================================== */
+
+.welcome-corner-action {
+  position: absolute;
+  bottom: 22px;
+  right: 28px;
+  z-index: 4;
+}
+
+.welcome-enter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.welcome-enter-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  transform: translateY(-2px);
+}
+
+.welcome-enter-btn:active {
+  transform: translateY(0);
+}
+
+.welcome-enter-btn .btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.welcome-enter-btn .btn-text {
+  line-height: 1;
+}
+
+/* ========================================
+   背景装饰
+   ======================================== */
+
+.welcome-background {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.10;
+}
+
+.welcome-page-container .circle-1 {
+  width: 420px;
+  height: 420px;
+  background: var(--primary-color);
+  top: -120px;
+  right: -100px;
+  animation: pulse 10s infinite alternate;
+}
+
+.welcome-page-container .circle-2 {
+  width: 320px;
+  height: 320px;
+  background: var(--secondary-color);
+  bottom: -80px;
+  left: -60px;
+  animation: pulse 8s infinite alternate-reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.10; }
+  100% { transform: scale(1.2); opacity: 0.16; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================
+   拖拽导入 overlay
+   ======================================== */
+
+.welcome-page-container.drag-over {
+  outline: 2px solid var(--primary-color);
+  outline-offset: -4px;
+}
+
+.welcome-drop-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--primary-rgb), 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 3px dashed var(--primary-color);
+  border-radius: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.welcome-drop-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.drop-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: dropBounce 0.4s ease-out;
+}
+
+.drop-overlay-icon {
+  color: var(--primary-color);
+  animation: dropPulse 1.5s ease-in-out infinite;
+}
+
+.drop-overlay-text {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.drop-overlay-formats {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  margin: 0;
+  opacity: 0.8;
+}
+
+@keyframes dropBounce {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes dropPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.8; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}
+
+/* ========================================
+   暗色主题
+   ======================================== */
+
+[data-theme="dark"] .welcome-drop-card {
+  background: rgba(var(--primary-rgb), 0.08);
+  border-color: rgba(var(--primary-rgb), 0.30);
+}
+
+[data-theme="dark"] .welcome-drop-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .welcome-load-btn--linux {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.30);
+}
+
+/* ========================================
+   响应式
+   ======================================== */
+
+/* 中等窗口：右侧「最近打开」转到下方，主区域占满整宽 */
+@media (max-width: 1080px) {
+  .welcome-layout {
+    flex-direction: column;
+  }
+
+  .welcome-side-col {
+    flex-basis: auto;
+    width: 100%;
+  }
+
+  .welcome-recent-card {
+    height: auto;
+    max-height: min(440px, 56vh);
+  }
+}
+
+/* 窄窗口：加载按钮卡片与拖拽卡片改为上下排列 */
+@media (max-width: 760px) {
+  .welcome-action-row {
+    flex-direction: column;
+  }
+
+  .welcome-drop-card {
+    flex-basis: auto;
+    padding: 22px 18px;
+  }
+
+  .welcome-feature-row {
+    gap: 16px;
+  }
+}
+
+/* 极窄窗口：Hero 卡片改为纵向居中，插画缩小置于文字下方 */
+@media (max-width: 560px) {
+  .welcome-load-buttons {
+    flex-direction: column;
+  }
+
+  .welcome-hero-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .welcome-hero-text {
+    text-align: center;
+  }
+
+  .welcome-feature-row {
+    justify-content: center;
+  }
+
+  .welcome-hero-art {
+    flex-basis: auto;
+    width: 100%;
+    min-width: 0;
+    max-width: 220px;
+  }
+
+  .welcome-corner-action {
+    position: static;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

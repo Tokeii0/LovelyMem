@@ -1,0 +1,86 @@
+/**
+ * 内嵌网页对话框样式
+ */
+
+.webview-dialog-overlay {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.webview-dialog-content {
+  transition: all 0.3s ease;
+}
+
+.webview-dialog-content:hover {
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+}
+
+.webview-title-bar {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.webview-title-bar button:hover {
+  transform: scale(1.1);
+}
+
+.webview-title-bar button:active {
+  transform: scale(0.95);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .webview-dialog-content {
+    width: 95vw !important;
+    height: 90vh !important;
+    margin: 20px;
+  }
+  
+  .webview-title-bar {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+}
+
+/* 滚动条样式 */
+.webview-dialog-content iframe::-webkit-scrollbar {
+  width: 8px;
+}
+
+.webview-dialog-content iframe::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.webview-dialog-content iframe::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.webview-dialog-content iframe::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* 加载动画优化 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.webview-dialog-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* 深色主题支持 */
+@media (prefers-color-scheme: dark) {
+  .webview-dialog-overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .webview-dialog-content {
+    background: #2d3748;
+    color: white;
+  }
+  
+  .webview-title-bar {
+    background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+  }
+}

@@ -1,0 +1,251 @@
+/* Lovelymem V2 - 主题切换器 + 设置验证 */
+/* 从 modernStyles.css 拆分 (原 L17167-L17415) */
+
+/* Theme Switcher - Three-segment Switch Style with Glider */
+.theme-switch-container {
+  display: flex;
+  align-items: center;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  padding: 3px;
+  position: relative;
+  height: 32px;
+  margin-right: 8px;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+  transition: background-color 0.4s ease;
+}
+
+/* 滑块 (Glider) */
+.theme-switch-glider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  height: calc(100% - 6px);
+  width: calc(33.33% - 4px);
+  background-color: #ffffff;
+  border-radius: 9999px;
+  transition: transform 0.4s cubic-bezier(0.4, 0.0, 0.2, 1), background-color 0.4s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Glider 位置控制 - 根据 data-current-theme 属性 */
+.theme-switch-container[data-current-theme="light"] .theme-switch-glider { transform: translateX(0%); }
+.theme-switch-container[data-current-theme="dark"] .theme-switch-glider { transform: translateX(calc(100% + 4px)); }
+.theme-switch-container[data-current-theme="sakura"] .theme-switch-glider { transform: translateX(calc(200% + 8px)); }
+
+.theme-switch-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  transition: color 0.3s ease;
+  user-select: none;
+  gap: 4px;
+  position: relative;
+  z-index: 10;
+  background: transparent;
+}
+
+.theme-switch-option svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.theme-switch-option:hover {
+  color: var(--text-primary);
+}
+
+/* 选中状态 - 只改变颜色，不加背景 */
+.theme-switch-option.active {
+  background: transparent;
+  font-weight: 600;
+}
+
+/* 浅色模式选中 - 亮蓝色 */
+.theme-switch-option[data-theme="light"].active {
+  color: #0ea5e9;
+}
+.theme-switch-option[data-theme="light"].active svg {
+  transform: translateY(-2px) scale(1.1);
+}
+
+/* 深色模式选中 - 金黄色 */
+.theme-switch-option[data-theme="dark"].active {
+  color: #fbbf24;
+}
+.theme-switch-option[data-theme="dark"].active svg {
+  transform: rotate(-15deg) scale(1.1);
+}
+
+/* 粉色模式选中 - 粉红色 */
+.theme-switch-option[data-theme="sakura"].active {
+  color: #ec4899;
+}
+.theme-switch-option[data-theme="sakura"].active svg {
+  transform: rotate(45deg) scale(1.1);
+}
+
+/* Dark Theme Adaptations */
+[data-theme="dark"] .theme-switch-container {
+  background: #374151;
+}
+
+[data-theme="dark"] .theme-switch-glider {
+  background-color: #4b5563;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .theme-switch-option {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .theme-switch-option:hover {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .theme-switch-option.active {
+  background: transparent;
+}
+
+[data-theme="dark"] .theme-switch-option[data-theme="dark"].active {
+  color: #fbbf24;
+}
+
+/* Sakura Theme Adaptations */
+[data-theme="sakura"] .theme-switch-container {
+  background: #fbcfe8;
+}
+
+[data-theme="sakura"] .theme-switch-glider {
+  background-color: #be185d;
+  box-shadow: 0 2px 5px rgba(190, 24, 93, 0.15);
+}
+
+[data-theme="sakura"] .theme-switch-option {
+  color: #be185d;
+}
+
+[data-theme="sakura"] .theme-switch-option:hover {
+  color: #831843;
+}
+
+[data-theme="sakura"] .theme-switch-option.active {
+  color: #ffffff;
+  background: transparent;
+}
+
+/* Menu Theme Switch - 设置菜单中的主题切换样式 */
+.menu-item-theme-switch {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: default;
+}
+
+.menu-item-theme-switch:hover {
+  background: transparent !important;
+}
+
+.menu-item-theme-switch .menu-text {
+  flex: 1;
+}
+
+.menu-theme-switch {
+  margin-left: auto;
+  margin-right: 0;
+  height: 28px;
+}
+
+.menu-theme-switch .theme-switch-option {
+  padding: 3px 8px;
+  font-size: 10px;
+  gap: 3px;
+}
+
+.menu-theme-switch .theme-switch-option svg {
+  width: 12px;
+  height: 12px;
+}
+
+.menu-theme-switch .theme-switch-glider {
+  height: calc(100% - 4px);
+  top: 2px;
+  left: 2px;
+}
+
+/* Settings Validation Styles */
+.settings-validation-content {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 12px;
+  padding: 30px;
+  width: 640px;
+  height: 520px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-heavy, 0 10px 30px rgba(0, 0, 0, 0.3));
+  animation: slideInUp 0.3s ease-out;
+}
+
+.settings-validation-body {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.settings-validation-footer {
+  flex-shrink: 0;
+}
+
+.settings-validation-header h3 {
+  margin: 0 0 20px 0;
+  color: var(--text-primary, #1e293b);
+  text-align: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.validation-summary {
+  background: var(--bg-tertiary, #f1f5f9);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  color: var(--text-primary, #1e293b);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.validation-issues {
+  margin-bottom: 25px;
+}
+
+.validation-issue {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border-left: 4px solid;
+}
+
+.validation-issue.critical {
+  background: rgba(255, 82, 82, 0.1);
+  border-left-color: var(--error-color, #ff5252);
+}
+
+.validation-issue.warning {
+  background: rgba(255, 167, 38, 0.1);
+  border-left-color: var(--warning-color, #ffa726);
+}

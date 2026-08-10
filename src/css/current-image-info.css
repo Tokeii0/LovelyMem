@@ -1,0 +1,434 @@
+/* ===== Current Image Info Component Styles ===== */
+
+/* 全局高度重置 - 确保所有状态统一高度 */
+.current-image-info,
+.current-image-info.loading,
+.current-image-info.completed,
+.current-image-info.error,
+.current-image-info:not(.loading):not(.completed):not(.error) {
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  padding: 4px 8px !important; /* 防止被通用 .loading 样式覆盖 */
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+/* 允许安全的动画效果 - 不影响高度 */
+.current-image-info {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* 图标旋转动画 - loading状态 */
+.current-image-info.loading .image-icon {
+  animation: image-icon-spin 1s linear infinite;
+}
+
+/* 成功状态图标动画 */
+.current-image-info.completed .image-icon {
+  animation: image-icon-bounce 0.6s ease-out;
+}
+
+/* 错误状态图标动画 */
+.current-image-info.error .image-icon {
+  animation: image-icon-shake 0.5s ease-in-out;
+}
+
+/* 禁用可能影响高度的缩放动画 - 但允许状态切换动画 */
+.current-image-info:not(.loading):not(.completed):not(.error),
+.current-image-info *,
+.current-image-info::before,
+.current-image-info::after {
+  transform: scale(1) !important; /* 允许其他transform，但禁用scale */
+}
+
+/* 状态切换动画完成后重置 */
+.current-image-info.loading,
+.current-image-info.completed,
+.current-image-info.error {
+  animation-fill-mode: forwards;
+}
+
+.current-image-info.loading:not(:hover),
+.current-image-info.completed:not(:hover),
+.current-image-info.error:not(:hover) {
+  transform: scale(1) !important;
+}
+
+/* 强制禁用可能的外部缩放动画类 */
+.current-image-info.animate-bounce,
+.current-image-info.animate-pulse,
+.current-image-info.animate-zoom-in {
+  animation: none !important;
+  transform: scale(1) !important;
+}
+
+/* 允许淡入动画 */
+.current-image-info.animate-fade-in {
+  animation: image-fade-in 0.3s ease-out !important;
+}
+
+/* 覆盖可能的内联缩放样式 */
+.current-image-info[style*="scale"] {
+  transform: scale(1) !important;
+}
+
+/* 镜像信息容器 - 统一设计 */
+.current-image-info {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  padding: 4px 8px;
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+/* 图标和文字容器 */
+.image-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+/* 图标样式 */
+.image-icon {
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+/* 文字样式 */
+.image-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--primary-color);
+  white-space: nowrap;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+/* 加载状态文字效果 */
+.current-image-info.loading .image-text {
+  color: #f57c00;
+  animation: text-loading-pulse 2s ease-in-out infinite;
+}
+
+/* 成功状态文字效果 */
+.current-image-info.completed .image-text {
+  color: #4caf50;
+  animation: text-success-glow 0.8s ease-out;
+}
+
+/* 错误状态文字效果 */
+.current-image-info.error .image-text {
+  color: #f44336;
+  animation: text-error-flash 0.6s ease-out;
+}
+
+/* 大小信息 */
+.image-size {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-left: 4px;
+  opacity: 0.8;
+  line-height: 1;
+}
+
+/* ===== 状态样式 ===== */
+
+/* 无镜像状态 */
+.current-image-info:not(.loading):not(.completed):not(.error) {
+  background: linear-gradient(135deg, rgba(128, 128, 128, 0.08), rgba(160, 160, 160, 0.08));
+  border: 1px dashed rgba(128, 128, 128, 0.3);
+  height: 30px !important;
+  padding: 4px 8px !important;
+}
+
+.current-image-info:not(.loading):not(.completed):not(.error) .image-text {
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+/* 加载中状态 */
+.current-image-info.loading {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  box-sizing: border-box;
+  padding: 4px 8px !important;
+  animation: loading-state-enter 0.5s ease-out;
+}
+
+/* 成功状态 */
+.current-image-info.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+  border: 1px solid rgba(76, 175, 80, 0.4);
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  box-sizing: border-box;
+  padding: 4px 8px !important;
+  animation: success-state-enter 0.6s ease-out;
+}
+
+/* 错误状态 */
+.current-image-info.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(255, 87, 34, 0.15));
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+  box-sizing: border-box;
+  padding: 4px 8px !important;
+  animation: error-state-enter 0.5s ease-out;
+}
+
+/* ===== 交互效果 ===== */
+
+/* 悬停效果 - 仅非加载状态，安全的变换 */
+.current-image-info:not(.loading):hover {
+  transform: translateY(-1px) scale(1); /* 明确指定scale(1)防止缩放 */
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+}
+
+/* 无镜像状态悬停 */
+.current-image-info:not(.loading):not(.completed):not(.error):hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12));
+  border: 1px dashed rgba(102, 126, 234, 0.4);
+}
+
+/* 加载状态悬停效果 - 仅改变颜色 */
+.current-image-info.loading:hover {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+  border: 1px solid rgba(255, 193, 7, 0.5);
+}
+
+/* 成功状态悬停效果 */
+.current-image-info.completed:hover {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+  border: 1px solid rgba(76, 175, 80, 0.5);
+}
+
+/* 错误状态悬停效果 */
+.current-image-info.error:hover {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(255, 87, 34, 0.2));
+  border: 1px solid rgba(244, 67, 54, 0.5);
+}
+
+/* ===== 动画定义 ===== */
+
+/* 图标旋转动画 */
+@keyframes image-icon-spin {
+  from { 
+    transform: rotate(0deg); 
+  }
+  to { 
+    transform: rotate(360deg); 
+  }
+}
+
+/* 淡入动画 - 不影响高度 */
+@keyframes image-fade-in {
+  from { 
+    opacity: 0;
+  }
+  to { 
+    opacity: 1;
+  }
+}
+
+/* 图标弹跳动画 - 成功状态 */
+@keyframes image-icon-bounce {
+  0%, 100% { 
+    transform: scale(1); 
+  }
+  50% { 
+    transform: scale(1.2); 
+  }
+}
+
+/* 图标摇摆动画 - 错误状态 */
+@keyframes image-icon-shake {
+  0%, 100% { 
+    transform: translateX(0) rotate(0deg); 
+  }
+  25% { 
+    transform: translateX(-2px) rotate(-2deg); 
+  }
+  75% { 
+    transform: translateX(2px) rotate(2deg); 
+  }
+}
+
+/* 应用淡入动画到组件 */
+.current-image-info {
+  animation: image-fade-in 0.3s ease-out;
+}
+
+/* 加载状态进入动画 */
+@keyframes loading-state-enter {
+  0% {
+    background: linear-gradient(135deg, rgba(128, 128, 128, 0.08), rgba(160, 160, 160, 0.08));
+    border: 1px dashed rgba(128, 128, 128, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    transform: scale(1);
+  }
+}
+
+/* 成功状态进入动画 */
+@keyframes success-state-enter {
+  0% {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.05);
+  }
+  60% {
+    transform: scale(0.98);
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15), rgba(139, 195, 74, 0.15));
+    border: 1px solid rgba(76, 175, 80, 0.4);
+    transform: scale(1);
+  }
+}
+
+/* 错误状态进入动画 */
+@keyframes error-state-enter {
+  0% {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15), rgba(255, 152, 0, 0.15));
+    border: 1px solid rgba(255, 193, 7, 0.4);
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(244, 67, 54, 0.15), rgba(255, 87, 34, 0.15));
+    border: 1px solid rgba(244, 67, 54, 0.4);
+    transform: translateX(0);
+  }
+}
+
+/* 文字动画 */
+@keyframes text-loading-pulse {
+  0%, 100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes text-success-glow {
+  0% {
+    text-shadow: 0 0 0 rgba(76, 175, 80, 0);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+  }
+  100% {
+    text-shadow: 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+@keyframes text-error-flash {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* ===== 主题适配 ===== */
+
+/* 深色主题 */
+[data-theme="dark"] .current-image-info {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  height: 30px !important;
+}
+
+[data-theme="dark"] .current-image-info:not(.loading):not(.completed):not(.error) {
+  background: linear-gradient(135deg, rgba(128, 128, 128, 0.12), rgba(160, 160, 160, 0.12));
+  border: 1px dashed rgba(128, 128, 128, 0.4);
+  height: 30px !important;
+}
+
+[data-theme="dark"] .current-image-info.loading {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.2), rgba(255, 152, 0, 0.2));
+  border: 1px solid rgba(255, 193, 7, 0.5);
+  height: 30px !important;
+}
+
+[data-theme="dark"] .current-image-info.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2), rgba(139, 195, 74, 0.2));
+  border: 1px solid rgba(76, 175, 80, 0.5);
+  height: 30px !important;
+}
+
+[data-theme="dark"] .current-image-info.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.2), rgba(255, 87, 34, 0.2));
+  border: 1px solid rgba(244, 67, 54, 0.5);
+  height: 30px !important;
+}
+
+/* 樱花主题 */
+[data-theme="sakura"] .current-image-info {
+  background: linear-gradient(135deg, rgba(255, 182, 193, 0.15), rgba(255, 192, 203, 0.15));
+  border: 1px solid rgba(255, 182, 193, 0.3);
+  height: 30px !important;
+}
+
+[data-theme="sakura"] .current-image-info:not(.loading):not(.completed):not(.error) {
+  background: linear-gradient(135deg, rgba(128, 128, 128, 0.1), rgba(160, 160, 160, 0.1));
+  border: 1px dashed rgba(128, 128, 128, 0.35);
+  height: 30px !important;
+}
+
+[data-theme="sakura"] .current-image-info.loading {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.18), rgba(255, 152, 0, 0.18));
+  border: 1px solid rgba(255, 193, 7, 0.45);
+  height: 30px !important;
+}
+
+[data-theme="sakura"] .current-image-info.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.18), rgba(139, 195, 74, 0.18));
+  border: 1px solid rgba(76, 175, 80, 0.45);
+  height: 30px !important;
+}
+
+[data-theme="sakura"] .current-image-info.error {
+  background: linear-gradient(135deg, rgba(244, 67, 54, 0.18), rgba(255, 87, 34, 0.18));
+  border: 1px solid rgba(244, 67, 54, 0.45);
+  height: 30px !important;
+} 

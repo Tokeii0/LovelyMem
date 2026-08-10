@@ -1,0 +1,384 @@
+/* Lovelymem V2 - 基础样式和通用变量 */
+/* 此文件包含不依赖主题的通用样式、CSS变量和动画定义 */
+
+/* ========================================
+   CSS 重置和基础样式
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 14px;
+  line-height: 1.6;
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   通用 CSS 变量（不依赖主题）
+   ======================================== */
+
+:root {
+  /* 阴影 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* 边框半径 */
+  --radius-sm: 0.375rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* 过渡动画 */
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s ease-in-out;
+  --transition-slow: all 0.5s ease-in-out;
+
+  /* ========================================
+     按钮样式变量
+     ======================================== */
+  
+  /* 主按钮 (Primary) */
+  --btn-primary-bg: var(--primary-color, #3b82f6);
+  --btn-primary-bg-hover: var(--primary-color-dark, #2563eb);
+  --btn-primary-color: #ffffff;
+  --btn-primary-border: transparent;
+  --btn-primary-radius: var(--radius);
+
+  /* 次要按钮 (Secondary) */
+  --btn-secondary-bg: var(--secondary-color, #6b7280);
+  --btn-secondary-bg-hover: var(--secondary-color-dark, #4b5563);
+  --btn-secondary-color: #ffffff;
+  --btn-secondary-border: transparent;
+  --btn-secondary-radius: var(--radius);
+
+  /* 危险按钮 (Danger) */
+  --btn-danger-bg: #ef4444;
+  --btn-danger-bg-hover: #dc2626;
+  --btn-danger-color: #ffffff;
+  --btn-danger-border: transparent;
+  --btn-danger-radius: var(--radius);
+
+  /* 成功按钮 (Success) */
+  --btn-success-bg: #22c55e;
+  --btn-success-bg-hover: #16a34a;
+  --btn-success-color: #ffffff;
+  --btn-success-border: transparent;
+  --btn-success-radius: var(--radius);
+
+  /* 警告按钮 (Warning) */
+  --btn-warning-bg: #f59e0b;
+  --btn-warning-bg-hover: #d97706;
+  --btn-warning-color: #ffffff;
+  --btn-warning-border: transparent;
+  --btn-warning-radius: var(--radius);
+
+  /* 幽灵按钮 (Ghost) */
+  --btn-ghost-bg: transparent;
+  --btn-ghost-bg-hover: rgba(0, 0, 0, 0.05);
+  --btn-ghost-color: var(--text-color, currentColor);
+  --btn-ghost-border: var(--border-color, #e5e7eb);
+  --btn-ghost-radius: var(--radius);
+
+  /* 默认按钮 (Default) */
+  --btn-default-bg: var(--bg-secondary, #f3f4f6);
+  --btn-default-bg-hover: var(--bg-tertiary, #e5e7eb);
+  --btn-default-color: var(--text-color, #374151);
+  --btn-default-border: var(--border-color, #e5e7eb);
+  --btn-default-radius: var(--radius);
+
+  /* ========================================
+     侧边栏 (Navbar) 样式变量
+     ======================================== */
+  --navbar-bg: var(--bg-secondary, #f8fafc);
+  --navbar-item-color: var(--text-secondary, #64748b);
+  --navbar-item-color-hover: var(--text-color, #1e293b);
+  --navbar-item-color-active: var(--primary-color, #3b82f6);
+  --navbar-item-bg-hover: var(--bg-tertiary, #e2e8f0);
+  --navbar-item-bg-active: var(--primary-color-light, rgba(59, 130, 246, 0.1));
+  --navbar-icon-size: 20px;
+
+  /* ========================================
+     二级菜单 (Secondary Menu) 样式变量
+     ======================================== */
+  --menu-bg: var(--bg-primary, #ffffff);
+  --menu-border: var(--border-color, #e5e7eb);
+  --menu-item-color: var(--text-color, #374151);
+  --menu-item-color-hover: var(--primary-color, #3b82f6);
+  --menu-item-bg-hover: var(--bg-secondary, #f3f4f6);
+  --menu-icon-size: 16px;
+  --menu-shadow: var(--shadow-lg);
+
+  /* ========================================
+     终端 (Terminal) 样式变量
+     ======================================== */
+  --terminal-bg: #1e1e1e;
+  --terminal-header-bg: #252526;
+  --terminal-text: #cccccc;
+  --terminal-title: #e0e0e0;
+  --terminal-border: #333333;
+  --terminal-btn: #888888;
+  --terminal-btn-hover: #ffffff;
+  --terminal-btn-hover-bg: #3e3e42;
+  --terminal-hint-bg: #2d2d30;
+  --terminal-selection: #094771;
+  --terminal-label: #dcdcaa;
+
+  /* ========================================
+     日志区域 (Log Content) 样式变量
+     ======================================== */
+  --log-content-bg: #1e1e1e;
+  --log-message-color: #d4d4d4;
+  --log-gutter-color: #888888;
+}
+
+/* ========================================
+   动画关键帧定义
+   ======================================== */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes brandGlow {
+  0% { 
+    text-shadow: 0 0 10px rgba(255,215,0,0.8), 0 0 20px rgba(255,165,0,0.6), 0 0 30px rgba(255,215,0,0.4);
+  }
+  100% { 
+    text-shadow: 0 0 20px rgba(255,215,0,1), 0 0 30px rgba(255,165,0,0.8), 0 0 40px rgba(255,215,0,0.6);
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes slideDown {
+  from { 
+    opacity: 0; 
+    transform: translateY(-20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes contextMenuShow {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes contextMenuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dialogSlideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   滚动条样式
+   ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* 暗色主题滚动条 */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* 樱花主题滚动条 */
+[data-theme="sakura"] ::-webkit-scrollbar-track {
+  background: rgba(255, 183, 197, 0.1);
+}
+
+[data-theme="sakura"] ::-webkit-scrollbar-thumb {
+  background: rgba(255, 183, 197, 0.3);
+}
+
+[data-theme="sakura"] ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 183, 197, 0.5);
+}
+
+/* ========================================
+   通用工具类
+   ======================================== */
+
+.hidden {
+  display: none !important;
+}
+
+.invisible {
+  visibility: hidden !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.gap-sm {
+  gap: 0.5rem;
+}
+
+.gap {
+  gap: 1rem;
+}
+
+.gap-lg {
+  gap: 1.5rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.no-select {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
