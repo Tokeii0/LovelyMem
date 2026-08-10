@@ -43,6 +43,9 @@ Lovelymem V2 is a desktop memory forensics application built with Rust, Tauri 2,
 
 The project does not bundle third-party forensic engines in the repository. You can configure paths to tools you already have in Settings or, on Windows x64, download supported tools from their respective official sources with one click.
 
+## Display
+<img width="1440" height="900" alt="image" src="https://github.com/user-attachments/assets/226097b8-c2b7-4d98-bfe1-797ac08563ab" />
+
 ## Evolution from the Python Version to V2
 
 Lovelymem V2 continues the forensic approach of the earlier [LovelyMem Python](https://github.com/Tokeii0/LovelyMem/tree/v1), but it is more than a new interface: the runtime foundation, page organization, tool provisioning, and investigation workflow have all been rebuilt.
