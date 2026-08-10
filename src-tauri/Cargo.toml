@@ -3,6 +3,7 @@ name = "lovelymem-v2"
 version = "2.5.0"
 description = "内存取证工具"
 authors = ["Tokeii"]
+license = "AGPL-3.0-only"
 edition = "2024"
 
 [lib]

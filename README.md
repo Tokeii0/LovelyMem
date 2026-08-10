@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript 5">
   <img src="https://img.shields.io/badge/Platform-Windows%20x64-0078D4?style=flat-square&logo=windows&logoColor=white" alt="Windows x64">
   <img src="https://img.shields.io/badge/Language-简体中文%20%7C%20English-6C5CE7?style=flat-square" alt="Chinese and English">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-AGPL--3.0--only-663399?style=flat-square" alt="AGPL-3.0-only"></a>
   <a href="https://github.com/Tokeii0/LovelyMem/actions/workflows/release.yml"><img src="https://github.com/Tokeii0/LovelyMem/actions/workflows/release.yml/badge.svg?branch=v2" alt="Release build"></a>
   <a href="https://github.com/Tokeii0/LovelyMem/releases/latest"><img src="https://img.shields.io/github/v/release/Tokeii0/LovelyMem?style=flat-square&label=Release" alt="Latest release"></a>
 </p>
@@ -270,9 +271,15 @@ cargo check
 - 不要提交内存镜像、调查结果、API 密钥、访问令牌或第三方二进制包。
 - 提交前至少运行 `npm run build`、`cargo check` 与 `git diff --check`。
 
+## 项目许可证
+
+Lovelymem V2 项目代码采用 [GNU Affero General Public License v3.0](./LICENSE)，SPDX 标识为 `AGPL-3.0-only`。使用、修改、部署或再分发本项目时，请遵守许可证完整条款；本节不是法律意见。
+
 ## 第三方工具与许可证
 
 Lovelymem V2 调用或下载的第三方工具仍受各自许可证约束，不会自动转为本项目许可证。
+
+随应用分发的 Monaco Editor、D3.js 等内嵌组件声明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
 
 | 组件 | 上游许可证 |
 | --- | --- |
@@ -284,9 +291,6 @@ Lovelymem V2 调用或下载的第三方工具仍受各自许可证约束，不�
 | DumpIt、Dokany、WinFsp | 以各自上游发布内容为准 |
 
 MemProcFS 相关取证流程会传入 Elastic License 2.0 接受参数，以使用其内置 FindEvil YARA 规则；使用前请自行审阅对应条款。
-
-> [!CAUTION]
-> 仓库当前尚未提供项目级根目录 `LICENSE` 文件。在许可证补充前，请勿假定本项目代码可以自由复制、修改或再分发。
 
 ## 致谢
 

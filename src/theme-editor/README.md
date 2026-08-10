@@ -196,4 +196,4 @@ window.themeEditorApp.getState()
 
 ## 📄 许可证
 
-MIT License - 详见LICENSE文件
+本模块是 Lovelymem V2 的一部分，采用 `AGPL-3.0-only`，详见仓库根目录的 `LICENSE` 文件。
