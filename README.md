@@ -31,11 +31,11 @@
   <a href="#工具链配置">工具链配置</a> ·
   <a href="#目录结构">目录结构</a> ·
   <a href="#数据网络与安全边界">安全边界</a> ·
-  <a href="#第三方工具与许可证">许可证</a>
+  <a href="#项目许可证">许可证</a>
 </p>
 
 > [!IMPORTANT]
-> `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE、便携 ZIP 或 NSIS 安装器；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
+> `v2` 是 Lovelymem V2 的主分支。Windows x64 用户可从 [Releases](https://github.com/Tokeii0/LovelyMem/releases) 下载独立 EXE；文中的 Linux 支持是指分析 Linux 内存镜像，并不代表桌面客户端已完整支持 Linux 运行。
 
 ## 项目简介
 
@@ -45,7 +45,7 @@ Lovelymem V2 是一款基于 Rust、Tauri 2 与原生 TypeScript 构建的内存
 
 ## 从 Python 版到 V2
 
-Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/LovelyMem) 的取证思路，但不是一次简单的界面换皮：运行底座、页面组织、工具准备和调查工作流都已重新构建。
+Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/LovelyMem/tree/v1) 的取证思路，但不是一次简单的界面换皮：运行底座、页面组织、工具准备和调查工作流都已重新构建。
 
 | 维度 | Python 版 | Lovelymem V2 |
 | --- | --- | --- |
@@ -56,8 +56,6 @@ Lovelymem V2 延续了旧版 [LovelyMem Python](https://github.com/Tokeii0/Lovel
 | 结果查看 | Qt 标签页、CSV 表格与扩展工具 | 内嵌结果工作区与进程、网络、文件、注册表、EVTX 等专用视图 |
 | AI 辅助 | 面向结果的自然语言分析与摘要 | 可浏览、检索并调用取证工具的可选 Agent |
 | 双语 | 简中 / English，切换后需重启完整生效 | 简中 / English 运行时切换并同步主要窗口 |
-
-完整的版本演进展示页位于 [pages/showcase.html](./pages/showcase.html)。运行 `npm run dev` 后访问 `http://127.0.0.1:14222/showcase.html` 即可预览。
 
 ## 核心能力
 
@@ -153,10 +151,6 @@ cargo clippy
 
 当前 `bundle.active` 为 `false`，因此 `npm run tauri build` 主要生成发布可执行文件，不会自动生成 MSI 或 NSIS 安装包。
 
-### 自动发布
-
-`v2` 分支中的 `package.json`、`package-lock.json`、`src-tauri/Cargo.toml` 或 `src-tauri/tauri.conf.json` 更新后，GitHub Actions 会校验三处项目版本是否一致，构建 Windows x64 程序，对最终 EXE 执行 UPX 压缩与完整性测试，再生成独立 EXE、便携 ZIP、NSIS 安装器和 `SHA256SUMS.txt`。版本标签已经指向其他提交时，工作流会拒绝覆盖；发布新版本前请先同步更新版本号。
-
 ## 工具链配置
 
 打开 **设置 → 工具链配置**，可以探测本机已有路径，也可以逐项或批量下载缺失工具。受管工具默认保存到：
@@ -182,7 +176,6 @@ cargo clippy
 | Volatility 2 | 支持 | 自动准备 Python 2 并创建独立插件目录。 |
 | Volatility 3 | 支持 | 自动准备 Python 3 和当前安装流程所需的固定依赖。 |
 | MemNixFS | 支持 | Linux 内存取证工具；挂载功能仍需手动安装 WinFsp。 |
-| DumpIt | 不支持 | 仅允许手动配置，请依据上游许可自行获取。 |
 
 一键下载器会执行以下保护：
 
@@ -267,34 +260,9 @@ cargo check
 
 </details>
 
-## 开发约定
-
-- 前端新页面放入 `pages/`，并同步登记到 `vite.config.ts`。
-- 前端模块放入 `src/modules/`；Rust 功能保持独立模块，并在 `src-tauri/src/lib.rs` 注册 Tauri 命令。
-- 设置项必须同时更新前端设置模型、Rust 设置结构、默认值和同步逻辑。
-- 不要提交内存镜像、调查结果、API 密钥、访问令牌或第三方二进制包。
-- 提交前至少运行 `npm run build`、`cargo check` 与 `git diff --check`。
-
 ## 项目许可证
 
-Lovelymem V2 项目代码采用 [GNU Affero General Public License v3.0](./LICENSE)，SPDX 标识为 `AGPL-3.0-only`。使用、修改、部署或再分发本项目时，请遵守许可证完整条款；本节不是法律意见。
-
-## 第三方工具与许可证
-
-Lovelymem V2 调用或下载的第三方工具仍受各自许可证约束，不会自动转为本项目许可证。
-
-随应用分发的 Monaco Editor、D3.js 等内嵌组件声明见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)。
-
-| 组件 | 上游许可证 |
-| --- | --- |
-| Python 2 / 3 | PSF License |
-| MemProcFS | AGPL-3.0；发布包中的部分组件可能采用其他许可证 |
-| Volatility 2 | GPL-2.0 |
-| Volatility 3 | Volatility Software License |
-| MemNixFS | Apache-2.0 |
-| DumpIt、Dokany、WinFsp | 以各自上游发布内容为准 |
-
-MemProcFS 相关取证流程会传入 Elastic License 2.0 接受参数，以使用其内置 FindEvil YARA 规则；使用前请自行审阅对应条款。
+Lovelymem V2 项目代码采用 [GNU Affero General Public License v3.0](./LICENSE)，SPDX 标识为 `AGPL-3.0-only`。使用、修改、部署或再分发本项目时，请遵守许可证完整条款。
 
 ## 致谢
 

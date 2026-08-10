@@ -31,11 +31,11 @@
   <a href="#toolchain-configuration">Toolchain configuration</a> ·
   <a href="#repository-structure">Repository structure</a> ·
   <a href="#data-network-and-security-boundaries">Security boundaries</a> ·
-  <a href="#third-party-tools-and-licenses">Licenses</a>
+  <a href="#project-license">License</a>
 </p>
 
 > [!IMPORTANT]
-> `v2` is the primary branch for Lovelymem V2. Windows x64 users can download a standalone EXE, portable ZIP, or NSIS installer from [Releases](https://github.com/Tokeii0/LovelyMem/releases). References to Linux support in this document mean analysis of Linux memory images; they do not mean that the desktop client is fully supported on Linux.
+> `v2` is the primary branch for Lovelymem V2. Windows x64 users can download the standalone EXE from [Releases](https://github.com/Tokeii0/LovelyMem/releases). References to Linux support in this document mean analysis of Linux memory images; they do not mean that the desktop client is fully supported on Linux.
 
 ## Project Overview
 
@@ -45,7 +45,7 @@ The project does not bundle third-party forensic engines in the repository. You 
 
 ## Evolution from the Python Version to V2
 
-Lovelymem V2 continues the forensic approach of the earlier [LovelyMem Python](https://github.com/Tokeii0/LovelyMem), but it is more than a new interface: the runtime foundation, page organization, tool provisioning, and investigation workflow have all been rebuilt.
+Lovelymem V2 continues the forensic approach of the earlier [LovelyMem Python](https://github.com/Tokeii0/LovelyMem/tree/v1), but it is more than a new interface: the runtime foundation, page organization, tool provisioning, and investigation workflow have all been rebuilt.
 
 | Dimension | Python Version | Lovelymem V2 |
 | --- | --- | --- |
@@ -56,8 +56,6 @@ Lovelymem V2 continues the forensic approach of the earlier [LovelyMem Python](h
 | Result viewing | Qt tabs, CSV tables, and auxiliary tools | An embedded results workspace with dedicated views for processes, network activity, files, the registry, EVTX, and more |
 | AI assistance | Natural-language analysis and summaries of results | An optional agent that can browse, search, and invoke forensic tools |
 | Bilingual interface | Simplified Chinese / English; a restart is required for all changes to take effect | Runtime switching between Simplified Chinese / English, synchronized across the main application windows |
-
-The complete version-evolution showcase is available at [pages/showcase.html](./pages/showcase.html). After running `npm run dev`, open `http://127.0.0.1:14222/showcase.html` to preview it.
 
 ## Core Capabilities
 
@@ -153,10 +151,6 @@ cargo clippy
 
 The current value of `bundle.active` is `false`. As a result, `npm run tauri build` primarily produces a release executable; it does not automatically generate MSI or NSIS installers.
 
-### Automated Releases
-
-When `package.json`, `package-lock.json`, `src-tauri/Cargo.toml`, or `src-tauri/tauri.conf.json` changes on the `v2` branch, GitHub Actions verifies that the project version is consistent across all three version declarations, builds the Windows x64 application, applies UPX compression and integrity testing to the final EXE, and then produces a standalone EXE, portable ZIP, NSIS installer, and `SHA256SUMS.txt`. The workflow refuses to overwrite a version tag that already points to another commit. Before publishing a new version, update all version declarations together.
-
 ## Toolchain Configuration
 
 Open **Settings → Toolchain Configuration** to detect existing local paths or download missing tools individually or in a batch. Managed tools are stored by default in:
@@ -182,7 +176,6 @@ Open **Settings → Toolchain Configuration** to detect existing local paths or 
 | Volatility 2 | Supported | Automatically provisions Python 2 and creates a separate plugin directory. |
 | Volatility 3 | Supported | Automatically provisions Python 3 and the pinned dependencies required by the current installation process. |
 | MemNixFS | Supported | A Linux memory forensics tool. Mounting still requires WinFsp to be installed manually. |
-| DumpIt | Not supported | Can only be configured manually; obtain it yourself in accordance with the upstream license. |
 
 The one-click downloader applies the following safeguards:
 
@@ -267,34 +260,9 @@ Stop the process using that port and try again. If you must change the port, upd
 
 </details>
 
-## Development Conventions
-
-- Add new frontend pages under `pages/` and register them in `vite.config.ts`.
-- Place frontend modules under `src/modules/`. Keep Rust features in separate modules and register Tauri commands in `src-tauri/src/lib.rs`.
-- Any setting must be updated in the frontend settings model, the Rust settings structure, its default value, and the synchronization logic.
-- Do not commit memory images, investigation results, API keys, access tokens, or third-party binary packages.
-- Before committing, run at least `npm run build`, `cargo check`, and `git diff --check`.
-
 ## Project License
 
-The Lovelymem V2 project code is licensed under the [GNU Affero General Public License v3.0](./LICENSE), with the SPDX identifier `AGPL-3.0-only`. When using, modifying, deploying, or redistributing this project, comply with the complete license terms. This section is not legal advice.
-
-## Third-Party Tools and Licenses
-
-Third-party tools invoked or downloaded by Lovelymem V2 remain subject to their respective licenses; they do not automatically become covered by this project's license.
-
-Notices for bundled components such as Monaco Editor and D3.js are available in [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md).
-
-| Component | Upstream license |
-| --- | --- |
-| Python 2 / 3 | PSF License |
-| MemProcFS | AGPL-3.0; some components in its release packages may use other licenses |
-| Volatility 2 | GPL-2.0 |
-| Volatility 3 | Volatility Software License |
-| MemNixFS | Apache-2.0 |
-| DumpIt, Dokany, and WinFsp | Refer to the respective upstream distributions |
-
-MemProcFS-based forensic workflows pass an Elastic License 2.0 acceptance argument to use its built-in FindEvil YARA rules. Review the applicable terms before use.
+The Lovelymem V2 project code is licensed under the [GNU Affero General Public License v3.0](./LICENSE), with the SPDX identifier `AGPL-3.0-only`. When using, modifying, deploying, or redistributing this project, comply with the complete license terms.
 
 ## Acknowledgements
 
