@@ -102,7 +102,12 @@ fn extract_event_data_message(xml: &str) -> Option<String> {
     // 查找EventData部分
     if let Some(event_data_start) = xml.find("<EventData>") {
         if let Some(event_data_end) = xml.find("</EventData>") {
-            let event_data_content = &xml[event_data_start..event_data_end + "</EventData>".len()];
+            let event_data_end = event_data_end + "</EventData>".len();
+            // 畸形 XML 中闭合标签可能出现在起始标签之前，此时不能直接切片
+            if event_data_end < event_data_start {
+                return None;
+            }
+            let event_data_content = &xml[event_data_start..event_data_end];
 
             // 提取所有Data元素
             let mut data_parts = Vec::new();
@@ -117,9 +122,13 @@ fn extract_event_data_message(xml: &str) -> Option<String> {
                     // 提取Data元素的内容
                     if let Some(content_start) = data_element.find('>') {
                         if let Some(content_end) = data_element.rfind('<') {
-                            let content = &data_element[content_start + 1..content_end];
-                            if !content.trim().is_empty() {
-                                data_parts.push(content.trim().to_string());
+                            let content_start = content_start + 1;
+                            // 畸形 Data 元素中 '>' 可能位于最后一个 '<' 之后，避免反向切片 panic
+                            if content_start <= content_end {
+                                let content = &data_element[content_start..content_end];
+                                if !content.trim().is_empty() {
+                                    data_parts.push(content.trim().to_string());
+                                }
                             }
                         }
                     }
@@ -1069,4 +1078,34 @@ pub async fn list_evtx_files() -> Result<Vec<EvtxFileInfo>, String> {
     debug_info!("✅ 找到 {} 个EVTX文件", evtx_files.len());
 
     Ok(evtx_files)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// 正常 EVTX XML 中的中文事件数据应被完整提取，修复不得改变正常路径结果
+    #[test]
+    fn extract_event_data_message_handles_multibyte_utf8() {
+        let xml = concat!(
+            "<?xml version=\"1.0\" encoding=\"utf-8\"?>",
+            "<Event>",
+            "<System><EventID>4624</EventID></System>",
+            "<EventData><Data Name=\"SubjectUserName\">中文用户</Data></EventData>",
+            "</Event>"
+        );
+
+        assert_eq!(
+            extract_event_data_message(xml),
+            Some("中文用户".to_string())
+        );
+    }
+
+    /// 畸形 XML 中闭合标签出现在起始标签之前时，旧实现会因反向字节切片 panic
+    #[test]
+    fn extract_event_data_message_reversed_tags_does_not_panic() {
+        let xml = "</EventData>AAAAAAAAAAAAAAAA<EventData><Data>x</Data></EventData>";
+
+        assert_eq!(extract_event_data_message(xml), None);
+    }
 }
